@@ -18,7 +18,7 @@ int CreatureData::creatureID = 0;
 int CreatureData::creatureCount = 0;
 
 
-CreatureData::CreatureData() {
+CreatureData::CreatureData() { // increment is an non atomic operation!!
     CreatureData::creatureCount++;
     CreatureData::creatureID++;
 }
