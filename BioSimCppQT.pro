@@ -9,7 +9,13 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES += main.cpp
+SOURCES += \
+    main.cpp \
+    creature.cpp \
+    textfilereader.cpp
 
 HEADERS += \
-    main.h
+    main.h \
+    config.h \
+    creature.h \
+    textfilereader.h
