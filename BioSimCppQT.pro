@@ -55,4 +55,5 @@ DISTFILES += \
     Grafics&Textfiles/land/sonnenblume.tga \
     Grafics&Textfiles/land/tanne.tga \
     Grafics&Textfiles/land/tiger.tga \
-    Grafics&Textfiles/land/ursus.tga
+    Grafics&Textfiles/land/ursus.tga \
+    Grafics&Textfiles/Aufgabenblätter.pdf
