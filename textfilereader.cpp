@@ -85,7 +85,7 @@ void TextFileReader::splitCreatureRow(std::string rowDescription, std::vector<st
 bool TextFileReader::correctRow(std::vector<std::string>& creatureInfo) {
     bool valid = true;
     if (creatureInfo.size() == 6) {
-        // äüößÄÜÖ BugGefunden ^^
+        // äüößÄÜÖ
         std::regex creatureNameRegex("[a-zA-Z\\s]+");										// valid creaturename
         if (!std::regex_match(creatureInfo[0], creatureNameRegex)) {
             valid = false;
@@ -180,6 +180,7 @@ CreatureData TextFileReader::createCreatureFromRow(std::vector<std::string>& cre
 
 
     creatureInfo.clear();
+    PRINT(creature.creaturename);
     PRINT(creature.strength);
     PRINT(creature.speed);
     PRINT(creature.lifetime);
