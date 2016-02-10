@@ -6,6 +6,7 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 // TODO const
+// TODO Exceptions
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 #include "TextFileReader.h"
@@ -20,7 +21,6 @@
 
 
 void splitString(std::string str, std::string delimiter, std::vector<std::string>& vector);
-// TODO Exceptions
 
 int StatisticalFileReadingData::rownumber = 0;
 int StatisticalFileReadingData::rowscorrect = 0;
@@ -86,13 +86,13 @@ bool TextFileReader::correctRow(std::vector<std::string>& creatureInfo) {
     bool valid = true;
     if (creatureInfo.size() == 6) {
         // äüößÄÜÖ
-        std::regex creatureNameRegex("[a-zA-Z\\s]+");										// valid creaturename
+        std::regex creatureNameRegex("[a-zA-Z\\s]+");                                   // valid creaturename
         if (!std::regex_match(creatureInfo[0], creatureNameRegex)) {
             valid = false;
             ErrorFileReadingData::errorInfo[ErrorFileReadingData::errorInfoCount] =
                 std::string("Invalid creature name. Line:").append(std::to_string(StatisticalFileReadingData::rownumber));
             ErrorFileReadingData::errorInfoCount++;
-        }																					// valid strengh
+        }                                                                               // valid strengh
         std::regex creatureStrengthRegex("[0-9]+");
         if (!std::regex_match(creatureInfo[1], creatureStrengthRegex)) {
             valid = false;
@@ -107,7 +107,7 @@ bool TextFileReader::correctRow(std::vector<std::string>& creatureInfo) {
             ErrorFileReadingData::errorInfoCount++;
         }
 
-        std::regex creatureSpeedRegex("[0-9]+");											// valid speed
+        std::regex creatureSpeedRegex("[0-9]+");                                        // valid speed
         if (!std::regex_match(creatureInfo[2], creatureSpeedRegex)) {
             valid = false;
             ErrorFileReadingData::errorInfo[ErrorFileReadingData::errorInfoCount] =
@@ -121,7 +121,7 @@ bool TextFileReader::correctRow(std::vector<std::string>& creatureInfo) {
             ErrorFileReadingData::errorInfoCount++;
         }
 
-        std::regex creatureLifetimeRegex("[0-9]+");											// valid lifetime
+        std::regex creatureLifetimeRegex("[0-9]+");                                     // valid lifetime
         if (!std::regex_match(creatureInfo[3], creatureLifetimeRegex)) {
             valid = false;
             ErrorFileReadingData::errorInfo[ErrorFileReadingData::errorInfoCount] =
@@ -134,7 +134,7 @@ bool TextFileReader::correctRow(std::vector<std::string>& creatureInfo) {
             ErrorFileReadingData::errorInfoCount++;
         }
 
-        std::regex creaturePropertiesRegex("[a-zA-Z0-9_\\s]*");								// valid properties HACK
+        std::regex creaturePropertiesRegex("[a-zA-Z0-9_\\s]*");                         // valid properties HACK
         if (!std::regex_match(creatureInfo[4], creaturePropertiesRegex)) {
             valid = false;
             ErrorFileReadingData::errorInfo[ErrorFileReadingData::errorInfoCount] =
@@ -142,7 +142,7 @@ bool TextFileReader::correctRow(std::vector<std::string>& creatureInfo) {
             ErrorFileReadingData::errorInfoCount++;
         }
 
-        std::regex creatureFilePathRegex("[a-zA-Z0-9]+/[a-zA-Z0-9]+.[a-zA-Z0-9]+");			// valid path HACK
+        std::regex creatureFilePathRegex("[a-zA-Z0-9]+/[a-zA-Z0-9]+.[a-zA-Z0-9]+");     // valid path HACK
         if (!std::regex_match(creatureInfo[5], creatureFilePathRegex)) {
             valid = false;
             ErrorFileReadingData::errorInfo[ErrorFileReadingData::errorInfoCount] =
@@ -196,7 +196,7 @@ void splitString(std::string str, std::string delimiter, std::vector<std::string
     size_t substrStart = 0;
     size_t substrEnd = 0;
     while (substrStart < str.length()) {
-        if (substrEnd > 10000) { break; }										// TODO Question: how to avoid this hack? [10000]
+        if (substrEnd > 10000) { break; }               // TODO Question: how to avoid this hack? [10000]
         substrEnd = str.find(delimiter, substrStart);
         std::string vectorElement = str.substr(substrStart, substrEnd - substrStart);
         vector.push_back(vectorElement);
@@ -204,5 +204,3 @@ void splitString(std::string str, std::string delimiter, std::vector<std::string
     }
     return;
 }
-
-
