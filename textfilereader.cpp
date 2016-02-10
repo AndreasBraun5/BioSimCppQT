@@ -1,13 +1,13 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-/*
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*/
     read file, read row, split row, check row, create creature
     storing statistical and error information in data-objects
-*/
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 // TODO const
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 #include "TextFileReader.h"
 
 #include<fstream>
@@ -17,7 +17,7 @@
 #include <list>
 #include <regex>
 #include <exception>
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
 
 void splitString(std::string str, std::string delimiter, std::vector<std::string>& vector);
 // TODO Exceptions
@@ -27,17 +27,17 @@ int StatisticalFileReadingData::rowscorrect = 0;
 int StatisticalFileReadingData::rowsincorrect = 0;
 int ErrorFileReadingData::errorInfoCount = 0;
 
-std::vector<std::string> ErrorFileReadingData::errorInfo(100);						// TODO Avoid Hack, dynamische Initialisierung möglich auch bei static?
+std::vector<std::string> ErrorFileReadingData::errorInfo(100);						// TODO Avoid Hack [100], dynamische Initialisierung möglich auch bei static?
 
 // Finished
-void TextFileReader::readCreatureFile(std::string filename, std::list<CreatureData>& creatureList) {
-    std::fstream infile(filename, std::fstream::in);
+void TextFileReader::readCreatureFile(std::string filepath, std::list<CreatureData>& creatureList) {
+    std::fstream infile(filepath, std::fstream::in);
     if (!infile.good()) {
         PRINT(&std::ios::rdstate);
         PRINT(&std::ios::badbit);
         PRINT(&std::ios::eofbit);
         PRINT(&std::ios::failbit);
-        std::cerr << filename << " Creature file cannot be opened!\n";
+        std::cerr << filepath << " Creature file cannot be opened!\n";
     }
     else {
         std::vector<std::string> creatureInfo;										// information from one row
@@ -172,15 +172,14 @@ CreatureData TextFileReader::createCreatureFromRow(std::vector<std::string>& cre
     int deleteCount = 0;
     for (int i = 0; i - deleteCount < creature.properties.size(); i++) {
         if (creature.properties[i - deleteCount] == "") {
-            creature.properties.erase(creature.properties.begin() + (i - deleteCount)); // ohne Klammer um (i - deleteCount) verursacht die Auswertereihenfolge der Operatoren einen Zugriff auf ein Vektorelement das nicht da ist.
+            creature.properties.erase(creature.properties.begin() + (i - deleteCount));
             deleteCount++;
         }
     }
     creature.figurepath = creatureInfo[5];
 
 
-    creatureInfo.clear();				// TODO Question: What does this mean: A reallocation is not guaranteed to happen, and the vector capacity is not guaranteed to change due to calling this function.
-    PRINT(creature.creaturename);
+    creatureInfo.clear();
     PRINT(creature.strength);
     PRINT(creature.speed);
     PRINT(creature.lifetime);
@@ -196,7 +195,7 @@ void splitString(std::string str, std::string delimiter, std::vector<std::string
     size_t substrStart = 0;
     size_t substrEnd = 0;
     while (substrStart < str.length()) {
-        if (substrEnd > 10000) { break; }										// TODO Question: how to avoid this hack?
+        if (substrEnd > 10000) { break; }										// TODO Question: how to avoid this hack? [10000]
         substrEnd = str.find(delimiter, substrStart);
         std::string vectorElement = str.substr(substrStart, substrEnd - substrStart);
         vector.push_back(vectorElement);

@@ -19,3 +19,6 @@ HEADERS += \
     config.h \
     creature.h \
     textfilereader.h
+
+DISTFILES += \
+    Notizen

@@ -1,0 +1,38 @@
+#pragma once                                            // Only VS, checks that the headerfile is include only once, fastest
+#if !defined (INCLUDED_CONFIG_H)			// see endif, alternative to #pragma, safest
+#define INCLUDED_CONFIG_H				// always use both
+
+#include <iostream>
+#define PRINT(X) std::cout << (X) << std::endl;
+
+#endif
+
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*/
+    .h-file is always orderd as following:		see book: one definition rule
+    function prototypes:						void meineFunktion(int einParameter);
+    declaration of global variables:			extern int global;
+    declaration of globas constants:			extern const int GLOBALE_KONSTANTE;
+    definition of constans:						const int MAXI = 10;
+    definition of enum + struct
+    declaration of classes
+        declaration of variables
+        declaration of constructors
+        declaration of functions
+/*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*/
+    .cpp-file is always orderd as following:			see book: one definition rule
+    function implementation
+    definition of global objects
+    definition and initialisation of global constants:	extern const int GLOBALE_KONSTANTE = 1;
+/*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+// increment is an non atomic operation!!
+// ohne Klammer um (i - deleteCount) verursacht die Auswertereihenfolge der Operatoren einen Zugriff auf ein Vektorelement das nicht da ist.
