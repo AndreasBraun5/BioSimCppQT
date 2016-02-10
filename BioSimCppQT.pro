@@ -12,13 +12,15 @@ TEMPLATE = app
 SOURCES += \
     main.cpp \
     creature.cpp \
-    textfilereader.cpp
+    textfilereader.cpp \
+    image.cpp
 
 HEADERS += \
     main.h \
     config.h \
     creature.h \
-    textfilereader.h
+    textfilereader.h \
+    image.h
 
 DISTFILES += \
     Notizen \
@@ -56,4 +58,5 @@ DISTFILES += \
     Grafics&Textfiles/land/tanne.tga \
     Grafics&Textfiles/land/tiger.tga \
     Grafics&Textfiles/land/ursus.tga \
-    Grafics&Textfiles/Aufgabenblätter.pdf
+    Grafics&Textfiles/Aufgabenblätter.pdf \
+    BioSim.qmodel

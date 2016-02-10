@@ -17,7 +17,7 @@
 #include <iostream>
 #include <list>
 #include <regex>
-#include <exception>
+//#include <exception>
 
 
 void splitString(std::string str, std::string delimiter, std::vector<std::string>& vector);

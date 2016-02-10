@@ -21,7 +21,9 @@
 class TextFileReader {
 
 public: TextFileReader() {
-}
+    }
+
+
 
         /*/
         Input:			creatureList is used to store the created creatures
