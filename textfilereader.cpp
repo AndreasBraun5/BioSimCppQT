@@ -1,16 +1,17 @@
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
     read file, read row, split row, check row, create creature
     storing statistical and error information in data-objects
 /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 
 // TODO const
 // TODO Exceptions
 
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ #include /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include "TextFileReader.h"
-
 #include<fstream>
 #include <vector>
 #include <string>
@@ -19,18 +20,32 @@
 #include <regex>
 //#include <exception>
 
-//helper methods
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ helper methods /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 void splitString(std::string str, std::string delimiter, std::vector<std::string>& vector);
 void addErrorLine(std::string);
 
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ static variable initialising /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 int StatisticalFileReadingData::rownumber = 0;
 int StatisticalFileReadingData::rowscorrect = 0;
 int StatisticalFileReadingData::rowsincorrect = 0;
 int ErrorFileReadingData::errorInfoCount = 0;
+std::vector<std::string> ErrorFileReadingData::errorInfo(100);                      // TODO Avoid Hack [100], dynamische Initialisierung möglich auch bei static?
 
-std::vector<std::string> ErrorFileReadingData::errorInfo(100);						// TODO Avoid Hack [100], dynamische Initialisierung möglich auch bei static?
 
-// Finished
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ constructors /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+// only standard construtor is implemented
+
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ readCreatureFile /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 std::list<CreatureData> TextFileReader::readCreatureFile(const std::string filepath) {
     std::list<CreatureData> creatureList;
     std::fstream infile(filepath, std::fstream::in);
@@ -59,7 +74,7 @@ std::list<CreatureData> TextFileReader::readCreatureFile(const std::string filep
                 }
             } else {
                 ErrorFileReadingData::errorInfo[ErrorFileReadingData::errorInfoCount] =
-                    std::string("Empty line found. Line: ").append(std::to_string(StatisticalFileReadingData::rownumber));
+                        std::string("Empty line found. Line: ").append(std::to_string(StatisticalFileReadingData::rownumber));
                 ErrorFileReadingData::errorInfoCount++;
             }
         }
@@ -76,14 +91,20 @@ std::list<CreatureData> TextFileReader::readCreatureFile(const std::string filep
     return creatureList;
 }
 
-//  FINISHED
-void TextFileReader::splitCreatureRow(const std::string rowDescription, std::vector<std::string>& creatureInfo) {
-    splitString(rowDescription,",", creatureInfo);
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ splitCreatureRow /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+void TextFileReader::splitCreatureRow(const std::string rowDescription, std::vector<std::string>& tempCreatureInfo) {
+    splitString(rowDescription,",", tempCreatureInfo);
     PRINT("");
     return;
 }
 
-// Finished
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ correctRow /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 bool TextFileReader::correctRow(const std::vector<std::string>& creatureInfo) {
     bool valid = true;
     if (creatureInfo.size() == 6) {
@@ -131,7 +152,9 @@ bool TextFileReader::correctRow(const std::vector<std::string>& creatureInfo) {
 }
 
 
-//  FINISHED
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ createCreatureFromRow /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 CreatureData TextFileReader::createCreatureFromRow(std::vector<std::string>& creatureInfo) {
 
     std::vector<std::string> tempProperties;
@@ -150,21 +173,22 @@ CreatureData TextFileReader::createCreatureFromRow(std::vector<std::string>& cre
     size_t tempSpeed = atoi(creatureInfo[2].c_str());
     size_t tempLifetime = atoi(creatureInfo[3].c_str());
     CreatureData creature{creatureInfo[0],
-                            tempStrength,
-                            tempSpeed,
-                            tempLifetime,
-                            tempProperties,
-                            creatureInfo[5]
+                tempStrength,
+                tempSpeed,
+                tempLifetime,
+                tempProperties,
+                creatureInfo[5]
                          };
 
     creatureInfo.clear();
-    creature.printCreatureDataToConsole(); // control output
+    creature.printCreatureDataToConsole();              // control output
     return creature;
 }
 
 
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-//  FINISHED
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ helper methods, declaration /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 void splitString(std::string str, std::string delimiter, std::vector<std::string>& vector) {
     size_t substrStart = 0;
     size_t substrEnd = 0;
@@ -178,9 +202,8 @@ void splitString(std::string str, std::string delimiter, std::vector<std::string
     return;
 }
 
-//  FINISHED
 void addErrorLine(std::string errorMessage){
     ErrorFileReadingData::errorInfo[ErrorFileReadingData::errorInfoCount] =
-        std::string(errorMessage).append(std::to_string(StatisticalFileReadingData::rownumber));
+            std::string(errorMessage).append(std::to_string(StatisticalFileReadingData::rownumber));
     ErrorFileReadingData::errorInfoCount++;
 }
