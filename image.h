@@ -1,6 +1,6 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /*/
-    TODO description
+    TODO loading of a correct TGA-image into the RAM
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -10,24 +10,22 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-//#include
+#include <vector>
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 class Image{
 
 /*/ TGA fileheader = 12 informations (see wikipedia TGA)
- *  followed by imageID and imagePalletType (don´t exist)
+ *  followed by imageID and imagePalletType (don´t exist here)
  *  followed by the image data
 /*/
 
-/*  a) Die Bilddatei muss im TGA-Format gelesen werden können.
-
-
-    b) Das Resultat des Einlesevorgangs soll eine Instanz einer ebenfalls zu entwickelnden
+/*/ b) Das Resultat des Einlesevorgangs soll eine Instanz einer ebenfalls zu entwickelnden
     Bild-Klasse sein. In dieser Klasse sollen RGB(A)-Daten mit einem Byte pro
     Farbkanal und Pixel vorgehalten werden. Der Ladevorgang soll durch statische
     Methoden innerhalb der Bild-Klasse umgesetzt werden.
+        RGB (A) 1B for each colour Red, Green, Blue and 1B for Alpha-chanel == 4B == 32bits per pixel
 
 
     c) Beim Schreiben der Bild-Klasse ist ein C++-übliches Vorgehen zu nutzen,
@@ -48,32 +46,66 @@ class Image{
     Variablen, Methoden, und Klassen sind entsprechend dem Anwendungs-Kontext
     sinnvoll zu benennen. Dokumentation und Formatierung analog zur ersten Aufgabe.
 
+    // Nach dem Einlesen des Bilddaten-Blocks mit Pixelfarben kann der Einlesevorgang
+    // abgebrochen werden. Weitere Metainformationen sind nicht zu lesen.
 
-Google-Stichwörter
-ifstream binary, auto_pointer, vector, tga tutorial, RAII
-*/
+    Google-Stichwörter
+    ifstream binary:
+    auto_pointer/unique_ptr: limited garbage collection facility
+    vector: sequence containers representing arrays that can change in size
+    RAII: Dabei wird die Belegung von Betriebsmitteln an den Konstruktoraufruf einer Variablen
+        eines benutzerdefinierten Typs und die Freigabe der Betriebsmittel an dessen
+        Destruktoraufruf gebunden. Die automatische Freigabe wird beispielsweise durch das
+        Verlassen des Gültigkeitsbereichs ausgelöst.
+    tga tutorial:
+/*/
+
 public: Image(){
     }
 
+private:    static int imageCount;   // further use for checking total number of read images
+
 // represents TGA
-public: int imageIDLength;       // 1 Byte, is zero --> no imageID
-        int colourPalletType;    // 1 Byte, is zero --> no colourPalletType
-        int imageType;           // 1 Byte, is two --> RGB 24 bit uncompressed
-        int palletStart;         // 16 bits, is zero
-        int palletLength;        // 16 bits, is zero
-        int sizePerBitsOfEachPalletEntry;    // 1 Byte
-        int zeroPointX;          // 16 bits, is zero
-        int zeroPointY;          // 16 bits, is zero
-        int imageWidth;          // 16 bits
-        int imagaHeigth;         // 16 bis
-        int bitsPerPixel;        // 1 Byte, is 24 or 32
-        int imageAttributeType;  // 1 Byte
-        //int imageID;           // nonexistent
-        //int colourPallet;      // nonexistent
-        //imageData, idea mutlilevel or multidimensional storage, break if imageWitdth*imageHeigth
+// 16 bits and positive --> unsigned int
+private: std::vector<unsigned int> tgaHeader[12];
+            // 01 int imageIDLength;       // 1 Byte, is zero --> no imageID
+            // 02 int colourPalletType;    // 1 Byte, is zero --> no colourPalletType
+            // 03 int imageType;           // 1 Byte, is two --> RGB 24 bit uncompressed
+            // 04 int palletStart;         // 16 bits, is zero
+            // 05 int palletLength;        // 16 bits, is zero
+            // 06 int sizePerBitsOfEachPalletEntry;    // 1 Byte
+            // 07 int zeroPointX;          // 16 bits, is zero
+            // 08 int zeroPointY;          // 16 bits, is zero
+            // 09 int imageWidth;          // 16 bits
+            // 10 int imagaHeigth;         // 16 bits
+            // 11 int bitsPerPixel;        // 1 Byte, is 24 or 32, maybe there is no Alpha-channel
+            // 12 int imageAttributeType;  // 1 Byte
+            //    int imageID;             // nonexistent --> not in tgaHeader
+            //    int colourPallet;        // nonexistent --> not in tgaHeader
+
+// imageData, idea mutlilevel or multidimensional storage, break if imageWitdth*imageHeigth*...
+// saved as RGB(A) with 1 Byte per channel
+// 32 bits and positive --> unsigned long int
+// Alpha-channel maybe not given
+private: std::vector<unsigned long int> imageData; // [1]
+
+// RAII: call checkImageHeader()
+public: Image();
+// RAII: auto free images from RAM
+public: ~Image();
+
+// throws exceptions if there is a not supported property in the file
+private: bool checkImageHeader();
+
+// loading image to RAM
+private: static void loadImage();
+
+
+
+
+
 };
-// Nach dem Einlesen des Bilddaten-Blocks mit Pixelfarben kann der Einlesevorgang
-// abgebrochen werden. Weitere Metainformationen sind nicht zu lesen.
+
 
 
 

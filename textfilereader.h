@@ -30,7 +30,7 @@ public: TextFileReader() {
         Side effects:	stores information in statisticalFileReadingData [& errorFileReadingData]
         Uses:			splitCreatureRow, correctCreatureRow, createCreatureFromRow
         /*/
-public: void readCreatureFile(std::string filepath, std::list<CreatureData>& creatureList);
+public: void readCreatureFile(const std::string filepath, std::list<CreatureData>& creatureList);
 
 
         /*/
@@ -38,7 +38,7 @@ public: void readCreatureFile(std::string filepath, std::list<CreatureData>& cre
                         store the splitted creatureInfo of one row
         Side effects:	the actual creature description of one row is stored in creatureInfo
         /*/
-private: void splitCreatureRow(std::string rowDescription, std::vector<std::string>& creatureInfo);
+private: void splitCreatureRow(const std::string rowDescription, std::vector<std::string>& creatureInfo);
 
 
         /*/
@@ -46,7 +46,7 @@ private: void splitCreatureRow(std::string rowDescription, std::vector<std::stri
         Output:			true if the information of one row is valid
         Side effects:	stores information in errorFileReadingData
         /*/
-private: bool correctRow(std::vector<std::string>& creatureInfo);
+private: bool correctRow(const std::vector<std::string>& creatureInfo);
 
 
          /*/

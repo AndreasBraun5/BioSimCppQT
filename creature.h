@@ -20,19 +20,21 @@
 class CreatureData {
 
 private: static int creatureCount;
-private: static	int creatureID;
+public: int creatureID;
 
-public:	std::string creaturename;
-public:	size_t strength;
-public:	size_t speed;
-public:	size_t lifetime;
-public:	std::vector<std::string> properties;
-public:	std::string figurepath;
+private:	std::string creaturename;
+            size_t strength;
+            size_t speed;
+            size_t lifetime;
+            std::vector<std::string> properties;
+            std::string figurepath;
+
+public: void printCreatureDataToConsole();
 
 public: CreatureData();
 
 public: CreatureData(std::string creaturename, size_t strength, size_t speed,
-    size_t lifetime, std::vector<std::string> properties, std::string figurepath);
+    size_t lifetime, const std::vector<std::string> properties, std::string figurepath);
 };
 
 
