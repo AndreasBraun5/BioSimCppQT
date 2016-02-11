@@ -20,11 +20,6 @@ int main(int argn, char *argv[]) {
     // realisation of the relative path of all other data than .../CreatureTable.txt by
     // cutting and concatenating out of its given path from argv[]
 
-    //std::string filename("");	   //works fine, but faster chaning of the two different files
-    //for (int i = 1; i < argn; i++) {
-    //	filename += argv[i];
-    //}
-    //
     PRINT("Enter number: \n 0 for CreatureTable_mitFehlern.txt \n 1 for CreatureTable.txt");
     int integer = 1;
     std::cin >> integer;
@@ -39,7 +34,12 @@ int main(int argn, char *argv[]) {
 
     std::list<CreatureData> creatureList; // stores all the creature objects
     TextFileReader in{};
-    in.readCreatureFile(filename, creatureList);
+    creatureList = in.readCreatureFile(filename);
+
+
+    // identify images to load
+    // forall images call constructor Image(imagepath)
+    // for testing reasons only open one image at a time
 
     _getch();
     return 0;

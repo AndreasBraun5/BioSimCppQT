@@ -7,29 +7,31 @@
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 #include "image.h"
+#include <fstream>
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-Image(){
+Image::Image(const std::string imagePath){
+    Image::openImage(imagePath);
+    readImageHeader();
+    loadImage();
+}
+
+Image::~Image(){
 
 }
 
-~Image(){
+static void Image::openImage(const std::string imagePath){
+    std::ifstream ifs(imagePath, std::ifstream::binary);
+    while(ifs.good()){
+
+    }
+}
+
+static bool Image::readImageHeader(){
 
 }
 
-bool checkImageHeader(){
+static void Image::loadImage(){
 
 }
-
-static void loadImage(){
-
-}
-
-
-
-
-
-//initialise
-//constructor
-//methods

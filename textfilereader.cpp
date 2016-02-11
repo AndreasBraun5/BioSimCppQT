@@ -31,7 +31,8 @@ int ErrorFileReadingData::errorInfoCount = 0;
 std::vector<std::string> ErrorFileReadingData::errorInfo(100);						// TODO Avoid Hack [100], dynamische Initialisierung möglich auch bei static?
 
 // Finished
-void TextFileReader::readCreatureFile(const std::string filepath, std::list<CreatureData>& creatureList) {
+std::list<CreatureData> TextFileReader::readCreatureFile(const std::string filepath) {
+    std::list<CreatureData> creatureList;
     std::fstream infile(filepath, std::fstream::in);
     if (!infile.good()) {
         PRINT(&std::ios::rdstate);
@@ -72,7 +73,7 @@ void TextFileReader::readCreatureFile(const std::string filepath, std::list<Crea
             std::cout << ErrorFileReadingData::errorInfo[i] << std::endl;
         }
     }
-    return;
+    return creatureList;
 }
 
 //  FINISHED

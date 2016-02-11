@@ -21,6 +21,7 @@
 class TextFileReader {
 
 public: TextFileReader() {
+
     }
 
 
@@ -30,7 +31,7 @@ public: TextFileReader() {
         Side effects:	stores information in statisticalFileReadingData [& errorFileReadingData]
         Uses:			splitCreatureRow, correctCreatureRow, createCreatureFromRow
         /*/
-public: void readCreatureFile(const std::string filepath, std::list<CreatureData>& creatureList);
+public: std::list<CreatureData> readCreatureFile(const std::string filepath);
 
 
         /*/

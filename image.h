@@ -60,9 +60,6 @@ class Image{
     tga tutorial:
 /*/
 
-public: Image(){
-    }
-
 private:    static int imageCount;   // further use for checking total number of read images
 
 // represents TGA
@@ -77,7 +74,7 @@ private: std::vector<unsigned int> tgaHeader[12];
             // 07 int zeroPointX;          // 16 bits, is zero
             // 08 int zeroPointY;          // 16 bits, is zero
             // 09 int imageWidth;          // 16 bits
-            // 10 int imagaHeigth;         // 16 bits
+            // 10 int imageHeigth;         // 16 bits
             // 11 int bitsPerPixel;        // 1 Byte, is 24 or 32, maybe there is no Alpha-channel
             // 12 int imageAttributeType;  // 1 Byte
             //    int imageID;             // nonexistent --> not in tgaHeader
@@ -87,31 +84,21 @@ private: std::vector<unsigned int> tgaHeader[12];
 // saved as RGB(A) with 1 Byte per channel
 // 32 bits and positive --> unsigned long int
 // Alpha-channel maybe not given
-private: std::vector<unsigned long int> imageData; // [1]
+private: std::vector< std::vector <unsigned long int> > imageData; // [1]
 
-// RAII: call checkImageHeader()
-public: Image();
+// RAII: call readImageHeader()
+public: Image(const std::string imagePath);
 // RAII: auto free images from RAM
 public: ~Image();
 
+// try to access image, exceptions
+private: static void openImage(const std::string imagePath);
+
 // throws exceptions if there is a not supported property in the file
-private: bool checkImageHeader();
+private: static void readImageHeader();
 
 // loading image to RAM
 private: static void loadImage();
 
-
-
-
-
 };
-
-
-
-
-
-
-
-
-
 #endif // IMAGE_H
