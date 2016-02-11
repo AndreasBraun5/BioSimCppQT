@@ -66,7 +66,7 @@ class Image{
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ variables /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-private:    static int imageCount;   // further use for checking total number of read images
+private:    static int imageCount = 0;   // further use for checking total number of read images
 
     // represents TGA
     // 16 bits and positive --> unsigned int

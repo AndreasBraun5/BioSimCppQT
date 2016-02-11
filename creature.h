@@ -25,7 +25,7 @@ class CreatureData {
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ variables /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-private: static int creatureCount;    
+private: static int creatureCount;
 public: int creatureID;
 private:	std::string creaturename;
     size_t strength;
