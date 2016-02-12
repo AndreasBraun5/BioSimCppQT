@@ -13,14 +13,14 @@ SOURCES += \
     main.cpp \
     creature.cpp \
     textfilereader.cpp \
-    image.cpp
+    imageTga.cpp
 
 HEADERS += \
     main.h \
     config.h \
     creature.h \
     textfilereader.h \
-    image.h
+    imageTga.h
 
 DISTFILES += \
     Notizen \

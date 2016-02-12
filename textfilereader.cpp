@@ -23,7 +23,7 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ helper methods /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-void splitString(std::string str, std::string delimiter, std::vector<std::string>& vector);
+void splitString(std::string str, std::string delimiter, std::vector<std::string> &vector);
 void addErrorLine(std::string);
 
 

@@ -9,6 +9,7 @@
 #include <conio.h>
 #include "Creature.h"
 #include "TextFileReader.h"
+#include "imageTga.h"
 
 
 
@@ -42,6 +43,8 @@ int main(int argn, char *argv[]) {
     // identify images to load
     // forall images call constructor Image(imagepath)
     // for testing reasons only open one image at a time
+    ImageTga testImage {ImageTga::createCorrectImage({"C:/GitHub/BioSimCppQT/GraficsTextfiles/dead.tga"})};
+
 
     _getch();
     return 0;

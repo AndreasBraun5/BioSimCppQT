@@ -17,7 +17,7 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class CreatureData /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-class Image{
+class ImageTga{
 
     /*/ TGA fileheader = 12 informations (see wikipedia TGA)
  *  followed by imageID and imagePalletType (don´t exist here)
@@ -63,14 +63,15 @@ class Image{
     tga tutorial:
 /*/
 
+
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ variables /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-private:    static int imageCount = 0;   // further use for checking total number of read images
+private:    static int imageCount;   // further use for checking total number of read images
 
     // represents TGA
     // 16 bits and positive --> unsigned int
-private: std::vector<unsigned int> tgaHeader[12];
+private:    std::vector<unsigned int> tgaHeader;
     // 01 int imageIDLength;       // 1 Byte, is zero --> no imageID
     // 02 int colourPalletType;    // 1 Byte, is zero --> no colourPalletType
     // 03 int imageType;           // 1 Byte, is two --> RGB 24 bit uncompressed
@@ -91,33 +92,21 @@ private: std::vector<unsigned int> tgaHeader[12];
     // saved as RGB(A) with 1 Byte per channel
     // 32 bits and positive --> unsigned long int
     // Alpha-channel maybe not given
-private: std::vector< std::vector <unsigned long int> > imageData; // [1]
+private:    std::vector< std::vector <unsigned long int> > imageData; // [1]
+
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ constructor, destructor /*/
+    /*/ constructor: after checking CreateCorrectImage /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    // RAII: call readImageHeader()
-public: Image(const std::string imagePath);
-    // RAII: auto free images from RAM
-public: ~Image();
+public:     ImageTga() = delete;
+private:    ImageTga(std::vector<unsigned int> tgaHeader,
+                 std::vector< std::vector <unsigned long int> > imageData  );
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ openImage: ... /*/
+    /*/ createCorrectImage: ... /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    // try to access image, exceptions
-private: static void openImage(const std::string imagePath);
+public:     static ImageTga createCorrectImage(const std::string imagePath);
 
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ readImageHeader: ... /*/
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    // throws exceptions if there is a not supported property in the file
-private: static void readImageHeader();
-
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ loadImage: ... /*/
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    // loading image to RAM
-private: static void loadImage();
 
 };
 #endif // IMAGE_H
