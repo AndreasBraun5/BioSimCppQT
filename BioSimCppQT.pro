@@ -20,7 +20,8 @@ HEADERS += \
     config.h \
     creature.h \
     textfilereader.h \
-    imageTga.h
+    imageTga.h \
+    exceptions.h
 
 DISTFILES += \
     Notizen \

@@ -72,21 +72,6 @@ private:    static int imageCount;   // further use for checking total number of
     // represents TGA
     // 16 bits and positive --> unsigned int
 private:    std::vector<unsigned int> tgaHeader;
-    // 01 int imageIDLength;       // 1 Byte, is zero --> no imageID
-    // 02 int colourPalletType;    // 1 Byte, is zero --> no colourPalletType
-    // 03 int imageType;           // 1 Byte, is two --> RGB 24 bit uncompressed
-    // 04 int palletStart;         // 16 bits, is zero
-    // 05 int palletLength;        // 16 bits, is zero
-    // 06 int sizePerBitsOfEachPalletEntry;    // 1 Byte
-    // 07 int zeroPointX;          // 16 bits, is zero
-    // 08 int zeroPointY;          // 16 bits, is zero
-    // 09 int imageWidth;          // 16 bits
-    // 10 int imageHeigth;         // 16 bits
-    // 11 int bitsPerPixel;        // 1 Byte, is 24 or 32, maybe there is no Alpha-channel
-    // 12 int imageAttributeType;  // 1 Byte
-    //    int imageID;             // nonexistent --> not in tgaHeader
-    //    int colourPallet;        // nonexistent --> not in tgaHeader
-
 
     // imageData, idea mutlilevel or multidimensional storage, break if imageWitdth*imageHeigth*...
     // saved as RGB(A) with 1 Byte per channel
@@ -100,7 +85,7 @@ private:    std::vector< std::vector <unsigned long int> > imageData; // [1]
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 public:     ImageTga() = delete;
 private:    ImageTga(std::vector<unsigned int> tgaHeader,
-                 std::vector< std::vector <unsigned long int> > imageData  );
+                     std::vector< std::vector <unsigned long int> > imageData  );
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ createCorrectImage: ... /*/
@@ -109,4 +94,20 @@ public:     static ImageTga createCorrectImage(const std::string imagePath);
 
 
 };
+
+class Pixel{
+private:    std::vector <unsigned int> pixelValues;
+
+public:     Pixel(unsigned int Rvalue, unsigned int Gvalue, unsigned int Bvalue);
+    Pixel(unsigned int Rvalue, unsigned int Gvalue, unsigned int Bvalue, unsigned int Avalue);
+
+    //pixelValues[0] = Rvalue;
+    //pixelValues[1] = Gvalue;
+    //pixelValues[2] = Bvalue;
+    //pixelValues[3] = Avalue; // by default 255
+    std::vector <unsigned int> getPixelValues() const;
+
+};
+
+
 #endif // IMAGE_H
