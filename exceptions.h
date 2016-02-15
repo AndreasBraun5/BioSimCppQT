@@ -32,4 +32,10 @@ class falseBitsPerPixel : public std::exception{
     }
 };
 
+class imageTooBig : public std::exception{
+    virtual const char* what() const throw(){
+        return "ImageTooBig: Maximum image size exceeded";
+    }
+};
+
 #endif // EXCEPTIONS_H

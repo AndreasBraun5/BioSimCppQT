@@ -10,6 +10,7 @@
 #include "Creature.h"
 #include "TextFileReader.h"
 #include "imageTga.h"
+#include <exception>
 
 
 
@@ -40,10 +41,17 @@ int main(int argn, char *argv[]) {
     creatureList = in.readCreatureFile(filename);
 
 
+
     // identify images to load
     // forall images call constructor Image(imagepath)
     // for testing reasons only open one image at a time
-    ImageTga testImage {ImageTga::createCorrectImage({"C:/GitHub/BioSimCppQT/GraficsTextfiles/dead.tga"})};
+    try{
+        //ImageTga testImage {ImageTga::createCorrectImage({"C:/GitHub/BioSimCppQT/GraficsTextfiles/dead.tga"})};
+        ImageTga testImage {ImageTga::createCorrectImage({"C:/GitHub/BioSimCppQT/GraficsTextfiles/terrain/sand.tga"})};
+    } catch (std::exception& e){
+        std::cout << e.what();
+    }
+    ImageTga testImage {ImageTga::createCorrectImage({"C:/GitHub/BioSimCppQT/GraficsTextfiles/terrain/sand.tga"})};
 
 
     _getch();

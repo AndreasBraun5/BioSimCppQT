@@ -1,6 +1,6 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-    TODO loading of a correct TGA-image into the RAM
+    TODO loading of a correct TGA-image into the RAM.
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #pragma once
@@ -15,7 +15,28 @@
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ class CreatureData /*/
+/*/ class Pixel /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+class Pixel{
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+    /*/ variables /*/
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+private:    std::vector <unsigned char> pixelValues;
+
+
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+    /*/ constructor: after checking CreateCorrectImage /*/
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+public:     Pixel(unsigned char Rvalue, unsigned char Gvalue, unsigned char Bvalue, unsigned char Avalue);
+
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+    /*/ getPixelValues: returns pixelValues ascending as following: RGB(A) /*/
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+    std::vector <unsigned char> getPixelValues() const;
+};
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class ImageTga{
 
@@ -67,17 +88,8 @@ class ImageTga{
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ variables /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-private:    static int imageCount;   // further use for checking total number of read images
-
-    // represents TGA
-    // 16 bits and positive --> unsigned int
-private:    std::vector<unsigned int> tgaHeader;
-
-    // imageData, idea mutlilevel or multidimensional storage, break if imageWitdth*imageHeigth*...
-    // saved as RGB(A) with 1 Byte per channel
-    // 32 bits and positive --> unsigned long int
-    // Alpha-channel maybe not given
-private:    std::vector< std::vector <unsigned long int> > imageData; // [1]
+private:    std::vector<unsigned int> tgaHeader;    // 18 Byte size
+private:    std::vector<Pixel> imageData;           // saved as following with 1 byte each: RGB(A). 4 byte = 1 pixel.
 
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
@@ -85,27 +97,17 @@ private:    std::vector< std::vector <unsigned long int> > imageData; // [1]
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 public:     ImageTga() = delete;
 private:    ImageTga(std::vector<unsigned int> tgaHeader,
-                     std::vector< std::vector <unsigned long int> > imageData  );
+                     std::vector<Pixel> imageData  );
+
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ createCorrectImage: ... /*/
+    /*/ createCorrectImage: TODO ... /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 public:     static ImageTga createCorrectImage(const std::string imagePath);
 
 
-};
+    //Pixel getPixel(unsigned int ); TODO
 
-class Pixel{
-private:    std::vector <unsigned int> pixelValues;
-
-public:     Pixel(unsigned int Rvalue, unsigned int Gvalue, unsigned int Bvalue);
-    Pixel(unsigned int Rvalue, unsigned int Gvalue, unsigned int Bvalue, unsigned int Avalue);
-
-    //pixelValues[0] = Rvalue;
-    //pixelValues[1] = Gvalue;
-    //pixelValues[2] = Bvalue;
-    //pixelValues[3] = Avalue; // by default 255
-    std::vector <unsigned int> getPixelValues() const;
 
 };
 
