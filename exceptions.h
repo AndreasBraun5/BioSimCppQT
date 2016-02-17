@@ -38,4 +38,11 @@ class imageTooBig : public std::exception{
     }
 };
 
+class corruptImageData : public std::exception{
+    virtual const char* what() const throw(){
+        return "CorruptImageData: Expected imageDataSize doesn´t match read Bytes from steam.";
+    }
+};
+
+
 #endif // EXCEPTIONS_H

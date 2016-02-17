@@ -52,7 +52,7 @@ int main(int argn, char *argv[]) {
         std::cout << e.what();
     }
     ImageTga testImage {ImageTga::createCorrectImage({"C:/GitHub/BioSimCppQT/GraficsTextfiles/terrain/sand.tga"})};
-
+    PRINT("Aufgabe 1 und Aufgabe 2 erfolgreich beendet.");
 
     _getch();
     return 0;

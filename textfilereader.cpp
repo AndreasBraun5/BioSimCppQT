@@ -5,8 +5,6 @@
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 
-// TODO const
-// TODO Exceptions
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ #include /*/
@@ -64,7 +62,7 @@ std::list<CreatureData> TextFileReader::readCreatureFile(const std::string filep
             StatisticalFileReadingData::rownumber++;
             if (!rowDescription.empty()) {											// Zeile nicht leer
                 TextFileReader::splitCreatureRow(rowDescription, creatureInfo);		// splitting & storing temporarily in creatureInfo
-                if (correctRow(creatureInfo)) {										// checking row	TODO Fehler bricht ab nach den Algen...
+                if (correctRow(creatureInfo)) {										// checking row
                     creatureList.push_back(createCreatureFromRow(creatureInfo));	// adding a creature to the list
                     StatisticalFileReadingData::rowscorrect++;
                 }

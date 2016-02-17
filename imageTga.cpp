@@ -1,6 +1,6 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-    TODO loading of a correct TGA-image into the RAM
+    Loading of a correct TGA-image into the RAM.
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 
@@ -14,8 +14,12 @@
 #include <vector>
 
 
+
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class Pixel /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ constructor /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 Pixel::Pixel(unsigned char Rvalue, unsigned char Gvalue, unsigned char Bvalue, unsigned char Avalue){
     pixelValues.push_back(Rvalue);
@@ -32,6 +36,7 @@ Pixel::Pixel(unsigned char Rvalue, unsigned char Gvalue, unsigned char Bvalue, u
 std::vector<unsigned char> Pixel::getPixelValues() const { return this->pixelValues;}
 
 
+
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
@@ -45,12 +50,9 @@ ImageTga::ImageTga(std::vector<unsigned int> tgaHeader,
 }
 
 
-
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ createCorrectImage /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-// return Image
-// TODO error checking
 ImageTga ImageTga::createCorrectImage(const std::string imagePath){
 
     std::vector<unsigned int> tempTgaHeader(12);
@@ -62,7 +64,9 @@ ImageTga ImageTga::createCorrectImage(const std::string imagePath){
     unsigned int charsToReadFromStreamForImageData;
 
     std::ifstream imageStream(imagePath, std::ifstream::binary);
-    while(imageStream.good()){
+    bool goodStream = imageStream.good();
+    while(goodStream){
+
 
         // reading header
         imageStream.read(bufferTgaHeaderUnformatted, 18);
@@ -108,14 +112,6 @@ ImageTga ImageTga::createCorrectImage(const std::string imagePath){
         char *bufferImageDataUnformatted =  new char[numberOfPixels*4]; // always 4 byte per pixel              // !delete bufferImageDataUnformatted
         imageStream.read(bufferImageDataUnformatted, charsToReadFromStreamForImageData);
 
-        /*      // this is how u correctly cast... -_-
-        for(int i=0; i<=1000; i++){
-            char charTemp = bufferImageDataUnformatted[i];
-            unsigned char unsignedCharTemp = bufferImageDataUnformatted[i];
-            int intTemp = 0xFF & (int) bufferImageDataUnformatted[i]; //leading 1er abschneiden (per Bitmaske auf das letzte Byte)
-            unsigned int unsignedIntTemp = (unsigned int) (unsigned char) bufferImageDataUnformatted[i];
-        }
-*/
 
         // Bytes are ordered as BGR(A) in usigned char bufferImageDataUnformatted[i]
         // --> RGB(A) in Pixel whereas each is safed in Pixel tempImageData[i]
@@ -125,25 +121,32 @@ ImageTga ImageTga::createCorrectImage(const std::string imagePath){
                         bufferImageDataUnformatted[i+1],
                         bufferImageDataUnformatted[i+0],255);                                       // [Pixel(R,G,B,A)]
                 tempImageData.push_back(pixel) ;
-                //Pixel pixel = Pixel(bufferImageDataUnformatted[2],bufferImageDataUnformatted[1],bufferImageDataUnformatted[0],255);
-                //Pixel pixel2 = Pixel(bufferImageDataUnformatted[5],bufferImageDataUnformatted[4],bufferImageDataUnformatted[3],255);
-            }
+             }
         } else { // byteToReadPerPixel == 4
             for(unsigned int i=0; i<charsToReadFromStreamForImageData ; i=i+4){
                 Pixel pixel = Pixel(bufferImageDataUnformatted[i+3],bufferImageDataUnformatted[i+2],
                         bufferImageDataUnformatted[i+1],bufferImageDataUnformatted[i+0]);           // [Pixel(R,G,B,A)]
                 tempImageData.push_back(pixel) ;
-                //Pixel pixel = Pixel(bufferImageDataUnformatted[3],bufferImageDataUnformatted[2],bufferImageDataUnformatted[1],bufferImageDataUnformatted[0]);
-                //Pixel pixel2 = Pixel(bufferImageDataUnformatted[7],bufferImageDataUnformatted[6],bufferImageDataUnformatted[5],bufferImageDataUnformatted[4]);
             }
         }
 
+        if(numberOfPixels != tempImageData.size()) throw corruptImageData();
+
         delete[] bufferImageDataUnformatted;                                                                    // !delete bufferImageDataUnformatted
         imageStream.close();
+        goodStream = false;
     }
-    return ImageTga(tempTgaHeader,tempImageData);
-    // TODO check number of values in vector<pixel>
+    return ImageTga(tempTgaHeader, tempImageData);
 }
+
+/*      // this is how u cast correctly... -_-
+for(int i=0; i<=1000; i++){
+    char charTemp = bufferImageDataUnformatted[i];
+    unsigned char unsignedCharTemp = bufferImageDataUnformatted[i];
+    int intTemp = 0xFF & (int) bufferImageDataUnformatted[i]; //leading 1er abschneiden (per Bitmaske auf das letzte Byte)
+    unsigned int unsignedIntTemp = (unsigned int) (unsigned char) bufferImageDataUnformatted[i];
+}
+*/
 
 
 
