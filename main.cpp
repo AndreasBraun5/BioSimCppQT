@@ -12,6 +12,10 @@
 #include "imageTga.h"
 #include <exception>
 
+#include <QApplication>
+#include <QMainWindow>
+#include <ui_biosim.h>
+#include "biosim.h"
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
@@ -55,5 +59,11 @@ int main(int argn, char *argv[]) {
     PRINT("Aufgabe 1 und Aufgabe 2 erfolgreich beendet.");
 
     _getch();
-    return 0;
+
+    QApplication a(argn, argv);
+    biosim w;
+    w.show();
+
+    return a.exec();
+    //return 0;
 }

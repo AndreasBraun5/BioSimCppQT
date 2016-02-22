@@ -1,6 +1,8 @@
 QT += core
 QT -= gui
 
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 CONFIG += c++11
 
 TARGET = BioSimCppQT
@@ -13,7 +15,8 @@ SOURCES += \
     main.cpp \
     creature.cpp \
     textfilereader.cpp \
-    imageTga.cpp
+    imageTga.cpp \
+    biosim.cpp
 
 HEADERS += \
     main.h \
@@ -21,7 +24,8 @@ HEADERS += \
     creature.h \
     textfilereader.h \
     imageTga.h \
-    exceptions.h
+    exceptions.h \
+    biosim.h
 
 DISTFILES += \
     Notizen \
@@ -62,4 +66,5 @@ DISTFILES += \
     Grafics&Textfiles/Aufgabenblaetter.pdf \
     BioSim.qmodel
 
-FORMS +=
+FORMS += \
+    biosim.ui
