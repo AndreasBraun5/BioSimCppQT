@@ -9,61 +9,47 @@
 #include <conio.h>
 #include "Creature.h"
 #include "TextFileReader.h"
-#include "imageTga.h"
+#include "imagetga.h"
 #include <exception>
+#include "gamemodel.h"
 
 #include <QApplication>
-#include <QMainWindow>
-#include <ui_biosim.h>
+//#include <QMainWindow>
+//#include <ui_biosim.h>
 #include "biosim.h"
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ main 18.02.16 /*/
+/*/ main /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 int main(int argn, char *argv[]) {
 
-    // TODO using namespace std
+    PRINT(argn);
+    //PRINT(argv[0]);   // argument used by qt
+    PRINT(argv[1]);     // relative filepath
 
-    // realisation of the relative path of all other data than .../CreatureTable.txt by
-    // cutting and concatenating out of its given path from argv[]
-
-    PRINT("Enter number: \n 0 for CreatureTable_mitFehlern.txt \n 1 for CreatureTable.txt");
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+    /*/ used for early debugging of work units one and two /*/
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+    PRINT("Currently not active any more.\nEnter number: \n 0 for CreatureTable_mitFehlern.txt \n 1 for CreatureTable.txt");
     int integer = 1;
     std::cin >> integer;
-    std::string filename;
+    std::string creatureDataFilepath;
     if (integer == 0) {
-        filename = "F:/Drive/AngewandteInformatik/Bio-SimulatorPraktikum/Elearning/CreatureTable_mitFehlern.txt";
+        creatureDataFilepath = creatureDataFilepath.append("CreatureTable_mitFehlern.txt");
     }
     else {
-        filename = "F:/Drive/AngewandteInformatik/Bio-SimulatorPraktikum/Elearning/CreatureTable.txt";
+        creatureDataFilepath = creatureDataFilepath.append("CreatureTable.txt");
     }
     PRINT("");
 
-    std::list<CreatureData> creatureList; // stores all the creature objects
-    TextFileReader in{};
-    creatureList = in.readCreatureFile(filename);
 
-
-
-    // identify images to load
-    // forall images call constructor Image(imagepath)
-    // for testing reasons only open one image at a time
-    try{
-        //ImageTga testImage {ImageTga::createCorrectImage({"C:/GitHub/BioSimCppQT/GraficsTextfiles/dead.tga"})};
-        ImageTga testImage {ImageTga::createCorrectImage({"C:/GitHub/BioSimCppQT/GraficsTextfiles/terrain/sand.tga"})};
-    } catch (std::exception& e){
-        std::cout << e.what();
-    }
-    ImageTga testImage {ImageTga::createCorrectImage({"C:/GitHub/BioSimCppQT/GraficsTextfiles/terrain/sand.tga"})};
-    PRINT("Aufgabe 1 und Aufgabe 2 erfolgreich beendet.");
-
-    _getch();
-
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+    /*/ Application /*/
+    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     QApplication a(argn, argv);
     biosim w;
     w.show();
-
-    return a.exec();
-    //return 0;
+    PRINT("Erfolgreicher Durchlauf\n");
+    return a.exec(); // game loop executing
 }

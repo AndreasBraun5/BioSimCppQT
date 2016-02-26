@@ -91,9 +91,6 @@
            </widget>
           </item>
          </layout>
-         <zorder>simulationAreaHorizontalScrollBar</zorder>
-         <zorder>simulationAreaVerticalScrollBar</zorder>
-         <zorder>simulationAreaInnerFrame</zorder>
         </widget>
        </item>
       </layout>
@@ -244,7 +241,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="simulationControllButtonStep">
+         <widget class="QPushButton" name="simulationControllButtonStop">
           <property name="text">
            <string>step</string>
           </property>

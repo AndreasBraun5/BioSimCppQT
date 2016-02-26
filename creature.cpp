@@ -7,27 +7,22 @@
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ #include /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include "Creature.h"
 #include <fstream>
 #include <vector>
 #include <string>
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ static variable initialising /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 int CreatureData::creatureCount = 0;
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ constructors /*/
+/*/ class CreatureData /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 CreatureData::CreatureData() {
     CreatureData::creatureCount++;
     this->creatureID = creatureCount;
 }
-
 CreatureData::CreatureData(std::string creaturename, size_t strength, size_t speed,
                            size_t lifetime, const std::vector<std::string> properties, std::string figurepath) {
     CreatureData::creatureCount++;
@@ -55,4 +50,32 @@ void CreatureData::printCreatureDataToConsole(){
     }
     PRINT(this->figurepath);
     return;
+}
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ CreatureData getter /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+std::string CreatureData::getCreaturename() const
+{
+    return creaturename;
+}
+
+size_t CreatureData::getStrength() const
+{
+    return strength;
+}
+
+size_t CreatureData::getSpeed() const
+{
+    return speed;
+}
+
+std::vector<std::string> CreatureData::getProperties() const
+{
+    return properties;
+}
+
+size_t CreatureData::getLifetime() const
+{
+    return lifetime;
 }

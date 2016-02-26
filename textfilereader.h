@@ -10,8 +10,6 @@
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ #include /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include <list>
 #include "Config.h"
 #include "Creature.h"
@@ -20,37 +18,29 @@
 /*/ class TextFileReader /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class TextFileReader {
-
-
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ constructors /*/
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 public: TextFileReader() {}
-
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ readCreatureFile: writes information to statisticalFileReadingData &
- *  errorFileReadingData /*/
+     *  errorFileReadingData /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 public: std::list<CreatureData> readCreatureFile(const std::string filepath);
-
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ splitCreaturerow: rowDescription = one row of textfile  /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 private: void splitCreatureRow(const std::string rowDescription, std::vector<std::string>& tempCreatureInfo);
 
-
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ splitCreaturerow: writes to errorFileReadingData /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 private: bool correctRow(const std::vector<std::string>& creatureInfo);
 
-
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ splitCreaturerow: cleares the vector creatureInfo /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-private: CreatureData createCreatureFromRow(std::vector<std::string>& creatureInfo);};
+private: CreatureData createCreatureFromRow(std::vector<std::string>& creatureInfo);
+};
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/

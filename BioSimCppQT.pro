@@ -15,17 +15,20 @@ SOURCES += \
     main.cpp \
     creature.cpp \
     textfilereader.cpp \
-    imageTga.cpp \
-    biosim.cpp
+    biosim.cpp \
+    gamemodel.cpp \
+    imagetga.cpp
 
 HEADERS += \
     main.h \
     config.h \
     creature.h \
     textfilereader.h \
-    imageTga.h \
     exceptions.h \
-    biosim.h
+    biosim.h \
+    gamemodel.h \
+    imagetga.h \
+    landscape.h
 
 DISTFILES += \
     Notizen \

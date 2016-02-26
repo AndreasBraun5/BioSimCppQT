@@ -20,13 +20,9 @@
 /*/ class CreatureData /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class CreatureData {
-
-
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ variables /*/
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 private: static int creatureCount;
 public: int creatureID;
+    // TODO still to create getter methods for all private vars
 private:	std::string creaturename;
     size_t strength;
     size_t speed;
@@ -34,19 +30,16 @@ private:	std::string creaturename;
     std::vector<std::string> properties;
     std::string figurepath;
 
-
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ constructors /*/
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 public: CreatureData();    
 public: CreatureData(std::string creaturename, size_t strength, size_t speed,
                      size_t lifetime, const std::vector<std::string> properties, std::string figurepath);
 
-
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ methods /*/
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 public: void printCreatureDataToConsole();
+    std::string getCreaturename() const;
+    size_t getStrength() const;
+    size_t getSpeed() const;
+    std::vector<std::string> getProperties() const;
+    size_t getLifetime() const;
 };
 
 #endif /*!defined (INCLUDED_CREATURE_H)*/

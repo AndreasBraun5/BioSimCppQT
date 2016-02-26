@@ -6,9 +6,7 @@
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ #include /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-#include "imageTga.h"
+#include "imagetga.h"
 #include <fstream>
 #include "exceptions.h"
 #include <vector>
@@ -18,19 +16,11 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class Pixel /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ constructor /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 Pixel::Pixel(unsigned char Rvalue, unsigned char Gvalue, unsigned char Bvalue, unsigned char Avalue){
     pixelValues.push_back(Rvalue);
     pixelValues.push_back(Gvalue);
     pixelValues.push_back(Bvalue);
     pixelValues.push_back(Avalue);
-
-    //pixelValues[1] = Rvalue;
-    //pixelValues[1] = Gvalue;
-    //pixelValues[2] = Bvalue;
-    //pixelValues[3] = Avalue;
 }
 
 std::vector<unsigned char> Pixel::getPixelValues() const { return this->pixelValues;}
@@ -39,9 +29,6 @@ std::vector<unsigned char> Pixel::getPixelValues() const { return this->pixelVal
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ constructor /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 ImageTga::ImageTga(std::vector<unsigned int> tgaHeader,
                    std::vector<Pixel> imageData  ){

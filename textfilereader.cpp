@@ -19,26 +19,18 @@
 //#include <exception>
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ helper methods /*/
+/*/ helper methods, declaration /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 void splitString(std::string str, std::string delimiter, std::vector<std::string> &vector);
 void addErrorLine(std::string);
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ static variable initialising /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 int StatisticalFileReadingData::rownumber = 0;
 int StatisticalFileReadingData::rowscorrect = 0;
 int StatisticalFileReadingData::rowsincorrect = 0;
 int ErrorFileReadingData::errorInfoCount = 0;
 std::vector<std::string> ErrorFileReadingData::errorInfo(100);                      // TODO Avoid Hack [100], dynamische Initialisierung möglich auch bei static?
-
-
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ constructors /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-// only standard construtor is implemented
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
@@ -185,7 +177,7 @@ CreatureData TextFileReader::createCreatureFromRow(std::vector<std::string>& cre
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ helper methods, declaration /*/
+/*/ helper methods, initialisation /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 void splitString(std::string str, std::string delimiter, std::vector<std::string>& vector) {
     size_t substrStart = 0;

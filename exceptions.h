@@ -3,12 +3,11 @@
     Explanation & collection of all self defined exceptions used in BioSim.
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+#pragma once
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
 
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ #include /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include <iostream>
 #include <exception>
