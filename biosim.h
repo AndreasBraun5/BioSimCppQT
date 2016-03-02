@@ -15,12 +15,12 @@ namespace Ui {
 class biosim;
 }
 
-class biosim : public QMainWindow // biosim is subclass of qmainwindow, TODO subclass of Ui_biosim too? see ui_biosim.h bottom
+class biosim : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit biosim(QWidget *parent = 0); // biosim has no parent --> own window
+    explicit biosim(QWidget *parent = 0);
     ~biosim();
     void updateCreatureEditLines(CreatureData tempCreatureEditing);
     CreatureData getTempCreatureEditing() const;
@@ -28,7 +28,7 @@ public:
 private:
     CreatureData tempCreatureEditing;
     Ui::biosim *ui;
-    GameModel gamemodel;
+    GameModel *gamemodel;
 
 private slots:
     void updateCreatureComboBox(int index);

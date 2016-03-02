@@ -18,7 +18,7 @@ Kuh,120,25,600,Landbewohner Pflanzenfresser,land/kuh.jpg
 Pferd,140,120,550,Landbewohner Pflanzenfresser,land/pferd.jpg
 Emu,70,180,350,  Landbewohner  ,land/emu.jpg
 
-Schaf,70,30,400,Landbewohner Pflanzenfresser aengstlich,land/schaf.jpg
+Schaf,70,30,400,Landbewohner Pflanzenfresser ängstlich,land/schaf.jpg
 Hund,100,50,700,Landbewohner Fleischfresser,land/hund.jpg\n
 Baer,250,30,650,Landbewohner Fleischfresser Brummt,../land/ursus.jpg
 ,Tiger,90,200,600,Landbewohner Fleischfresser,land/tiger.jpg

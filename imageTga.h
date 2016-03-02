@@ -10,6 +10,7 @@
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include <vector>
+#include <qimage.h>
 
 
 
@@ -33,7 +34,7 @@ private:    std::vector<unsigned int> tgaHeader;    // 18 Byte size
 private:    std::vector<Pixel> imageData;           // saved as following with 1 byte of each RGB(A). 4 byte = 1 pixel.
 
 
-public:     ImageTga() = delete;
+//public:     ImageTga() = delete;
 private:    ImageTga(std::vector<unsigned int> tgaHeader,
                      std::vector<Pixel> imageData  );
 
@@ -43,7 +44,7 @@ private:    ImageTga(std::vector<unsigned int> tgaHeader,
      *  corrupt image can be constructed /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 public:     static ImageTga createCorrectImage(const std::string imagePath);
-
+            static QImage* createCorrectQImage(const std::string imagePath);
 };
 
 

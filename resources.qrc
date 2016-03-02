@@ -1,0 +1,45 @@
+<RCC>
+    <qresource prefix="/wasser">
+        <file>GraficsTextfiles/wasser/algen.tga</file>
+        <file>GraficsTextfiles/wasser/delphin.tga</file>
+        <file>GraficsTextfiles/wasser/forelle.tga</file>
+        <file>GraficsTextfiles/wasser/hai.tga</file>
+        <file>GraficsTextfiles/wasser/krabbe.tga</file>
+        <file>GraficsTextfiles/wasser/plankton.tga</file>
+        <file>GraficsTextfiles/wasser/seetang.tga</file>
+        <file>GraficsTextfiles/wasser/wels.tga</file>
+    </qresource>
+    <qresource prefix="/land">
+        <file>GraficsTextfiles/land/birne.tga</file>
+        <file>GraficsTextfiles/land/busch.tga</file>
+        <file>GraficsTextfiles/land/eiche.tga</file>
+        <file>GraficsTextfiles/land/emu.tga</file>
+        <file>GraficsTextfiles/land/gras.tga</file>
+        <file>GraficsTextfiles/land/hund.tga</file>
+        <file>GraficsTextfiles/land/kaktus.tga</file>
+        <file>GraficsTextfiles/land/kuh.tga</file>
+        <file>GraficsTextfiles/land/pferd.tga</file>
+        <file>GraficsTextfiles/land/schaf.tga</file>
+        <file>GraficsTextfiles/land/sonnenblume.tga</file>
+        <file>GraficsTextfiles/land/tanne.tga</file>
+        <file>GraficsTextfiles/land/tiger.tga</file>
+        <file>GraficsTextfiles/land/ursus.tga</file>
+    </qresource>
+    <qresource prefix="/terrain">
+        <file>GraficsTextfiles/terrain/deep_sea.tga</file>
+        <file>GraficsTextfiles/terrain/earth.tga</file>
+        <file>GraficsTextfiles/terrain/rocks.tga</file>
+        <file>GraficsTextfiles/terrain/sand.tga</file>
+        <file>GraficsTextfiles/terrain/shallow_water.tga</file>
+        <file>GraficsTextfiles/terrain/snow.tga</file>
+    </qresource>
+    <qresource prefix="/other">
+        <file>GraficsTextfiles/Aufgabenblätter.pdf</file>
+        <file>GraficsTextfiles/CreatureTable.txt</file>
+        <file>GraficsTextfiles/CreatureTable_mitFehlern.txt</file>
+        <file>GraficsTextfiles/cursor.tga</file>
+        <file>GraficsTextfiles/dead.tga</file>
+        <file>GraficsTextfiles/Fehler_in_CreatureTable.txt</file>
+        <file>GraficsTextfiles/path.tga</file>
+    </qresource>
+</RCC>

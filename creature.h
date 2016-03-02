@@ -22,7 +22,6 @@
 class CreatureData {
 private: static int creatureCount;
 public: int creatureID;
-    // TODO still to create getter methods for all private vars
 private:	std::string creaturename;
     size_t strength;
     size_t speed;

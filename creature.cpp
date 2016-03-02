@@ -20,8 +20,8 @@ int CreatureData::creatureCount = 0;
 /*/ class CreatureData /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 CreatureData::CreatureData() {
-    CreatureData::creatureCount++;
     this->creatureID = creatureCount;
+    CreatureData::creatureCount++;
 }
 CreatureData::CreatureData(std::string creaturename, size_t strength, size_t speed,
                            size_t lifetime, const std::vector<std::string> properties, std::string figurepath) {
@@ -40,8 +40,8 @@ CreatureData::CreatureData(std::string creaturename, size_t strength, size_t spe
 /*/ printCreatureDataToConsole /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 void CreatureData::printCreatureDataToConsole(){
-    PRINT(this->creatureID)
-            PRINT(this->creaturename);
+    PRINT(this->creatureID);
+    PRINT(this->creaturename);
     PRINT(this->strength);
     PRINT(this->speed);
     PRINT(this->lifetime);

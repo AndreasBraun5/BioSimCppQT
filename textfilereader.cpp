@@ -16,7 +16,8 @@
 #include <iostream>
 #include <list>
 #include <regex>
-//#include <exception>
+#include "exceptions.h"
+
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ helper methods, declaration /*/
@@ -39,44 +40,36 @@ std::vector<std::string> ErrorFileReadingData::errorInfo(100);                  
 std::list<CreatureData> TextFileReader::readCreatureFile(const std::string filepath) {
     std::list<CreatureData> creatureList;
     std::fstream infile(filepath, std::fstream::in);
-    if (!infile.good()) {
-        PRINT(&std::ios::rdstate);
-        PRINT(&std::ios::badbit);
-        PRINT(&std::ios::eofbit);
-        PRINT(&std::ios::failbit);
-        std::cerr << filepath << " Creature file cannot be opened!\n";
-    }
-    else {
-        std::vector<std::string> creatureInfo;										// information from one row
-        std::string rowDescription;
-        while (infile.good()) {
-            std::getline(infile, rowDescription);
-            StatisticalFileReadingData::rownumber++;
-            if (!rowDescription.empty()) {											// Zeile nicht leer
-                TextFileReader::splitCreatureRow(rowDescription, creatureInfo);		// splitting & storing temporarily in creatureInfo
-                if (correctRow(creatureInfo)) {										// checking row
-                    creatureList.push_back(createCreatureFromRow(creatureInfo));	// adding a creature to the list
-                    StatisticalFileReadingData::rowscorrect++;
-                }
-                else {
-                    creatureInfo.clear();
-                    StatisticalFileReadingData::rowsincorrect++;
-                }
-            } else {
-                ErrorFileReadingData::errorInfo[ErrorFileReadingData::errorInfoCount] =
-                        std::string("Empty line found. Line: ").append(std::to_string(StatisticalFileReadingData::rownumber));
-                ErrorFileReadingData::errorInfoCount++;
+    std::vector<std::string> creatureInfo;										// information from one row
+    std::string rowDescription;
+    if(infile.good() == false) throw badTextFilePath();
+    while (infile.good()) {
+        std::getline(infile, rowDescription);
+        StatisticalFileReadingData::rownumber++;
+        if (!rowDescription.empty()) {											// Zeile nicht leer
+            TextFileReader::splitCreatureRow(rowDescription, creatureInfo);		// splitting & storing temporarily in creatureInfo
+            if (correctRow(creatureInfo)) {										// checking row
+                creatureList.push_back(createCreatureFromRow(creatureInfo));	// adding a creature to the list
+                StatisticalFileReadingData::rowscorrect++;
             }
+            else {
+                creatureInfo.clear();
+                StatisticalFileReadingData::rowsincorrect++;
+            }
+        } else {
+            ErrorFileReadingData::errorInfo[ErrorFileReadingData::errorInfoCount] =
+                    std::string("Empty line found. Line: ").append(std::to_string(StatisticalFileReadingData::rownumber));
+            ErrorFileReadingData::errorInfoCount++;
         }
+    }
 
-        PRINT("");
-        std::cout << "Read rows: " << StatisticalFileReadingData::rownumber << std::endl;
-        std::cout << "Correct rows: " << StatisticalFileReadingData::rowscorrect << std::endl;
-        std::cout << "Incorrect rows: " << StatisticalFileReadingData::rowsincorrect << std::endl;
-        std::cout << "" << std::endl;
-        for (int i = 0; i < ErrorFileReadingData::errorInfo.size(); i++) {
-            std::cout << ErrorFileReadingData::errorInfo[i] << std::endl;
-        }
+    PRINT("");
+    std::cout << "Read rows: " << StatisticalFileReadingData::rownumber << std::endl;
+    std::cout << "Correct rows: " << StatisticalFileReadingData::rowscorrect << std::endl;
+    std::cout << "Incorrect rows: " << StatisticalFileReadingData::rowsincorrect << std::endl;
+    std::cout << "" << std::endl;
+    for (int i = 0; i < ErrorFileReadingData::errorInfo.size(); i++) {
+        std::cout << ErrorFileReadingData::errorInfo[i] << std::endl;
     }
     return creatureList;
 }

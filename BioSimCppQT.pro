@@ -24,11 +24,11 @@ HEADERS += \
     config.h \
     creature.h \
     textfilereader.h \
-    exceptions.h \
     biosim.h \
     gamemodel.h \
     imagetga.h \
-    landscape.h
+    landscape.h \
+    exceptions.h
 
 DISTFILES += \
     Notizen \
@@ -67,7 +67,17 @@ DISTFILES += \
     Grafics&Textfiles/land/tiger.tga \
     Grafics&Textfiles/land/ursus.tga \
     Grafics&Textfiles/Aufgabenblaetter.pdf \
-    BioSim.qmodel
+    BioSim.qmodel \
+    GraficsTextfiles/Aufgabenblätter.pdf \
+    GraficsTextfiles/cursor.tga \
+    GraficsTextfiles/dead.tga \
+    GraficsTextfiles/path.tga \
+    GraficsTextfiles/CreatureTable.txt \
+    GraficsTextfiles/CreatureTable_mitFehlern.txt \
+    GraficsTextfiles/Fehler_in_CreatureTable.txt
 
 FORMS += \
     biosim.ui
+
+RESOURCES += \
+    resources.qrc

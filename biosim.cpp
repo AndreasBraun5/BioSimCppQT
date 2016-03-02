@@ -10,17 +10,18 @@
 #include "qmessagebox.h"
 
 biosim::biosim(QWidget *parent) :
-    QMainWindow(parent), // constructor call to parent class
-    ui(new Ui::biosim) // initialisation of the private pointer ui of type biosim
+    QMainWindow(parent),
+    ui(new Ui::biosim), // initialisation of the private pointer ui of type biosim              // !delete ui
+    gamemodel(new GameModel(qApp->arguments().at(1).toStdString()))                             // !delete gamemodel
 {
     ui->setupUi(this);
 
     // pre selecting of the combobox and its related fields
-    tempCreatureEditing = gamemodel.creatureList.at(0); // TODO Now tempCreatureEditing points to the same object??
-    for(int i=0; i<gamemodel.creatureList.size(); i++){
-        ui->creatureEditingComboBox->addItem(QString::fromStdString(gamemodel.creatureList.at(i).getCreaturename()));
+    tempCreatureEditing = gamemodel->creatureList.at(0);
+    for(int i=0; i<gamemodel->creatureList.size(); i++){
+        ui->creatureEditingComboBox->addItem(QString::fromStdString(gamemodel->creatureList.at(i).getCreaturename()));
     }
-    updateCreatureEditLines(tempCreatureEditing); // initally to the first element
+    updateCreatureEditLines(tempCreatureEditing);
 
     connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));
     connect(ui->creatureEditingPushButton, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
@@ -31,7 +32,8 @@ biosim::biosim(QWidget *parent) :
 
 biosim::~biosim()
 {
-    delete ui;
+    delete ui;                                                                                  // !delete ui
+    delete gamemodel;                                                                           // !delete gamemodel
 }
 
 void biosim::updateCreatureEditLines(CreatureData tempCreatureEditing)
@@ -53,7 +55,7 @@ void biosim::updateCreatureEditLines(CreatureData tempCreatureEditing)
 
 void biosim::updateCreatureComboBox(int index)
 {
-    tempCreatureEditing = gamemodel.creatureList.at(index);
+    tempCreatureEditing = gamemodel->creatureList.at(index);
     updateCreatureEditLines(tempCreatureEditing);
 }
 
