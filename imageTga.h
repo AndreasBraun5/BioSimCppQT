@@ -13,38 +13,26 @@
 #include <qimage.h>
 
 
-
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ class Pixel /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-class Pixel{
-private:    std::vector <unsigned char> pixelValues;
-public:     Pixel(unsigned char Rvalue, unsigned char Gvalue, unsigned char Bvalue, unsigned char Avalue);
-    std::vector <unsigned char> getPixelValues() const;
-};
-
-
-
 // TODO auto_pointer/unique_ptr: limited garbage collection facility ??
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class ImageTga{
 private:    std::vector<unsigned int> tgaHeader;    // 18 Byte size
-private:    std::vector<Pixel> imageData;           // saved as following with 1 byte of each RGB(A). 4 byte = 1 pixel.
+private:    QImage imageData;
+            //QImage *imageDatap;
 
 
-//public:     ImageTga() = delete;
+public:     ImageTga() = delete;
 private:    ImageTga(std::vector<unsigned int> tgaHeader,
-                     std::vector<Pixel> imageData  );
+                     QImage imageData);
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/  createCorrectImage: static method for creating a image. The created image is always
      *  a valid one. Different types of errors are excluded before creating. Therefore no
      *  corrupt image can be constructed /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-public:     static ImageTga createCorrectImage(const std::string imagePath);
-            static QImage* createCorrectQImage(const std::string imagePath);
+public:     static ImageTga createCorrectQImage(const std::string imagePath);
 };
 
 

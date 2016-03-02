@@ -28,7 +28,7 @@ public:
 private:
     CreatureData tempCreatureEditing;
     Ui::biosim *ui;
-    GameModel *gamemodel;
+    GameModel *gamemodel; // TODO access violation
 
 private slots:
     void updateCreatureComboBox(int index);

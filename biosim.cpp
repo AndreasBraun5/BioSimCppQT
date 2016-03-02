@@ -8,6 +8,7 @@
 #include "gamemodel.h"
 #include "list"
 #include "qmessagebox.h"
+#include <qgraphicsscene.h>
 
 biosim::biosim(QWidget *parent) :
     QMainWindow(parent),
@@ -17,13 +18,16 @@ biosim::biosim(QWidget *parent) :
     ui->setupUi(this);
 
     // pre selecting of the combobox and its related fields
-    tempCreatureEditing = gamemodel->creatureList.at(0);
+    tempCreatureEditing =  gamemodel->creatureList.at(0);
     for(int i=0; i<gamemodel->creatureList.size(); i++){
         ui->creatureEditingComboBox->addItem(QString::fromStdString(gamemodel->creatureList.at(i).getCreaturename()));
     }
     updateCreatureEditLines(tempCreatureEditing);
 
-    connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));
+    QGraphicsScene scene;
+    //scene.addItem(gamemodel->algen);
+
+    connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));            
     connect(ui->creatureEditingPushButton, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
     connect(ui->simulationControllButtonPause, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
     connect(ui->simulationControllButtonStart, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));

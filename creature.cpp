@@ -19,10 +19,7 @@ int CreatureData::creatureCount = 0;
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class CreatureData /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-CreatureData::CreatureData() {
-    this->creatureID = creatureCount;
-    CreatureData::creatureCount++;
-}
+CreatureData::CreatureData() {} // needed for initialising the tempCreatureEditing
 CreatureData::CreatureData(std::string creaturename, size_t strength, size_t speed,
                            size_t lifetime, const std::vector<std::string> properties, std::string figurepath) {
     CreatureData::creatureCount++;

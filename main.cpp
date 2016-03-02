@@ -30,22 +30,6 @@ int main(int argn, char *argv[]) {
     PRINT(argv[1]);     // relative filepath
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/ used for early debugging of work units one and two /*/
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*PRINT("Currently not active any more.\nEnter number: \n 0 for CreatureTable_mitFehlern.txt \n 1 for CreatureTable.txt");
-    int integer = 1;
-    std::cin >> integer;
-    std::string creatureDataFilepath;
-    if (integer == 0) {
-        creatureDataFilepath = creatureDataFilepath.append("CreatureTable_mitFehlern.txt");
-    }
-    else {
-        creatureDataFilepath = creatureDataFilepath.append("CreatureTable.txt");
-    }
-    PRINT("");
-    */
-
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ Application /*/
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     QApplication a(argn, argv);
