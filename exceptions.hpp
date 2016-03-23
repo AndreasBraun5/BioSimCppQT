@@ -4,12 +4,9 @@
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #pragma once
-#ifndef EXCEPTIONS_H
-#define EXCEPTIONS_H
+#ifndef INCLUDED_BIOSIM_EXCEPTIONS_HPP
+#define INCLUDED_BIOSIM_EXCEPTIONS_HPP
 
-
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-// #include <iostream>
 #include <exception>
 
 class invalidHeader : public std::exception{
@@ -56,4 +53,4 @@ class badTextFilePath : public std::exception{
     }
 };
 
-#endif // EXCEPTIONS_H
+#endif // EXCEPTIONS_HPP

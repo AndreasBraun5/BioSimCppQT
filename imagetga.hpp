@@ -4,13 +4,12 @@
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #pragma once
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef INCLUDED_BIOSIM_IMAGE_HPP
+#define INCLUDED_BIOSIM_IMAGE_HPP
 
-
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include <vector>
-#include <qimage.h>
+
+#include <qimage>
 
 
 // TODO auto_pointer/unique_ptr: limited garbage collection facility ??
@@ -36,4 +35,4 @@ public:     static ImageTga createCorrectQImage(const std::string imagePath);
 };
 
 
-#endif // IMAGE_H
+#endif // IMAGE_HPP

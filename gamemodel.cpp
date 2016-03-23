@@ -1,11 +1,18 @@
-#include "gamemodel.h"
-#include "imagetga.h"
-#include "textfilereader.h"
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/
+    gamemodel
+/*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+#include "gamemodel.hpp"
 
+#include <iostream>
 
+#include "imagetga.hpp"
+#include "textfilereader.hpp"
 
-//GameModel::GameModel(){}
-
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ class GameModel /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 GameModel::GameModel(std::string relativePath)
 {
     setUpGamemodel(relativePath);
@@ -13,7 +20,7 @@ GameModel::GameModel(std::string relativePath)
 
 void GameModel::setUpGamemodel(std::string relativePath)
 {
-    PRINT("Enter number: \n 0 for CreatureTable_mitFehlern.txt \n 1 for CreatureTable.txt");
+    std::cout << "Enter number: \n 0 for CreatureTable_mitFehlern.txt \n 1 for CreatureTable.txt \n";
     int integer = 1;
     std::cin >> integer;
     std::string creatureDataFilepath = relativePath;
@@ -23,7 +30,7 @@ void GameModel::setUpGamemodel(std::string relativePath)
     else {
         creatureDataFilepath = creatureDataFilepath.append("CreatureTable.txt");
     }
-    PRINT("");
+    std::cout << "\n";
 
     try{loadCreatures(creatureDataFilepath);} catch (std::exception &e){std::cout << e.what() << "/n" << creatureDataFilepath;}
 
@@ -58,14 +65,16 @@ void GameModel::loadImages(std::string relativePath)
 
 // helper method: only needed by loadCreatures
 bool creatureListComparator(const CreatureData cd1, const CreatureData cd2){
-    return cd1.getCreaturename()[0] < cd2.getCreaturename()[0];
+    return cd1.creaturename[0] < cd2.creaturename[0];
 }
 
 void GameModel::loadCreatures(std::string relativeFilePath)
 {
     // TODO working with relative path
-    TextFileReader tfr;
-    QList<CreatureData> tempList = QList<CreatureData>::fromStdList(tfr.readCreatureFile(relativeFilePath));
+    StatisticalFileReadingData sfrd;
+    ErrorFileReadingData efrd;
+    // TODO per reference
+    QList<CreatureData> tempList = QList<CreatureData>::fromStdList(textFileReader::readCreatureFile(relativeFilePath, sfrd, efrd));
     qSort(tempList.begin(), tempList.end(),creatureListComparator);
     creatureList = tempList;
 }

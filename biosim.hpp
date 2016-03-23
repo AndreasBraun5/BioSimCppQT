@@ -4,13 +4,15 @@
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #pragma once
-#ifndef BIOSIM_H
-#define BIOSIM_H
+#ifndef INCLUDED_BIOSIM_BIOSIM_HPP
+#define INCLUDED_BIOSIM_BIOSIM_HPP
 
 #include <QMainWindow>
-#include "gamemodel.h" // had circular dependency
-#include "creature.h"
 
+#include "gamemodel.hpp" // had circular dependency
+#include "creature.hpp"
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 namespace Ui {
 class biosim;
 }
@@ -22,13 +24,13 @@ class biosim : public QMainWindow
 public:
     explicit biosim(QWidget *parent = 0);
     ~biosim();
-    void updateCreatureEditLines(CreatureData tempCreatureEditing);
+    void updateCreatureEditLines(const CreatureData *tempCreatureEditing);
     CreatureData getTempCreatureEditing() const;
 
 private:
-    CreatureData tempCreatureEditing;
+    CreatureData const * tempCreatureEditing; // pointer to const object
     Ui::biosim *ui;
-    GameModel *gamemodel; // TODO access violation
+    GameModel *gamemodel; // TODO access violation scoped pointer?
 
 private slots:
     void updateCreatureComboBox(int index);
@@ -36,4 +38,4 @@ private slots:
 
 };
 
-#endif // BIOSIM_H
+#endif // BIOSIM_HPP

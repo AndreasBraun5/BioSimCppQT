@@ -36,3 +36,5 @@
 
 // increment is an non atomic operation!!
 // ohne Klammer um (i - deleteCount) verursacht die Auswertereihenfolge der Operatoren einen Zugriff auf ein Vektorelement das nicht da ist.
+
+void printCreatureDataToConsole() const -> verändere keine Membervariablen des Objekts, äquivalent zu dem gerade hier

@@ -1,18 +1,18 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-
+    gamemodel
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #pragma once
-#ifndef GAMEMODEL_H
-#define GAMEMODEL_H
+#ifndef INCLUDED_BIOSIM_GAMEMODEL_HPP
+#define INCLUDED_BIOSIM_GAMEMODEL_HPP
 
-#include "imagetga.h"
-#include "creature.h"
 #include <QMainWindow>
 #include <qimage.h>
-#include <exceptions.h>
-#include "imagetga.h"
+
+#include "exceptions.hpp"
+#include "imagetga.hpp"
+#include "creature.hpp"
 //#include "biosim.h" // circular dependency
 
 class GameModel {
@@ -37,4 +37,4 @@ private: void loadImages(std::string relativePath);
     void loadCreatures(std::string relativeFilePath);
 
 };
-#endif // GAMEMODEL_H
+#endif // GAMEMODEL_HPP

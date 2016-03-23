@@ -3,23 +3,21 @@
     Loading of a correct TGA-image into the RAM.
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+#include "imagetga.hpp"
 
-
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-#include "imagetga.h"
 #include <fstream>
-#include "exceptions.h"
 #include <vector>
+
 #include <QImage>
+
+#include "exceptions.hpp"
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 ImageTga::ImageTga(std::vector<unsigned int> tgaHeader,
-                   QImage imageData  ){
-    this->tgaHeader=tgaHeader;
-    this->imageData=imageData;
+                   QImage imageData  ): tgaHeader(tgaHeader), imageData(imageData){
     //this->imageDatap=&imageData;
 }
 
@@ -40,41 +38,67 @@ ImageTga ImageTga::createCorrectQImage(const std::string imagePath){
     bool goodStream = imageStream.good();
     if(goodStream == false) throw badImageFilePath();
     while(goodStream){
-
-
-        // reading header
+        // reading header //
         imageStream.read(bufferTgaHeaderUnformatted, 18);
-        tempTgaHeader[0] = bufferTgaHeaderUnformatted[0];                                       // imageIDLength
-        tempTgaHeader[1] = bufferTgaHeaderUnformatted[1];                                       // colourPalletType
-        tempTgaHeader[2] = bufferTgaHeaderUnformatted[2];                                       // imageType
-        tempTgaHeader[3] = bufferTgaHeaderUnformatted[3] + bufferTgaHeaderUnformatted[4];       // palletStart
-        tempTgaHeader[4] = bufferTgaHeaderUnformatted[5] + bufferTgaHeaderUnformatted[6];       // palletLength
-        tempTgaHeader[5] = bufferTgaHeaderUnformatted[7];                                       // sizePerBitsOfEachPalletEntry
-        tempTgaHeader[6] = bufferTgaHeaderUnformatted[8] + bufferTgaHeaderUnformatted[9];       // zeroPointX
-        tempTgaHeader[7] = bufferTgaHeaderUnformatted[10] + bufferTgaHeaderUnformatted[11];     // zeroPointY
-        tempTgaHeader[8] = bufferTgaHeaderUnformatted[12] + bufferTgaHeaderUnformatted[13];     // imageWidth
-        tempTgaHeader[9] = bufferTgaHeaderUnformatted[14] + bufferTgaHeaderUnformatted[15];     // imageHeigth
-        tempTgaHeader[10] = bufferTgaHeaderUnformatted[16];                                     // bitsPerPixel
-        tempTgaHeader[11] = bufferTgaHeaderUnformatted[17];                                     // imageAttributeType
+        // imageIDLength
+        tempTgaHeader[0] = bufferTgaHeaderUnformatted[0];
+        // colourPalletType
+        tempTgaHeader[1] = bufferTgaHeaderUnformatted[1];
+        // imageType
+        tempTgaHeader[2] = bufferTgaHeaderUnformatted[2];
+        // palletStart
+        tempTgaHeader[3] = bufferTgaHeaderUnformatted[3] + bufferTgaHeaderUnformatted[4];
+        // palletLength
+        tempTgaHeader[4] = bufferTgaHeaderUnformatted[5] + bufferTgaHeaderUnformatted[6];
+        // sizePerBitsOfEachPalletEntry
+        tempTgaHeader[5] = bufferTgaHeaderUnformatted[7];
+        // zeroPointX
+        tempTgaHeader[6] = bufferTgaHeaderUnformatted[8] + bufferTgaHeaderUnformatted[9];
+        // zeroPointY
+        tempTgaHeader[7] = bufferTgaHeaderUnformatted[10] + bufferTgaHeaderUnformatted[11];
+        // imageWidth
+        tempTgaHeader[8] = bufferTgaHeaderUnformatted[12] + bufferTgaHeaderUnformatted[13];
+        // imageHeigth
+        tempTgaHeader[9] = bufferTgaHeaderUnformatted[14] + bufferTgaHeaderUnformatted[15];
+        // bitsPerPixel
+        tempTgaHeader[10] = bufferTgaHeaderUnformatted[16];
+        // imageAttributeType
+        tempTgaHeader[11] = bufferTgaHeaderUnformatted[17];
         // imageID is nonexistent
         // colourPallet is nonexistent
 
-        // checking header
-        if(tempTgaHeader[0] != 0) throw invalidHeader();                    // imageIDLength = 0 --> imageID is nonexistent
-        if(tempTgaHeader[1] != 0) throw invalidHeader();                    // colourPalletType = 0 --> colourPallet is nonexistent
-        if(tempTgaHeader[2] != 2) throw invalidHeader();                    // imageType = 2
-        if(tempTgaHeader[3] != 0) throw invalidHeader();                    // palletStart = 0
-        if(tempTgaHeader[4] != 0) throw invalidHeader();                    // palletLength = 0
-        // if(tempTgaHeader[5] != ??)                                       // sizePerBitsOfEachPalletEntry: nothing explicitly specified
-        if(tempTgaHeader[6] != 0) throw invalidHeader();                    // zeroPointX = 0
-        if(tempTgaHeader[7] != 0) throw invalidHeader();                    // zeroPointY = 0
-        if(tempTgaHeader[8] != tempTgaHeader[9]) throw onlySqareImages();   // imageWidth=imageHeigth
-        if(tempTgaHeader[10] = 24){                                         // bitsPerPixel = 24 = RGB
-            byteToReadPerPixel = 3;}
-        else if(tempTgaHeader[10] = 32){                                    // bitsPerPixel = 32 = RGB(A)
-            byteToReadPerPixel = 4;}
-        else{throw falseBitsPerPixel();}
-        // if(tempTgaHeader[11] != ??)                                      // imageAttributeType: nothing explicitly specified
+        // checking header //
+        // imageIDLength = 0 --> imageID is nonexistent
+        if(tempTgaHeader[0] != 0) throw invalidHeader();
+        // colourPalletType = 0 --> colourPallet is nonexistent
+        if(tempTgaHeader[1] != 0) throw invalidHeader();
+        // imageType = 2
+        if(tempTgaHeader[2] != 2) throw invalidHeader();
+        // palletStart = 0
+        if(tempTgaHeader[3] != 0) throw invalidHeader();
+        // palletLength = 0
+        if(tempTgaHeader[4] != 0) throw invalidHeader();
+        // sizePerBitsOfEachPalletEntry: nothing explicitly specified
+        // if(tempTgaHeader[5] != ??)
+        // zeroPointX = 0
+        if(tempTgaHeader[6] != 0) throw invalidHeader();
+        // zeroPointY = 0
+        if(tempTgaHeader[7] != 0) throw invalidHeader();
+        // imageWidth=imageHeigth
+        if(tempTgaHeader[8] != tempTgaHeader[9]) throw onlySqareImages();
+        // bitsPerPixel
+        if(tempTgaHeader[10] = 24) {
+            // 24 = RGB
+            byteToReadPerPixel = 3;
+        } else if(tempTgaHeader[10] = 32) {
+            // 32 = RGB(A)
+            byteToReadPerPixel = 4;
+        }
+        else{
+            throw falseBitsPerPixel();
+        }
+        // imageAttributeType: nothing explicitly specified
+        // if(tempTgaHeader[11] != ??)
 
         // limitation of image size. Symbolic value of 10kBytes (maximum value needed to load all used images)
         if( byteToReadPerPixel > 10000) throw invalidHeader();
@@ -95,7 +119,7 @@ ImageTga ImageTga::createCorrectQImage(const std::string imagePath){
                 tempImageData.push_back(bufferImageDataUnformatted[i+2]); // TODO here
                 tempImageData.push_back(bufferImageDataUnformatted[i+1]);
                 tempImageData.push_back(bufferImageDataUnformatted[i+0]);
-             }
+            }
         } else { // byteToReadPerPixel == 4
             for(unsigned int i=0; i<charsToReadFromStreamForImageData ; i=i+4){
                 tempImageData.push_back(bufferImageDataUnformatted[i+3]);

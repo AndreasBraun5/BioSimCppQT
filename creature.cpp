@@ -1,14 +1,12 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-    creature data, creature logic
+    creature data
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+#include "creature.hpp"
 
-
-
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-#include "Creature.h"
 #include <fstream>
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -19,60 +17,26 @@ int CreatureData::creatureCount = 0;
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class CreatureData /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-CreatureData::CreatureData() {} // needed for initialising the tempCreatureEditing
+void CreatureData::operator=(const CreatureData &cd){} // TODO operator=
+
 CreatureData::CreatureData(std::string creaturename, size_t strength, size_t speed,
-                           size_t lifetime, const std::vector<std::string> properties, std::string figurepath) {
+                           size_t lifetime, const std::vector<std::string> properties,
+                           std::string figurepath) :
+    creaturename(creaturename), strength(strength), speed(speed), lifetime(lifetime),
+    properties(properties), figurepath(figurepath)
+{
     CreatureData::creatureCount++;
-    this->creatureID = creatureCount;
-    this->creaturename = creaturename;
-    this->strength = strength;
-    this->speed = speed;
-    this->lifetime = lifetime;
-    this->properties = properties;
-    this->figurepath = figurepath;
 }
 
 
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ printCreatureDataToConsole /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-void CreatureData::printCreatureDataToConsole(){
-    PRINT(this->creatureID);
-    PRINT(this->creaturename);
-    PRINT(this->strength);
-    PRINT(this->speed);
-    PRINT(this->lifetime);
+void CreatureData::printCreatureDataToConsole() const{
+    std::cout << this->creaturename << "\n";
+    std::cout << this->strength << "\n";
+    std::cout << this->speed << "\n";
+    std::cout << this->lifetime << "\n";
     for (int i = 0; i < this->properties.size(); i++) {
-        PRINT(this->properties[i]);
+        std::cout << this->properties[i] << "\n";
     }
-    PRINT(this->figurepath);
+    std::cout << this->figurepath << "\n";
     return;
-}
-
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ CreatureData getter /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-std::string CreatureData::getCreaturename() const
-{
-    return creaturename;
-}
-
-size_t CreatureData::getStrength() const
-{
-    return strength;
-}
-
-size_t CreatureData::getSpeed() const
-{
-    return speed;
-}
-
-std::vector<std::string> CreatureData::getProperties() const
-{
-    return properties;
-}
-
-size_t CreatureData::getLifetime() const
-{
-    return lifetime;
 }

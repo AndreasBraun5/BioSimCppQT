@@ -1,33 +1,34 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ #include /*/
+/*/
+    main
+/*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-#include "Main.h"
-#include<fstream>
 #include <vector>
 #include <string>
 #include <list>
-#include <conio.h>
-#include "Creature.h"
-#include "TextFileReader.h"
-#include "imagetga.h"
+#include <iostream>
+#include <conio.h>                          //################
 #include <exception>
-#include "gamemodel.h"
 #include <fstream>
 
 #include <QApplication>
-//#include <QMainWindow>
-//#include <ui_biosim.h>
-#include "biosim.h"
 
+#include "biosim.hpp"
+#include "creature.hpp"
+#include "textFileReader.hpp"
+#include "imagetga.hpp"
+#include "gamemodel.hpp"
+
+// TODO find why creature count not with 0
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ main /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 int main(int argn, char *argv[]) {
 
-    PRINT(argn);        // number of arguments
-    //PRINT(argv[0]);   // argument used by qt
-    PRINT(argv[1]);     // relative filepath
+    std::cout << argn << "\n";          // number of arguments
+    //std::cout << argv[0];             // argument used by qt
+    std::cout << argv[1] << "\n";       // relative filepath
 
     /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
     /*/ Application /*/
@@ -35,6 +36,6 @@ int main(int argn, char *argv[]) {
     QApplication a(argn, argv);
     biosim w;
     w.show();
-    PRINT("Erfolgreicher Durchlauf\n");
+    std::cout << "Erfolgreicher Durchlauf\n";
     return a.exec(); // game loop executing
 }
