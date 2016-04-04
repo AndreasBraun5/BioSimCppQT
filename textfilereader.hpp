@@ -19,20 +19,23 @@ class ErrorFileReadingData;
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 namespace textFileReader {
 // writes information to statisticalFileReadingData & errorFileReadingData
-std::list<CreatureData> readCreatureFile(const std::string filepath,
+std::list<CreatureData> readCreatureFile(const std::string &filePath,
                                          StatisticalFileReadingData &statisticalFileReadingData,
                                          ErrorFileReadingData &errorFileReadingData);
 
-// splitCreaturerow: rowDescription = one row of textfile
-void splitCreatureRow(const std::string rowDescription, std::vector<std::string>& tempCreatureInfo);
+// splitCreaturerow: rowDescription = one row of textfile, writes to tempCreatureInfo
+void splitCreatureRow(const std::string &rowDescription,
+                      std::vector<std::string> &tempCreatureInfo);
 
 
 // correctRow: writes to errorFileReadingData
-bool correctRow(const std::vector<std::string>& creatureInfo, StatisticalFileReadingData &statisticalFileReadingData, ErrorFileReadingData &errorFileReadingData);
+bool correctRow(const std::vector<std::string> &creatureInfo,
+                StatisticalFileReadingData &statisticalFileReadingData,
+                ErrorFileReadingData &errorFileReadingData);
 
 
 // splitCreaturerow: cleares the vector creatureInfo
-CreatureData createCreatureFromRow(std::vector<std::string>& creatureInfo);
+CreatureData createCreatureFromRow(std::vector<std::string> &creatureInfo);
 }
 
 
@@ -43,7 +46,8 @@ class StatisticalFileReadingData {
 public:	int rownumber;
     int rowscorrect;
     int rowsincorrect;
-public: StatisticalFileReadingData(){
+
+    StatisticalFileReadingData() {
         rownumber = 0;
         rowscorrect = 0;
         rowsincorrect = 0;
@@ -56,8 +60,8 @@ public: StatisticalFileReadingData(){
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class ErrorFileReadingData {    
 public: int errorInfoCount;
-    std::vector<std::string> errorInfo;
-public: ErrorFileReadingData(){
+    std::vector<std::string> errorInfo; // TODO Unfinished: vector declaration is done, but no initialiation. Error shows if Creature file with errors is used.
+    ErrorFileReadingData() {
         errorInfoCount = 0;
     }
 };

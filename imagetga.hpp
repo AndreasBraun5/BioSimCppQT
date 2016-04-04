@@ -9,29 +9,23 @@
 
 #include <vector>
 
-#include <qimage>
+#include <qimage.h>
 
 
-// TODO auto_pointer/unique_ptr: limited garbage collection facility ??
+// TODO Discuss: smart pointer: auto_pointer = boost::scoped_ptr or std::unique_ptr, boost::shared_ptr, std::shared_ptr
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-class ImageTga{
-private:    std::vector<unsigned int> tgaHeader;    // 18 Byte size
-private:    QImage imageData;
-            //QImage *imageDatap;
+class ImageTga {
+private: std::vector<unsigned int> tgaHeader;    // 18 Byte size
+    QImage imageData;
+    //QImage *imageDatap; TODO Unfinished:
 
 
-public:     ImageTga() = delete;
-private:    ImageTga(std::vector<unsigned int> tgaHeader,
-                     QImage imageData);
-
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-    /*/  createCorrectImage: static method for creating a image. The created image is always
-     *  a valid one. Different types of errors are excluded before creating. Therefore no
-     *  corrupt image can be constructed /*/
-    /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-public:     static ImageTga createCorrectQImage(const std::string imagePath);
+public: ImageTga() = delete; // no zombie image possible
+private: ImageTga(const std::vector<unsigned int> &tgaHeader,
+                  const QImage &imageData);
+public: static ImageTga createCorrectQImage(const std::string &imagePath);
 };
 
 

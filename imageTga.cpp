@@ -16,17 +16,18 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-ImageTga::ImageTga(std::vector<unsigned int> tgaHeader,
-                   QImage imageData  ): tgaHeader(tgaHeader), imageData(imageData){
-    //this->imageDatap=&imageData;
+ImageTga::ImageTga(const std::vector<unsigned int> &tgaHeader,
+                   const QImage &imageData  )
+    : tgaHeader(tgaHeader), imageData(imageData) {
+    //this->imageDatap=&imageData; TODO Note:
 }
 
 
-ImageTga ImageTga::createCorrectQImage(const std::string imagePath){
+ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
 
     std::vector<unsigned int> tempTgaHeader(12);
     char bufferTgaHeaderUnformatted[18];
-    std::vector<unsigned char> tempImageData; //TODO with temporary length of one (1)...
+    std::vector<unsigned char> tempImageData; //TODO Note: with temporary length of one (1)... ??
 
     //QImage tempQImage;
 
@@ -37,7 +38,8 @@ ImageTga ImageTga::createCorrectQImage(const std::string imagePath){
     std::ifstream imageStream(imagePath, std::ifstream::binary);
     bool goodStream = imageStream.good();
     if(goodStream == false) throw badImageFilePath();
-    while(goodStream){
+    while(goodStream) {
+
         // reading header //
         imageStream.read(bufferTgaHeaderUnformatted, 18);
         // imageIDLength
@@ -69,23 +71,23 @@ ImageTga ImageTga::createCorrectQImage(const std::string imagePath){
 
         // checking header //
         // imageIDLength = 0 --> imageID is nonexistent
-        if(tempTgaHeader[0] != 0) throw invalidHeader();
+        if(tempTgaHeader[0] != 0) {throw invalidHeader();}
         // colourPalletType = 0 --> colourPallet is nonexistent
-        if(tempTgaHeader[1] != 0) throw invalidHeader();
+        if(tempTgaHeader[1] != 0) {throw invalidHeader();}
         // imageType = 2
-        if(tempTgaHeader[2] != 2) throw invalidHeader();
+        if(tempTgaHeader[2] != 2) {throw invalidHeader();}
         // palletStart = 0
-        if(tempTgaHeader[3] != 0) throw invalidHeader();
+        if(tempTgaHeader[3] != 0) {throw invalidHeader();}
         // palletLength = 0
-        if(tempTgaHeader[4] != 0) throw invalidHeader();
+        if(tempTgaHeader[4] != 0) {throw invalidHeader();}
         // sizePerBitsOfEachPalletEntry: nothing explicitly specified
         // if(tempTgaHeader[5] != ??)
         // zeroPointX = 0
-        if(tempTgaHeader[6] != 0) throw invalidHeader();
+        if(tempTgaHeader[6] != 0) {throw invalidHeader();}
         // zeroPointY = 0
-        if(tempTgaHeader[7] != 0) throw invalidHeader();
+        if(tempTgaHeader[7] != 0) {throw invalidHeader();}
         // imageWidth=imageHeigth
-        if(tempTgaHeader[8] != tempTgaHeader[9]) throw onlySqareImages();
+        if(tempTgaHeader[8] != tempTgaHeader[9]) {throw onlySqareImages();}
         // bitsPerPixel
         if(tempTgaHeader[10] = 24) {
             // 24 = RGB
@@ -93,35 +95,34 @@ ImageTga ImageTga::createCorrectQImage(const std::string imagePath){
         } else if(tempTgaHeader[10] = 32) {
             // 32 = RGB(A)
             byteToReadPerPixel = 4;
-        }
-        else{
+        } else {
             throw falseBitsPerPixel();
         }
         // imageAttributeType: nothing explicitly specified
         // if(tempTgaHeader[11] != ??)
 
         // limitation of image size. Symbolic value of 10kBytes (maximum value needed to load all used images)
-        if( byteToReadPerPixel > 10000) throw invalidHeader();
+        if( byteToReadPerPixel > 10000) {throw invalidHeader();}
 
 
         // reading imageData
-        numberOfPixels = tempTgaHeader[8]*tempTgaHeader[9]; // only square images supported
-        charsToReadFromStreamForImageData = numberOfPixels*byteToReadPerPixel;
-        char *bufferImageDataUnformatted =  new char[numberOfPixels*4]; // always 4 byte per pixel              // !delete bufferImageDataUnformatted
+        numberOfPixels = tempTgaHeader[8] * tempTgaHeader[9]; // only square images supported
+        charsToReadFromStreamForImageData = numberOfPixels * byteToReadPerPixel;
+        char *bufferImageDataUnformatted =  new char[numberOfPixels * 4]; // always 4 byte per pixel              // !delete bufferImageDataUnformatted
         imageStream.read(bufferImageDataUnformatted, charsToReadFromStreamForImageData);
 
 
         // Bytes are ordered as BGR(A) in usigned char bufferImageDataUnformatted[i]
-        // --> reorganizing aplpha-RGB in Pixel whereas each value is safed in Pixel tempImageData
-        if(byteToReadPerPixel == 3){
-            for(unsigned int i=0; i<charsToReadFromStreamForImageData ; i=i+3){
+        // --> reorganizing aplpha-RGB in Pixel whereas each value is safed in tempImageData
+        if(byteToReadPerPixel == 3) {
+            for(unsigned int i = 0; i < charsToReadFromStreamForImageData ; i = i + 3) {
                 tempImageData.push_back(255);
-                tempImageData.push_back(bufferImageDataUnformatted[i+2]); // TODO here
+                tempImageData.push_back(bufferImageDataUnformatted[i+2]);
                 tempImageData.push_back(bufferImageDataUnformatted[i+1]);
                 tempImageData.push_back(bufferImageDataUnformatted[i+0]);
             }
         } else { // byteToReadPerPixel == 4
-            for(unsigned int i=0; i<charsToReadFromStreamForImageData ; i=i+4){
+            for(unsigned int i = 0; i < charsToReadFromStreamForImageData ; i = i + 4) {
                 tempImageData.push_back(bufferImageDataUnformatted[i+3]);
                 tempImageData.push_back(bufferImageDataUnformatted[i+2]);
                 tempImageData.push_back(bufferImageDataUnformatted[i+1]);
@@ -129,24 +130,15 @@ ImageTga ImageTga::createCorrectQImage(const std::string imagePath){
             }
         }
 
-        if(numberOfPixels*4 != tempImageData.size()) throw corruptImageData();
+        if(numberOfPixels * 4 != tempImageData.size()) throw corruptImageData();
 
         delete[] bufferImageDataUnformatted;                                                                    // !delete bufferImageDataUnformatted
         imageStream.close();
         goodStream = false;
     }
-    uchar *imageData = &tempImageData.front(); // TODO !!!!
+    uchar *imageData = &tempImageData.front(); // TODO Unfinished: do not know what this was -_-
     return ImageTga(tempTgaHeader, QImage(imageData, tempTgaHeader[8], tempTgaHeader[9], QImage::Format_ARGB32));
 }
-
-/*      // this is how u cast correctly... -_-
-for(int i=0; i<=1000; i++){
-    char charTemp = bufferImageDataUnformatted[i];
-    unsigned char unsignedCharTemp = bufferImageDataUnformatted[i];
-    int intTemp = 0xFF & (int) bufferImageDataUnformatted[i]; //leading 1er abschneiden (per Bitmaske auf das letzte Byte)
-    unsigned int unsignedIntTemp = (unsigned int) (unsigned char) bufferImageDataUnformatted[i];
-}
-*/
 
 
 

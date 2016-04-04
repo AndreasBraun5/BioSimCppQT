@@ -13,12 +13,13 @@
 #include "creature.hpp"
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ class CreatureData /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 namespace Ui {
 class biosim;
 }
 
-class biosim : public QMainWindow
-{
+class biosim : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -28,9 +29,13 @@ public:
     CreatureData getTempCreatureEditing() const;
 
 private:
-    CreatureData const * tempCreatureEditing; // pointer to const object
+    CreatureData const *tempCreatureEditing;
     Ui::biosim *ui;
-    GameModel *gamemodel; // TODO access violation scoped pointer?
+    // TODO Discuss: access violation scoped pointer, if main window is closed. Solved?: the pointer gamemodel was
+    // deleted in the constructor, analog to the ui pointer. But I blieve some kind of garbage collection tried
+    // again to delete the already deleted pointer gamemodel. How to check if the gamemodel pointer is really already deleted?
+    // or better use smart pointer?
+    GameModel *gamemodel;                                   // TODO Unfinished: name it gamecontroller
 
 private slots:
     void updateCreatureComboBox(int index);

@@ -9,6 +9,21 @@
 
 #include <exception>
 
+// TODO Discuss: make more specific exceptions possible?
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ exceptions used by TextFileReader.hpp /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+class badTextFilePath : public std::exception{
+    virtual const char* what() const throw() {
+        return "BadTextFilePath: The given file path is incorrect.";
+    }
+};
+
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ exceptions used by ImageTga.hpp /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+
 class invalidHeader : public std::exception{
     virtual const char* what() const throw(){
         return "InvalidHeader: Not supported TGA properties. "
@@ -43,13 +58,6 @@ class corruptImageData : public std::exception{
 class badImageFilePath : public std::exception{
     virtual const char* what() const throw() {
         return "BadImageFilePath: The given file path is incorrect.";
-    }
-};
-
-
-class badTextFilePath : public std::exception{
-    virtual const char* what() const throw() {
-        return "BadTextFilePath: The given file path is incorrect.";
     }
 };
 

@@ -16,8 +16,8 @@ SOURCES += \
     creature.cpp \
     textfilereader.cpp \
     biosim.cpp \
-    gamemodel.cpp \
-    imagetga.cpp
+    imagetga.cpp \
+    gamemodel.cpp
 
 HEADERS += \
     creature.hpp \

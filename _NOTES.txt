@@ -3,14 +3,14 @@
 #define INCLUDED_CONFIG_H				// always use both
 
 #include <iostream>
-#define PRINT(X) std::cout << (X) << std::endl;
+#define PRINT(X) std::cout << (X) << std::endl; // better it is to use a global known function. The define directly replaces, see example if if else ...
 
 #endif
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /*/
-    .h-file is always orderd as following:		see book: one definition rule
+    .hpp-file is always orderd as following:	see book: one definition rule
     function prototypes:						void meineFunktion(int einParameter);
     declaration of global variables:			extern int global;
     declaration of globas constants:			extern const int GLOBALE_KONSTANTE;
@@ -37,4 +37,17 @@
 // increment is an non atomic operation!!
 // ohne Klammer um (i - deleteCount) verursacht die Auswertereihenfolge der Operatoren einen Zugriff auf ein Vektorelement das nicht da ist.
 
-void printCreatureDataToConsole() const -> verändere keine Membervariablen des Objekts, äquivalent zu dem gerade hier
+void printCreatureDataToConsole() const -> verändere keine Membervariablen des Objekts, "der this pointer wird const"
+
+void updateCreatureEditLines(const CreatureData *tempCreatureEditing); // pointed to value is const
+CreatureData const *tempCreatureEditing; // pointer to const object
+
+/*      // this is how u cast correctly... -_-
+for(int i=0; i<=1000; i++){
+    char charTemp = bufferImageDataUnformatted[i];
+    unsigned char unsignedCharTemp = bufferImageDataUnformatted[i];
+    int intTemp = 0xFF & (int) bufferImageDataUnformatted[i]; //leading 1er abschneiden (per Bitmaske auf das letzte Byte)
+    unsigned int unsignedIntTemp = (unsigned int) (unsigned char) bufferImageDataUnformatted[i];
+}
+*/
+

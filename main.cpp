@@ -7,7 +7,7 @@
 #include <string>
 #include <list>
 #include <iostream>
-#include <conio.h>                          //################
+#include <conio.h>                          // TODO Unfinished: check if needed
 #include <exception>
 #include <fstream>
 
@@ -18,8 +18,6 @@
 #include "textFileReader.hpp"
 #include "imagetga.hpp"
 #include "gamemodel.hpp"
-
-// TODO find why creature count not with 0
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ main /*/

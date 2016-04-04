@@ -13,8 +13,11 @@
 #include "exceptions.hpp"
 #include "imagetga.hpp"
 #include "creature.hpp"
-//#include "biosim.h" // circular dependency
+//#include "biosim.h" // TODO Note: circular dependency
 
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+/*/ class TextFileReader /*/
+/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class GameModel {
 public: QList<CreatureData> creatureList;
 
@@ -30,11 +33,12 @@ public: QList<CreatureData> creatureList;
     QScopedPointer<ImageTga> algen;
     QScopedPointer<ImageTga> delpin;
 
-public:  GameModel(std::string relativePath);
-    //~GameModel();
-private: void setUpGamemodel(std::string relativePath);
-private: void loadImages(std::string relativePath);
-    void loadCreatures(std::string relativeFilePath);
+    GameModel() = delete;
+    GameModel(const std::string &relativePath);
+
+private: void setUpGamemodel(const std::string &relativePath);
+    void loadImages(const std::string &relativePath);
+    void loadCreatures(const std::string &relativeFilePath);
 
 };
 #endif // GAMEMODEL_HPP
