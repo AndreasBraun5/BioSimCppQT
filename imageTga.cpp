@@ -136,7 +136,7 @@ ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
         imageStream.close();
         goodStream = false;
     }
-    uchar *imageData = &tempImageData.front(); // TODO Unfinished: do not know what this was -_-
+    uchar *imageData = &tempImageData.front(); // TODO Note: do not know what this was -_-
     return ImageTga(tempTgaHeader, QImage(imageData, tempTgaHeader[8], tempTgaHeader[9], QImage::Format_ARGB32));
 }
 

@@ -25,7 +25,7 @@ public:	const std::string creaturename;
     const std::vector<std::string> properties;
     const std::string figurepath;
 
-    void operator=(const CreatureData &b); // TODO Discuss: operator=, automatic generation is not working
+    //void operator=(const CreatureData &b); // TODO Discuss: operator=, automatic generation is not working
 
     CreatureData() =  delete;
     CreatureData(const std::string &creaturename,

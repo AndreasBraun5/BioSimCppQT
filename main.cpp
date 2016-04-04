@@ -7,7 +7,6 @@
 #include <string>
 #include <list>
 #include <iostream>
-#include <conio.h>                          // TODO Unfinished: check if needed
 #include <exception>
 #include <fstream>
 

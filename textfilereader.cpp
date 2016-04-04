@@ -125,17 +125,16 @@ bool textFileReader::correctRow(const std::vector<std::string> &creatureInfo,
                                                statisticalFileReadingData, errorFileReadingData);
             valid = false;
         }
-        std::regex creaturePropertiesRegex("[a-zA-Z0-9_\\s]*");
+        std::regex creaturePropertiesRegex("[a-zA-Z0-9_\\s]+");
         if (!std::regex_match(creatureInfo[4], creaturePropertiesRegex)) {
-            // valid properties HACK
+            // valid properties
             helperTextFileReader::addErrorLine("Invalid creature properties. Line: ",
                                                statisticalFileReadingData, errorFileReadingData);
             valid = false;
         }
-
         std::regex creatureFilePathRegex("[a-zA-Z0-9]+/[a-zA-Z0-9]+.[a-zA-Z0-9]+");
         if (!std::regex_match(creatureInfo[5], creatureFilePathRegex)) {
-            // valid path HACK
+            // valid path
             helperTextFileReader::addErrorLine("Invalid creature file path. Line: ",
                                                statisticalFileReadingData, errorFileReadingData);
             valid = false;

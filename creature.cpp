@@ -15,7 +15,7 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 int CreatureData::creatureCount = 0;
 
-void CreatureData::operator=(const CreatureData &cd){} // TODO Discuss: operator=
+//void CreatureData::operator=(const CreatureData &cd){} // TODO Discuss: operator=
 
 CreatureData::CreatureData(const std::string &creaturename,
                            size_t strength,

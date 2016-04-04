@@ -60,7 +60,7 @@ public:	int rownumber;
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class ErrorFileReadingData {    
 public: int errorInfoCount;
-    std::vector<std::string> errorInfo; // TODO Unfinished: vector declaration is done, but no initialiation. Error shows if Creature file with errors is used.
+    std::vector<std::string> errorInfo;
     ErrorFileReadingData() {
         errorInfoCount = 0;
     }

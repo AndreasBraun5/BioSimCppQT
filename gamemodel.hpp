@@ -1,6 +1,6 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-    gamemodel
+    gamemodel: constains gamelogic and gamedata
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #pragma once
@@ -9,6 +9,7 @@
 
 #include <QMainWindow>
 #include <qimage.h>
+#include <list>
 
 #include "exceptions.hpp"
 #include "imagetga.hpp"

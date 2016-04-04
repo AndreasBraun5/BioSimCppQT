@@ -1,6 +1,6 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-    gamemodel
+    gamemodel: constains gamelogic and gamedata
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include "gamemodel.hpp"
@@ -16,7 +16,6 @@
 GameModel::GameModel(const std::string &relativePath) {
     setUpGamemodel(relativePath);
 }
-
 void GameModel::setUpGamemodel(const std::string &relativePath) {
     std::cout << "Enter number: \n 0 for CreatureTable_mitFehlern.txt \n 1 for CreatureTable.txt \n";
     int integer = 1;
@@ -35,7 +34,6 @@ void GameModel::setUpGamemodel(const std::string &relativePath) {
         std::cout << e.what() << "/n" << creatureDataFilepath;
     }
 
-    // TODO Unfinished: try catch
     loadImages(relativePath);
 }
 
@@ -45,24 +43,20 @@ void GameModel::loadImages(const std::string &relativePath) {
     std::string relativePathWasser = relativePath + "wasser/";
 
     // TODO Unfinished: all images need to be loaded
-    try {
-        // test
-        this->sand.reset(&ImageTga::createCorrectQImage(relativePath + "terrain/sand.tga"));
+    // TODO Test snd. Shows error if wrong image path is given.
+    this->sand.reset(&ImageTga::createCorrectQImage(relativePath + "terrain/sand.tga"));
 
-        // land
-        this->birne.reset(&ImageTga::createCorrectQImage(relativePathLand + "birne.tga"));
-        this->busch.reset(&ImageTga::createCorrectQImage(relativePathLand + "busch.tga"));
+    // land
+    this->birne.reset(&ImageTga::createCorrectQImage(relativePathLand + "birne.tga"));
+    this->busch.reset(&ImageTga::createCorrectQImage(relativePathLand + "busch.tga"));
 
-        //terrain
-        this->deep_sea.reset(&ImageTga::createCorrectQImage(relativePathTerrain + "deep_sea.tga"));
-        this->earth.reset(&ImageTga::createCorrectQImage(relativePathTerrain + "earth.tga"));
+    //terrain
+    this->deep_sea.reset(&ImageTga::createCorrectQImage(relativePathTerrain + "deep_sea.tga"));
+    this->earth.reset(&ImageTga::createCorrectQImage(relativePathTerrain + "earth.tga"));
 
-        // wasser
-        this->algen.reset(&ImageTga::createCorrectQImage(relativePathWasser + "algen.tga"));
-        this->delpin.reset(&ImageTga::createCorrectQImage(relativePathWasser + "delphin.tga"));
-    } catch(std::exception &e) {
-        std::cout << e.what();
-    }
+    // wasser
+    this->algen.reset(&ImageTga::createCorrectQImage(relativePathWasser + "algen.tga"));
+    this->delpin.reset(&ImageTga::createCorrectQImage(relativePathWasser + "delphin.tga"));
 }
 
 // helper method: only needed by loadCreatures
@@ -73,9 +67,11 @@ bool creatureListComparator(const CreatureData &cd1, const CreatureData &cd2) {
 void GameModel::loadCreatures(const std::string &creatureDataFilepath) {
     StatisticalFileReadingData sfrd;
     ErrorFileReadingData efrd;
-    QList<CreatureData> tempList = QList<CreatureData>::fromStdList(textFileReader::readCreatureFile(creatureDataFilepath, sfrd, efrd));
-    qSort(tempList.begin(), tempList.end(),creatureListComparator);
-    creatureList = tempList;
+    std::list<CreatureData> tempList = textFileReader::readCreatureFile(creatureDataFilepath, sfrd, efrd);
+    tempList.sort(creatureListComparator);
+    // qSort deprecated...
+    QList<CreatureData> qtempList = QList<CreatureData>::fromStdList(tempList);
+    creatureList = qtempList;
 }
 
 

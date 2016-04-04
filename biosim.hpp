@@ -27,6 +27,7 @@ public:
     ~biosim();
     void updateCreatureEditLines(const CreatureData *tempCreatureEditing);
     CreatureData getTempCreatureEditing() const;
+    void startError(const std::string &error);
 
 private:
     CreatureData const *tempCreatureEditing;
@@ -35,7 +36,10 @@ private:
     // deleted in the constructor, analog to the ui pointer. But I blieve some kind of garbage collection tried
     // again to delete the already deleted pointer gamemodel. How to check if the gamemodel pointer is really already deleted?
     // or better use smart pointer?
-    GameModel *gamemodel;                                   // TODO Unfinished: name it gamecontroller
+    GameModel *gamemodel;                                   // TODO Unfinished: Improvement, name it gamecontroller
+    // TODO Discuss: Model(gamemodel)-View(Ui_biosim.h)-Presenter(biosim-.hpp/.cpp) intended. Gamemodel doesn´t know of
+    // Ui_biosim.h (generated from biosim.ui) and biosim-.hpp/.cpp. Gamemodel will contain all data and logic. biosim will
+    // handle the communication and Ui_biosim will only contain the view.
 
 private slots:
     void updateCreatureComboBox(int index);
