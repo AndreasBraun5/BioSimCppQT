@@ -9,8 +9,11 @@
 #include "list"
 #include "iostream"
 
-#include "qmessagebox.h"
 #include <qgraphicsscene.h>
+#include <qmessagebox.h>
+#include <qgraphicsscene.h>
+#include <qgraphicsitem.h>
+#include <QGraphicsPixmapItem>
 
 #include "gamemodel.hpp"
 
@@ -19,15 +22,12 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 biosim::biosim(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::biosim) // initialisation of the private pointer ui of type biosim              // !delete ui
-    {                           // !delete gamemodel
+    ui(new Ui::biosim) { // initialisation of the private pointer ui of type biosim             // !delete ui
     ui->setupUi(this);
-    // TODO Discussion: Application doesn´t start if a vital part couldn´t be loaded, up till now images.
-    // TODO Unfinished: Excercise 3: Open Window and tell if image is loaded wrong (done), if Textfile is loaded wrong (still missing)
     try {
-        this->gamemodel = new GameModel(qApp->arguments().at(1).toStdString());
+        this->gamemodel = new GameModel(qApp->arguments().at(1).toStdString());                 // !delete gamemodel auto managed
     } catch(std::exception &e) {
-        startError(e.what());
+        writeStartErrorToMsgboxAndExit(e.what());
         exit(EXIT_FAILURE);
     }
 
@@ -39,8 +39,17 @@ biosim::biosim(QWidget *parent) :
     }
     updateCreatureEditLines(tempCreatureEditing);
 
-    // QGraphicsScene scene;
-    // scene.addItem(gamemodel->algen);
+    // TODO AB4: Showing one of the Images
+    // TODO
+    QGraphicsScene *scene = new QGraphicsScene(this);                                           // !delete scene auto managed, by parent
+    ui->graphicsView->setScene(scene);
+    scene->addText("hello test");
+    QPixmap qPixmap = QPixmap::fromImage(gamemodel->sand->imageData, Qt::ColorOnly);
+    QImage testImage = gamemodel->sand->imageData;
+    QGraphicsPixmapItem qPixmapItem;
+    qPixmapItem.setPixmap(qPixmap);
+    //qPixmapItem.setParentItem(this); // TODO set parent?
+    scene->addPixmap(qPixmap);
 
     connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));
     connect(ui->creatureEditingPushButton, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
@@ -51,7 +60,7 @@ biosim::biosim(QWidget *parent) :
 
 biosim::~biosim() {
     delete ui;                                                                                  // !delete ui
-    //delete gamemodel; TODO Discuss: wanted to delete here,
+    //delete gamemodel; //TODO Discuss: wanted to delete here,
     //  but there is shown an error if i do that. Deleting an already deleted pointer. // !delete gamemodel
 }
 
@@ -64,10 +73,7 @@ void biosim::updateCreatureEditLines(const CreatureData *tempCreatureEditing) {
         tempProperties.append(QString::fromStdString(tempCreatureEditing->properties[i]));
         tempProperties.append(" ");
     }
-    // TODO Discuss: what if field to long? also it is editable
-    //tempProperties.append("\n");
-    //tempProperties.append("asöljfödsajfldsajfdsajölkjfdsa");
-    //tempProperties.append("xxxxxxxxxxxxxxxxx");
+    // TODO Discuss: Too much text in the LineEdit.
     ui->creatureEditingPropertiesLineEdit->setText(tempProperties);
 }
 
@@ -82,7 +88,7 @@ void biosim::dumbClick() {
     msg.exec();
 }
 
-void biosim::startError(const std::string &error)
+void biosim::writeStartErrorToMsgboxAndExit(const std::string &error)
 {
     QMessageBox msg;
     QString qerror = QString::fromStdString(error);

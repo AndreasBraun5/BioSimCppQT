@@ -12,17 +12,21 @@
 #include <qimage.h>
 
 
-// TODO Discuss: smart pointer: auto_pointer = boost::scoped_ptr or std::unique_ptr, boost::shared_ptr, std::shared_ptr
+// TODO Discuss: smart pointer, auto_pointer = boost::scoped_ptr or std::unique_ptr, boost::shared_ptr, std::shared_ptr
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class ImageTga {
-private: std::vector<unsigned int> tgaHeader;    // 18 Byte size
-    QImage imageData;
-    //QImage *imageDatap; TODO Unfinished:
+public: const std::vector<unsigned int> tgaHeader;    // 18 Byte size
+    // TODO AB0: which one is actually needed.
+    const QImage imageData;
+    //QPixmap qPixmap;
+
+    // TODO Note: imagaDatap. Pointer to the QImage data.
+    // QImage *imageDatap;
 
 
-public: ImageTga() = delete; // no zombie image possible
+public: ImageTga() = delete; // RAII pattern. No zombie image possible
 private: ImageTga(const std::vector<unsigned int> &tgaHeader,
                   const QImage &imageData);
 public: static ImageTga createCorrectQImage(const std::string &imagePath);

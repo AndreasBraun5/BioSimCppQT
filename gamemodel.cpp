@@ -22,18 +22,13 @@ void GameModel::setUpGamemodel(const std::string &relativePath) {
     std::cin >> integer;
     std::string creatureDataFilepath = relativePath;
     if (integer == 0) {
+        // TODO Test: "CreatureTableXXX.txt" Shows error if wrong textfile path is given.
         creatureDataFilepath = creatureDataFilepath.append("CreatureTable_mitFehlern.txt");
     } else {
         creatureDataFilepath = creatureDataFilepath.append("CreatureTable.txt");
     }
     std::cout << "\n";
-
-    try {
-        loadCreatures(creatureDataFilepath);
-    } catch (std::exception &e) {
-        std::cout << e.what() << "/n" << creatureDataFilepath;
-    }
-
+    loadCreatures(creatureDataFilepath);
     loadImages(relativePath);
 }
 
@@ -42,9 +37,11 @@ void GameModel::loadImages(const std::string &relativePath) {
     std::string relativePathTerrain = relativePath + "terrain/";
     std::string relativePathWasser = relativePath + "wasser/";
 
-    // TODO Unfinished: all images need to be loaded
-    // TODO Test snd. Shows error if wrong image path is given.
-    this->sand.reset(&ImageTga::createCorrectQImage(relativePath + "terrain/sand.tga"));
+    // TODO AB2: all images need to be loaded
+    // TODO Test: "snd.tga" Shows error if wrong image path is given.
+    // TODO reset, scoped Pointer must have new
+    this->sand.reset(ImageTga::createCorrectQImage(relativePath + "terrain/sand.tga")); // TODO Note: see boost reference, needs a "new"
+    QImage test = this->sand->imageData;
 
     // land
     this->birne.reset(&ImageTga::createCorrectQImage(relativePathLand + "birne.tga"));
@@ -69,7 +66,7 @@ void GameModel::loadCreatures(const std::string &creatureDataFilepath) {
     ErrorFileReadingData efrd;
     std::list<CreatureData> tempList = textFileReader::readCreatureFile(creatureDataFilepath, sfrd, efrd);
     tempList.sort(creatureListComparator);
-    // qSort deprecated...
+    // TODO Note: qSort deprecated...
     QList<CreatureData> qtempList = QList<CreatureData>::fromStdList(tempList);
     creatureList = qtempList;
 }

@@ -22,7 +22,7 @@
 class GameModel {
 public: QList<CreatureData> creatureList;
 
-    //test
+    //test TODO const Qscoped... -> pointer to a const imagetga sand.
     QScopedPointer<ImageTga> sand;
     // land
     QScopedPointer<ImageTga> birne;
@@ -34,7 +34,7 @@ public: QList<CreatureData> creatureList;
     QScopedPointer<ImageTga> algen;
     QScopedPointer<ImageTga> delpin;
 
-    GameModel() = delete;
+    GameModel() = delete; // RAII pattern. No zombie gamemodel possible.
     GameModel(const std::string &relativePath);
 
 private: void setUpGamemodel(const std::string &relativePath);

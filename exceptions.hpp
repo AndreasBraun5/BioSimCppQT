@@ -15,7 +15,7 @@
 /*/ exceptions used by TextFileReader.hpp /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class badTextFilePath : public std::exception{
-    virtual const char* what() const throw() {
+public:    virtual const char* what() const throw() {
         return "BadTextFilePath: The given file path is incorrect.";
     }
 };

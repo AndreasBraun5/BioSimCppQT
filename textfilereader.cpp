@@ -63,7 +63,7 @@ std::list<CreatureData> textFileReader::readCreatureFile(const std::string &file
             statisticalFileReadingData.rowsincorrect++;
         }
     }
-
+    // TODO Discuss: Programm should not exit
     std::cout << "\n";
     std::cout << "Read rows: " << statisticalFileReadingData.rownumber << std::endl;
     std::cout << "Correct rows: " << statisticalFileReadingData.rowscorrect << std::endl;

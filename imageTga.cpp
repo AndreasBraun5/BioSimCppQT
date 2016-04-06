@@ -19,7 +19,7 @@
 ImageTga::ImageTga(const std::vector<unsigned int> &tgaHeader,
                    const QImage &imageData  )
     : tgaHeader(tgaHeader), imageData(imageData) {
-    //this->imageDatap=&imageData; TODO Note:
+    //this->imageDatap=&imageData; TODO Note: imagaDatap. Pointer to the QImage data.
 }
 
 
@@ -28,8 +28,6 @@ ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
     std::vector<unsigned int> tempTgaHeader(12);
     char bufferTgaHeaderUnformatted[18];
     std::vector<unsigned char> tempImageData; //TODO Note: with temporary length of one (1)... ??
-
-    //QImage tempQImage;
 
     unsigned int numberOfPixels;
     unsigned int byteToReadPerPixel;
@@ -137,7 +135,8 @@ ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
         goodStream = false;
     }
     uchar *imageData = &tempImageData.front(); // TODO Note: do not know what this was -_-
-    return ImageTga(tempTgaHeader, QImage(imageData, tempTgaHeader[8], tempTgaHeader[9], QImage::Format_ARGB32));
+    QImage tempQImage = QImage(imageData, tempTgaHeader[8], tempTgaHeader[9], QImage::Format_ARGB32);
+    return ImageTga(tempTgaHeader, tempQImage);
 }
 
 
