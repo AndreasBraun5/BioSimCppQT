@@ -16,10 +16,12 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+ImageTga::ImageTga(const ImageTga &imageTga)
+    : tgaHeader(imageTga.tgaHeader), imageData(imageTga.imageData) {}
+
 ImageTga::ImageTga(const std::vector<unsigned int> &tgaHeader,
                    const QImage &imageData  )
-    : tgaHeader(tgaHeader), imageData(imageData) {
-    //this->imageDatap=&imageData; TODO Note: imagaDatap. Pointer to the QImage data.
+    : tgaHeader(tgaHeader), imageData(imageData) {//this->imageDatap=&imageData; TODO Note: imagaDatap. Pointer to the QImage data.
 }
 
 
@@ -134,7 +136,7 @@ ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
         imageStream.close();
         goodStream = false;
     }
-    uchar *imageData = &tempImageData.front(); // TODO Note: do not know what this was -_-
+    uchar *imageData = &tempImageData.front();
     QImage tempQImage = QImage(imageData, tempTgaHeader[8], tempTgaHeader[9], QImage::Format_ARGB32);
     return ImageTga(tempTgaHeader, tempQImage);
 }

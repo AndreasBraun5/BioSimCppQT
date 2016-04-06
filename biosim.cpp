@@ -40,16 +40,35 @@ biosim::biosim(QWidget *parent) :
     updateCreatureEditLines(tempCreatureEditing);
 
     // TODO AB4: Showing one of the Images
-    // TODO
+    // TODO Testing Scene
     QGraphicsScene *scene = new QGraphicsScene(this);                                           // !delete scene auto managed, by parent
     ui->graphicsView->setScene(scene);
+
+    // adding Text
     scene->addText("hello test");
-    QPixmap qPixmap = QPixmap::fromImage(gamemodel->sand->imageData, Qt::ColorOnly);
-    QImage testImage = gamemodel->sand->imageData;
+
+    // adding rectitem
+    QGraphicsRectItem tempQRectItem;
+    QBrush greenBrush(Qt::green);
+    QPen outlinePen(Qt::black);
+    tempQRectItem.setRect(0,0,20,40);
+    scene->addRect(250,250,50,100,outlinePen,greenBrush);
+
+    // adding qPixmap of sand.tga, now deep_sea.tga
+    QPixmap qPixmap = QPixmap::fromImage(gamemodel->deep_sea->imageData, Qt::AutoColor);
     QGraphicsPixmapItem qPixmapItem;
     qPixmapItem.setPixmap(qPixmap);
-    //qPixmapItem.setParentItem(this); // TODO set parent?
-    scene->addPixmap(qPixmap);
+    //qPixmapItem.setParentItem(&tempQRectItem); random selected parent, if scene->addItem the scene takes ownership
+    //scene->addPixmap(qPixmap);
+    bool b = ui->graphicsView->isVisible();
+    scene->addItem(&qPixmapItem);
+    bool a = qPixmapItem.isVisible(); // it is visible
+    ui->graphicsView->show();
+    b = ui->graphicsView->isVisible(); // despite being show b is false
+
+    // Testing actual image values
+    QImage tempQImage =  gamemodel->sand->imageData;
+
 
     connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));
     connect(ui->creatureEditingPushButton, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));

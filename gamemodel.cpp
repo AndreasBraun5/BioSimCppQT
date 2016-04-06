@@ -39,16 +39,16 @@ void GameModel::loadImages(const std::string &relativePath) {
 
     // TODO AB2: all images need to be loaded
     // TODO Test: "snd.tga" Shows error if wrong image path is given.
-    // TODO reset, scoped Pointer must have new
-    this->sand.reset(ImageTga::createCorrectQImage(relativePath + "terrain/sand.tga")); // TODO Note: see boost reference, needs a "new"
-    QImage test = this->sand->imageData;
+    // TODO reset Qscoped Pointer with new
+    this->sand.reset(new ImageTga(ImageTga::createCorrectQImage(relativePath + "terrain/sand.tga")));
+    //QImage test = this->sand->imageData;
 
     // land
     this->birne.reset(&ImageTga::createCorrectQImage(relativePathLand + "birne.tga"));
     this->busch.reset(&ImageTga::createCorrectQImage(relativePathLand + "busch.tga"));
 
     //terrain
-    this->deep_sea.reset(&ImageTga::createCorrectQImage(relativePathTerrain + "deep_sea.tga"));
+    this->deep_sea.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "deep_sea.tga")));
     this->earth.reset(&ImageTga::createCorrectQImage(relativePathTerrain + "earth.tga"));
 
     // wasser
