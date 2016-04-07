@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <vector>
+#include <iostream>
 
 #include <QImage>
 
@@ -24,7 +25,7 @@ ImageTga::ImageTga(const std::vector<unsigned int> &tgaHeader,
     : tgaHeader(tgaHeader), imageData(imageData) {//this->imageDatap=&imageData; TODO Note: imagaDatap. Pointer to the QImage data.
 }
 
-
+bool onetime = true;
 ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
 
     std::vector<unsigned int> tempTgaHeader(12);
@@ -128,6 +129,18 @@ ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
                 tempImageData.push_back(bufferImageDataUnformatted[i+1]);
                 tempImageData.push_back(bufferImageDataUnformatted[i+0]);
             }
+        }
+        // TODO
+        if(onetime){
+        std::cout << "Image heigth: " << tempTgaHeader[8] << "\n";
+        std::cout << "Image width: " << tempTgaHeader[9] << "\n";
+        std::cout << "Image byteCount: " << charsToReadFromStreamForImageData << "\n";
+        std::cout << "Image bytesPerLine: " << byteToReadPerPixel*tempTgaHeader[8] << "\n";
+        std::cout << (int) tempImageData[0] << " alpha\n" <<
+                     (int) tempImageData[1] << " red\n" <<
+                     (int) tempImageData[2] << " green\n" <<
+                     (int) tempImageData[3] << " blue\n";
+        onetime = false;
         }
 
         if(numberOfPixels * 4 != tempImageData.size()) throw corruptImageData();

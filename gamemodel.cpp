@@ -42,6 +42,15 @@ void GameModel::loadImages(const std::string &relativePath) {
     // TODO reset Qscoped Pointer with new
     this->sand.reset(new ImageTga(ImageTga::createCorrectQImage(relativePath + "terrain/sand.tga")));
     //QImage test = this->sand->imageData;
+    QImage tempQImage =  sand->imageData;
+    std::cout << "Image heigth: " << tempQImage.height() << "\n";
+    std::cout << "Image width: " << tempQImage.width() << "\n";
+    std::cout << "Image byteCount: " << tempQImage.byteCount() << "\n";
+    std::cout << "Image bytesPerLine: " << tempQImage.bytesPerLine() << "\n";
+    std::cout << tempQImage.pixelColor(1,1).alpha() << " alpha\n" <<
+                 tempQImage.pixelColor(1,1).red() << " red\n" <<
+                 tempQImage.pixelColor(1,1).green() << " green\n" <<
+                 tempQImage.pixelColor(1,1).blue() << " blue\n";
 
     // land
     this->birne.reset(&ImageTga::createCorrectQImage(relativePathLand + "birne.tga"));

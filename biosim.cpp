@@ -55,19 +55,32 @@ biosim::biosim(QWidget *parent) :
     scene->addRect(250,250,50,100,outlinePen,greenBrush);
 
     // adding qPixmap of sand.tga, now deep_sea.tga
-    QPixmap qPixmap = QPixmap::fromImage(gamemodel->deep_sea->imageData, Qt::AutoColor);
-    QGraphicsPixmapItem qPixmapItem;
+    QPixmap qPixmap = QPixmap::fromImage(gamemodel->sand->imageData, Qt::ColorOnly);
+    scene->addPixmap(qPixmap);
+
+    // or
+    /*QGraphicsPixmapItem qPixmapItem;
     qPixmapItem.setPixmap(qPixmap);
-    //qPixmapItem.setParentItem(&tempQRectItem); random selected parent, if scene->addItem the scene takes ownership
-    //scene->addPixmap(qPixmap);
+    //qPixmapItem.setParentItem(&tempQRectItem); //random selected parent, if scene->addItem the scene takes ownership
+    qPixmapItem.setPos(3000,3000);
     bool b = ui->graphicsView->isVisible();
     scene->addItem(&qPixmapItem);
-    bool a = qPixmapItem.isVisible(); // it is visible
-    ui->graphicsView->show();
-    b = ui->graphicsView->isVisible(); // despite being show b is false
+    bool a = qPixmapItem.isVisible(); // it is visible, but won´t be shown */
+
+
+    //ui->graphicsView->show(); // not needed, hide() works
+    //b = ui->graphicsView->isVisible(); // despite being show b is false
 
     // Testing actual image values
     QImage tempQImage =  gamemodel->sand->imageData;
+    std::cout << "Image heigth: " << tempQImage.height() << "\n";
+    std::cout << "Image width: " << tempQImage.width() << "\n";
+    std::cout << "Image byteCount: " << tempQImage.byteCount() << "\n";
+    std::cout << "Image bytesPerLine: " << tempQImage.bytesPerLine() << "\n";
+    std::cout << tempQImage.pixelColor(1,1).alpha() << " alpha\n" <<
+                 tempQImage.pixelColor(1,1).red() << " red\n" <<
+                 tempQImage.pixelColor(1,1).green() << " green\n" <<
+                 tempQImage.pixelColor(1,1).blue() << " blue\n";
 
 
     connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));
