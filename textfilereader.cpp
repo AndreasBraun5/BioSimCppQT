@@ -49,6 +49,7 @@ std::list<CreatureData> textFileReader::readCreatureFile(const std::string &file
             errorFileReadingData.errorInfo.push_back(
                         std::string("Empty line found. Line: ").append(
                             std::to_string(statisticalFileReadingData.rownumber)));
+            statisticalFileReadingData.rowsincorrect++;
             errorFileReadingData.errorInfoCount++;
             continue;
         }

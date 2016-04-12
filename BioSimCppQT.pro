@@ -26,7 +26,8 @@ HEADERS += \
     imagetga.hpp \
     landscape.hpp \
     textfilereader.hpp \
-    biosim.hpp
+    biosim.hpp \
+    util.hpp
 
 DISTFILES += \
     Notizen \

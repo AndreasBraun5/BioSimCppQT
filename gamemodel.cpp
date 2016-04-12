@@ -16,13 +16,14 @@
 GameModel::GameModel(const std::string &relativePath) {
     setUpGamemodel(relativePath);
 }
+
 void GameModel::setUpGamemodel(const std::string &relativePath) {
     std::cout << "Enter number: \n 0 for CreatureTable_mitFehlern.txt \n 1 for CreatureTable.txt \n";
     int integer = 1;
     std::cin >> integer;
     std::string creatureDataFilepath = relativePath;
     if (integer == 0) {
-        // TODO Test: "CreatureTableXXX.txt" Shows error if wrong textfile path is given.
+        // TODO Test: showing error window if wrong textfile path is given.
         creatureDataFilepath = creatureDataFilepath.append("CreatureTable_mitFehlern.txt");
     } else {
         creatureDataFilepath = creatureDataFilepath.append("CreatureTable.txt");
@@ -37,32 +38,45 @@ void GameModel::loadImages(const std::string &relativePath) {
     std::string relativePathTerrain = relativePath + "terrain/";
     std::string relativePathWasser = relativePath + "wasser/";
 
-    // TODO AB2: all images need to be loaded
-    // TODO Test: "snd.tga" Shows error if wrong image path is given.
-    // TODO reset Qscoped Pointer with new
-    this->sand.reset(new ImageTga(ImageTga::createCorrectQImage(relativePath + "terrain/sand.tga")));
-    //QImage test = this->sand->imageData;
-    QImage tempQImage =  sand->imageData;
+
+
+    //this->sand.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "sand.tga")));
+
+    // TODO AB2: all images need to be loaded. All terrain images are already.
+    // TODO Test: showing error window if wrong image path is given at start.
+    // land
+    this->birne.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathLand + "birne.tga")));
+    this->busch.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathLand + "busch.tga")));
+
+    //terrain
+    this->deep_sea.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "deep_sea.tga")));
+    this->earth.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "earth.tga")));
+    this->rocks.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "rocks.tga")));
+    this->sand.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "sand.tga")));
+    this->shallow_water.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "shallow_water.tga")));
+    this->snow.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "snow.tga")));
+
+    // wasser
+    this->algen.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathWasser + "algen.tga")));
+    this->delpin.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathWasser + "delphin.tga")));
+
+    // TODO Test: image debug output 3
+    QImage tempQImage =  birne->qImage;
+    std::cout << "\nTest: image debug output 3\n";
     std::cout << "Image heigth: " << tempQImage.height() << "\n";
     std::cout << "Image width: " << tempQImage.width() << "\n";
     std::cout << "Image byteCount: " << tempQImage.byteCount() << "\n";
     std::cout << "Image bytesPerLine: " << tempQImage.bytesPerLine() << "\n";
-    std::cout << tempQImage.pixelColor(1,1).alpha() << " alpha\n" <<
-                 tempQImage.pixelColor(1,1).red() << " red\n" <<
-                 tempQImage.pixelColor(1,1).green() << " green\n" <<
-                 tempQImage.pixelColor(1,1).blue() << " blue\n";
-
-    // land
-    this->birne.reset(&ImageTga::createCorrectQImage(relativePathLand + "birne.tga"));
-    this->busch.reset(&ImageTga::createCorrectQImage(relativePathLand + "busch.tga"));
-
-    //terrain
-    this->deep_sea.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "deep_sea.tga")));
-    this->earth.reset(&ImageTga::createCorrectQImage(relativePathTerrain + "earth.tga"));
-
-    // wasser
-    this->algen.reset(&ImageTga::createCorrectQImage(relativePathWasser + "algen.tga"));
-    this->delpin.reset(&ImageTga::createCorrectQImage(relativePathWasser + "delphin.tga"));
+    std::cout << "Image data size QimageSizeHeight*QimageSizeWidth: " <<
+                 tempQImage.size().height() * tempQImage.size().width() << "\n";
+    std::cout << "bits per pixel: " << tempQImage.depth() << "\n";
+    std::cout << "ImageFormat: " << tempQImage.format() << ", if 5 it is 32-bit ARGB \n";
+    std::cout << "Image data pointer adress: " << tempQImage.data_ptr() <<"\n";
+    std::cout << "first pixel down left:\n";
+    std::cout << tempQImage.pixelColor(0,0).alpha() << " alpha\n" <<
+                 tempQImage.pixelColor(0,0).red() << " red\n" <<
+                 tempQImage.pixelColor(0,0).green() << " green\n" <<
+                 tempQImage.pixelColor(0,0).blue() << " blue\n";
 }
 
 // helper method: only needed by loadCreatures

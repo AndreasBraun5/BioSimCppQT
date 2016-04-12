@@ -17,20 +17,21 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-ImageTga::ImageTga(const ImageTga &imageTga)
-    : tgaHeader(imageTga.tgaHeader), imageData(imageTga.imageData) {}
-
 ImageTga::ImageTga(const std::vector<unsigned int> &tgaHeader,
                    const QImage &imageData  )
-    : tgaHeader(tgaHeader), imageData(imageData) {//this->imageDatap=&imageData; TODO Note: imagaDatap. Pointer to the QImage data.
-}
+    : tgaHeader(tgaHeader), qImage(imageData) {}
 
+// TODO Test: image debug output
 bool onetime = true;
+bool onetime2 = true;
 ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
 
     std::vector<unsigned int> tempTgaHeader(12);
     char bufferTgaHeaderUnformatted[18];
-    std::vector<unsigned char> tempImageData; //TODO Note: with temporary length of one (1)... ??
+    // TODO AB0: tempImageData needs to be deleted from the heap or does scoped Pointer delete this?
+    std::vector<unsigned char> *tempImageData = new std::vector<unsigned char>(); //TODO Note: with temporary length of one (1)... ??
+    unsigned char *tempImageDataPointer;
+
 
     unsigned int numberOfPixels;
     unsigned int byteToReadPerPixel;
@@ -112,45 +113,75 @@ ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
         char *bufferImageDataUnformatted =  new char[numberOfPixels * 4]; // always 4 byte per pixel              // !delete bufferImageDataUnformatted
         imageStream.read(bufferImageDataUnformatted, charsToReadFromStreamForImageData);
 
-
-        // Bytes are ordered as BGR(A) in usigned char bufferImageDataUnformatted[i]
-        // --> reorganizing aplpha-RGB in Pixel whereas each value is safed in tempImageData
+        // Bytes are ordered as BGR(A) in bufferImageDataUnformatted
+        // --> reorganizing as aplpha-RGB planned, because constructor of QImage is
+        // QImage::QImage(uchar * data, int width, int height, Format format) and
+        // Format is used QImage::Format_ARGB32, equals int value 5. (The image is stored using
+        // a 32-bit ARGB format (0xAARRGGBB)." It is not taken the ordering within the vector
+        // data structure but the one direktly in the RAM. Therefore because of the endianess the
+        // values are stored without a reorganization.
         if(byteToReadPerPixel == 3) {
-            for(unsigned int i = 0; i < charsToReadFromStreamForImageData ; i = i + 3) {
-                tempImageData.push_back(255);
-                tempImageData.push_back(bufferImageDataUnformatted[i+2]);
-                tempImageData.push_back(bufferImageDataUnformatted[i+1]);
-                tempImageData.push_back(bufferImageDataUnformatted[i+0]);
-            }
-        } else { // byteToReadPerPixel == 4
-            for(unsigned int i = 0; i < charsToReadFromStreamForImageData ; i = i + 4) {
-                tempImageData.push_back(bufferImageDataUnformatted[i+3]);
-                tempImageData.push_back(bufferImageDataUnformatted[i+2]);
-                tempImageData.push_back(bufferImageDataUnformatted[i+1]);
-                tempImageData.push_back(bufferImageDataUnformatted[i+0]);
-            }
-        }
-        // TODO
+                    for(unsigned int i = 0; i < charsToReadFromStreamForImageData; i = i + 3) {
+                        tempImageData->push_back(bufferImageDataUnformatted[i+0]);
+                        tempImageData->push_back(bufferImageDataUnformatted[i+1]);
+                        tempImageData->push_back(bufferImageDataUnformatted[i+2]);
+                        tempImageData->push_back(255);
+                    }
+                } else { // byteToReadPerPixel == 4
+                    for(unsigned int i = 0; i < charsToReadFromStreamForImageData ; i = i + 4) {
+                        tempImageData->push_back(bufferImageDataUnformatted[i+0]);
+                        tempImageData->push_back(bufferImageDataUnformatted[i+1]);
+                        tempImageData->push_back(bufferImageDataUnformatted[i+2]);
+                        tempImageData->push_back(bufferImageDataUnformatted[i+3]);
+                    }
+                }
+
+        // TODO Test: image debug output 1
+        tempImageDataPointer = tempImageData->data();
         if(onetime){
-        std::cout << "Image heigth: " << tempTgaHeader[8] << "\n";
-        std::cout << "Image width: " << tempTgaHeader[9] << "\n";
-        std::cout << "Image byteCount: " << charsToReadFromStreamForImageData << "\n";
-        std::cout << "Image bytesPerLine: " << byteToReadPerPixel*tempTgaHeader[8] << "\n";
-        std::cout << (int) tempImageData[0] << " alpha\n" <<
-                     (int) tempImageData[1] << " red\n" <<
-                     (int) tempImageData[2] << " green\n" <<
-                     (int) tempImageData[3] << " blue\n";
-        onetime = false;
+            tempImageDataPointer = tempImageData->data();
+            std::cout << "\nTest: image debug output 1\n";
+            std::cout << "Image heigth: " << tempTgaHeader[8] << "\n";
+            std::cout << "Image width: " << tempTgaHeader[9] << "\n";
+            std::cout << "Image byteCountToRead: " << charsToReadFromStreamForImageData << "\n";
+            std::cout << "Image bytesPerLine: " << byteToReadPerPixel*tempTgaHeader[8] << "\n";
+            std::cout << "Image Data size of  std::vector<unsigned char> tempImageData: " << tempImageData->size() << "\n";
+            std::cout << "bits per pixel: " << tempTgaHeader[10] << "\n";
+            std::cout << "ImageFormat = 32bit alpha-RGB\n";
+            std::cout << "Image data pointer adress: " << &tempImageDataPointer <<"\n";
+            std::cout << "first pixel down left:\n";
+            std::cout << static_cast<int> (tempImageData->data()[3]) << " alpha\n" <<
+                                                   static_cast<int> (tempImageData->data()[2]) << " red\n" <<
+                                                   static_cast<int> (tempImageData->data()[1])<< " green\n" <<
+                                                   static_cast<int> (tempImageData->data()[0]) << " blue\n";
+            onetime = false;
         }
-
-        if(numberOfPixels * 4 != tempImageData.size()) throw corruptImageData();
-
+        if(numberOfPixels * 4 != tempImageData->size()) throw corruptImageData();
         delete[] bufferImageDataUnformatted;                                                                    // !delete bufferImageDataUnformatted
         imageStream.close();
         goodStream = false;
     }
-    uchar *imageData = &tempImageData.front();
-    QImage tempQImage = QImage(imageData, tempTgaHeader[8], tempTgaHeader[9], QImage::Format_ARGB32);
+    QImage tempQImage = QImage(tempImageData->data(), tempTgaHeader[8], tempTgaHeader[9], QImage::Format_ARGB32);
+    // TODO Test: image debug output 2
+    if(onetime2){
+        std::cout << "\nTest: image debug output 2\n";
+        std::cout << "Image heigth: " << tempQImage.height() << "\n";
+        std::cout << "Image width: " << tempQImage.width() << "\n";
+        std::cout << "Image byteCount: " << tempQImage.byteCount() << "\n";
+        std::cout << "Image bytesPerLine: " << tempQImage.bytesPerLine() << "\n";
+        std::cout << "Image data size QimageSizeHeight*QimageSizeWidth: " <<
+                     tempQImage.size().height() * tempQImage.size().width() << "\n";
+        std::cout << "bits per pixel: " << tempQImage.depth() << "\n";
+        std::cout << "ImageFormat: " << tempQImage.format() << ", if 5 it is 32-bit ARGB \n";
+        std::cout << "Image data pointer adress: " << tempQImage.data_ptr() <<"\n";
+        std::cout << "first pixel down left:\n";
+        std::cout << tempQImage.pixelColor(0,0).alpha() << " alpha\n" <<
+                     tempQImage.pixelColor(0,0).red() << " red\n" <<
+                     tempQImage.pixelColor(0,0).green() << " green\n" <<
+                     tempQImage.pixelColor(0,0).blue() << " blue\n";
+
+        onetime2 = false;
+    }
     return ImageTga(tempTgaHeader, tempQImage);
 }
 

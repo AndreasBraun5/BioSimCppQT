@@ -22,14 +22,19 @@
 class GameModel {
 public: QList<CreatureData> creatureList;
 
-    //test TODO const Qscoped... -> pointer to a const imagetga sand.
-    QScopedPointer<ImageTga> sand;
+    //TODO Discuss: const Qscoped... -> pointer to a ?const? imagetga, because Image data
+    // doesn´t need to be manipulated.
+
     // land
     QScopedPointer<ImageTga> birne;
     QScopedPointer<ImageTga> busch;
     // terrain
     QScopedPointer<ImageTga> deep_sea;
     QScopedPointer<ImageTga> earth;
+    QScopedPointer<ImageTga> rocks;
+    QScopedPointer<ImageTga> sand;
+    QScopedPointer<ImageTga> shallow_water;
+    QScopedPointer<ImageTga> snow;
     // wasser
     QScopedPointer<ImageTga> algen;
     QScopedPointer<ImageTga> delpin;

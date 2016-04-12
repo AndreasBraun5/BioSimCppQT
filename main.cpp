@@ -33,6 +33,6 @@ int main(int argn, char *argv[]) {
     QApplication a(argn, argv);
     biosim w;
     w.show();
-    std::cout << "Erfolgreicher Durchlauf\n";
+    std::cout << "\nErfolgreicher Durchlauf\n";
     return a.exec(); // game loop executing
 }

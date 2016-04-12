@@ -39,8 +39,7 @@ biosim::biosim(QWidget *parent) :
     }
     updateCreatureEditLines(tempCreatureEditing);
 
-    // TODO AB4: Showing one of the Images
-    // TODO Testing Scene
+    // TODO Test: scene testing
     QGraphicsScene *scene = new QGraphicsScene(this);                                           // !delete scene auto managed, by parent
     ui->graphicsView->setScene(scene);
 
@@ -54,33 +53,29 @@ biosim::biosim(QWidget *parent) :
     tempQRectItem.setRect(0,0,20,40);
     scene->addRect(250,250,50,100,outlinePen,greenBrush);
 
-    // adding qPixmap of sand.tga, now deep_sea.tga
-    QPixmap qPixmap = QPixmap::fromImage(gamemodel->sand->imageData, Qt::ColorOnly);
+    //TODO AB0: only the terrain images are dispayed correctly... header info?,
+    QPixmap qPixmap = QPixmap::fromImage(gamemodel->sand->qImage, Qt::AutoColor);
     scene->addPixmap(qPixmap);
 
-    // or
-    /*QGraphicsPixmapItem qPixmapItem;
-    qPixmapItem.setPixmap(qPixmap);
-    //qPixmapItem.setParentItem(&tempQRectItem); //random selected parent, if scene->addItem the scene takes ownership
-    qPixmapItem.setPos(3000,3000);
-    bool b = ui->graphicsView->isVisible();
-    scene->addItem(&qPixmapItem);
-    bool a = qPixmapItem.isVisible(); // it is visible, but won´t be shown */
 
-
-    //ui->graphicsView->show(); // not needed, hide() works
-    //b = ui->graphicsView->isVisible(); // despite being show b is false
-
-    // Testing actual image values
-    QImage tempQImage =  gamemodel->sand->imageData;
+    //TODO Test: image debug output 4
+    QImage tempQImage =  gamemodel->birne->qImage;
+    //QImage tempQImage =  gamemodel->sand->qImage;
+    std::cout << "\nTest: image debug output 4\n";
     std::cout << "Image heigth: " << tempQImage.height() << "\n";
     std::cout << "Image width: " << tempQImage.width() << "\n";
     std::cout << "Image byteCount: " << tempQImage.byteCount() << "\n";
     std::cout << "Image bytesPerLine: " << tempQImage.bytesPerLine() << "\n";
-    std::cout << tempQImage.pixelColor(1,1).alpha() << " alpha\n" <<
-                 tempQImage.pixelColor(1,1).red() << " red\n" <<
-                 tempQImage.pixelColor(1,1).green() << " green\n" <<
-                 tempQImage.pixelColor(1,1).blue() << " blue\n";
+    std::cout << "Image data size QimageSizeHeight*QimageSizeWidth: " <<
+                 tempQImage.size().height() * tempQImage.size().width() << "\n";
+    std::cout << "bits per pixel: " << tempQImage.depth() << "\n";
+    std::cout << "ImageFormat: " << tempQImage.format() << ", if 5 it is 32-bit ARGB \n";
+    std::cout << "Image data pointer adress: " << tempQImage.data_ptr() <<"\n";
+    std::cout << "first pixel down left:\n";
+    std::cout << tempQImage.pixelColor(0,0).alpha() << " alpha\n" <<
+                 tempQImage.pixelColor(0,0).red() << " red\n" <<
+                 tempQImage.pixelColor(0,0).green() << " green\n" <<
+                 tempQImage.pixelColor(0,0).blue() << " blue\n";
 
 
     connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));
@@ -124,7 +119,6 @@ void biosim::writeStartErrorToMsgboxAndExit(const std::string &error)
 {
     QMessageBox msg;
     QString qerror = QString::fromStdString(error);
-    //connect(msg, SIGNAL(clicked(bool)),ui , SLOT(updateCreatureComboBox(int)));
     msg.setText(qerror);
     msg.exec();
     QApplication::exit();

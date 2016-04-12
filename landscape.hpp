@@ -7,7 +7,7 @@
 #ifndef INCLUDED_BIOSIM_REGIONSQUARE_HPP
 #define INCLUDED_BIOSIM_REGIONSQUARE_HPP
 
-class landscape{
+class landscapeGrid{
     // 2 dim grid
     // size of landscape: Not hardcoded. Should be appropiatetly selected during compile time
 

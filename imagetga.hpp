@@ -18,18 +18,12 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class ImageTga {
 public: const std::vector<unsigned int> tgaHeader;    // 18 Byte size
-    // TODO AB0: which one is actually needed.
-    QImage imageData;
-    //QPixmap qPixmap;
-
-    // TODO Note: imagaDatap. Pointer to the QImage data.
-    // QImage *imageDatap;
-
+    //QScopedPointer<std::vector<unsigned char>> imageDataVector;
+    QImage qImage;
 
 public: ImageTga() = delete; // RAII pattern. No zombie image possible
-        ImageTga(const ImageTga &imageTga);
 private: ImageTga(const std::vector<unsigned int> &tgaHeader,
-                  const QImage &imageData);
+                  const QImage &qImage);
 public: static ImageTga createCorrectQImage(const std::string &imagePath);
 };
 
