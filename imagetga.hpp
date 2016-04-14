@@ -9,7 +9,8 @@
 
 #include <vector>
 
-#include <qimage.h>
+#include <QImage>
+#include <QPixmap>
 
 
 // TODO Discuss: smart pointer, auto_pointer = boost::scoped_ptr or std::unique_ptr, boost::shared_ptr, std::shared_ptr
@@ -24,7 +25,7 @@ public: const std::vector<unsigned int> tgaHeader;    // 18 Byte size
 public: ImageTga() = delete; // RAII pattern. No zombie image possible
 private: ImageTga(const std::vector<unsigned int> &tgaHeader,
                   const QImage &qImage);
-public: static ImageTga createCorrectQImage(const std::string &imagePath);
+public: static ImageTga createCorrectImageTga(const std::string &imagePath);
 };
 
 

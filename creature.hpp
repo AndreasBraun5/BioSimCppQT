@@ -27,7 +27,7 @@ public:	const std::string creaturename;
 
     //void operator=(const CreatureData &b); // TODO Discuss: operator=, automatic generation is not working
 
-    CreatureData() =  delete;
+    // TODO AB0: CreatureData() =  delete;
     CreatureData(const std::string &creaturename,
                  size_t strength,
                  size_t speed,

@@ -17,17 +17,18 @@ SOURCES += \
     textfilereader.cpp \
     biosim.cpp \
     imagetga.cpp \
-    gamemodel.cpp
+    gamemodel.cpp \
+    landscape.cpp
 
 HEADERS += \
-    creature.hpp \
-    exceptions.hpp \
-    gamemodel.hpp \
-    imagetga.hpp \
-    landscape.hpp \
+    util.hpp \
     textfilereader.hpp \
-    biosim.hpp \
-    util.hpp
+    landscape.hpp \
+    imagetga.hpp \
+    gamemodel.hpp \
+    exceptions.hpp \
+    creature.hpp \
+    biosim.hpp
 
 DISTFILES += \
     Notizen \

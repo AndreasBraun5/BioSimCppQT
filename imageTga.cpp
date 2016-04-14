@@ -10,6 +10,8 @@
 #include <iostream>
 
 #include <QImage>
+#include <QFile>
+#include <Qdebug>
 
 #include "exceptions.hpp"
 
@@ -24,11 +26,11 @@ ImageTga::ImageTga(const std::vector<unsigned int> &tgaHeader,
 // TODO Test: image debug output
 bool onetime = true;
 bool onetime2 = true;
-ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
+ImageTga ImageTga::createCorrectImageTga(const std::string &imagePath) {
 
     std::vector<unsigned int> tempTgaHeader(12);
     char bufferTgaHeaderUnformatted[18];
-    // TODO AB0: tempImageData needs to be deleted from the heap or does scoped Pointer delete this?
+    // TODO AB0: DELETE!? tempImageData needs to be deleted for every image from the heap or does scoped Pointer delete this?
     std::vector<unsigned char> *tempImageData = new std::vector<unsigned char>(); //TODO Note: with temporary length of one (1)... ??
     unsigned char *tempImageDataPointer;
 
@@ -121,20 +123,20 @@ ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
         // data structure but the one direktly in the RAM. Therefore because of the endianess the
         // values are stored without a reorganization.
         if(byteToReadPerPixel == 3) {
-                    for(unsigned int i = 0; i < charsToReadFromStreamForImageData; i = i + 3) {
-                        tempImageData->push_back(bufferImageDataUnformatted[i+0]);
-                        tempImageData->push_back(bufferImageDataUnformatted[i+1]);
-                        tempImageData->push_back(bufferImageDataUnformatted[i+2]);
-                        tempImageData->push_back(255);
-                    }
-                } else { // byteToReadPerPixel == 4
-                    for(unsigned int i = 0; i < charsToReadFromStreamForImageData ; i = i + 4) {
-                        tempImageData->push_back(bufferImageDataUnformatted[i+0]);
-                        tempImageData->push_back(bufferImageDataUnformatted[i+1]);
-                        tempImageData->push_back(bufferImageDataUnformatted[i+2]);
-                        tempImageData->push_back(bufferImageDataUnformatted[i+3]);
-                    }
-                }
+            for(unsigned int i = 0; i < charsToReadFromStreamForImageData; i = i + 3) {
+                tempImageData->push_back(bufferImageDataUnformatted[i + 0]);
+                tempImageData->push_back(bufferImageDataUnformatted[i + 1]);
+                tempImageData->push_back(bufferImageDataUnformatted[i + 2]);
+                tempImageData->push_back(255);
+            }
+        } else { // byteToReadPerPixel == 4
+            for(unsigned int i = 0; i < charsToReadFromStreamForImageData ; i = i + 4) {
+                tempImageData->push_back(bufferImageDataUnformatted[i + 0]);
+                tempImageData->push_back(bufferImageDataUnformatted[i + 1]);
+                tempImageData->push_back(bufferImageDataUnformatted[i + 2]);
+                tempImageData->push_back(bufferImageDataUnformatted[i + 3]);
+            }
+        }
 
         // TODO Test: image debug output 1
         tempImageDataPointer = tempImageData->data();
@@ -150,10 +152,12 @@ ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
             std::cout << "ImageFormat = 32bit alpha-RGB\n";
             std::cout << "Image data pointer adress: " << &tempImageDataPointer <<"\n";
             std::cout << "first pixel down left:\n";
-            std::cout << static_cast<int> (tempImageData->data()[3]) << " alpha\n" <<
-                                                   static_cast<int> (tempImageData->data()[2]) << " red\n" <<
-                                                   static_cast<int> (tempImageData->data()[1])<< " green\n" <<
-                                                   static_cast<int> (tempImageData->data()[0]) << " blue\n";
+            for(int i = 0; i <= 500; i = i + 4){
+            std::cout << static_cast<int> (tempImageData->data()[i + 3]) << " alpha " <<
+                                                   static_cast<int> (tempImageData->data()[i + 2]) << " red " <<
+                                                   static_cast<int> (tempImageData->data()[i + 1])<< " green " <<
+                                                   static_cast<int> (tempImageData->data()[i + 0]) << " blue\n";
+            }
             onetime = false;
         }
         if(numberOfPixels * 4 != tempImageData->size()) throw corruptImageData();
@@ -175,15 +179,19 @@ ImageTga ImageTga::createCorrectQImage(const std::string &imagePath) {
         std::cout << "ImageFormat: " << tempQImage.format() << ", if 5 it is 32-bit ARGB \n";
         std::cout << "Image data pointer adress: " << tempQImage.data_ptr() <<"\n";
         std::cout << "first pixel down left:\n";
-        std::cout << tempQImage.pixelColor(0,0).alpha() << " alpha\n" <<
-                     tempQImage.pixelColor(0,0).red() << " red\n" <<
-                     tempQImage.pixelColor(0,0).green() << " green\n" <<
-                     tempQImage.pixelColor(0,0).blue() << " blue\n";
-
+        for(int i = 0; i <= 1; i++){
+            for(int j = 0; j <= 10; j++){
+                std::cout << tempQImage.pixelColor(i,j).alpha() << " alpha " <<
+                             tempQImage.pixelColor(i,j).red() << " red " <<
+                             tempQImage.pixelColor(i,j).green() << " green " <<
+                             tempQImage.pixelColor(i,j).blue() << " blue\n";
+            }
+        }
         onetime2 = false;
     }
     return ImageTga(tempTgaHeader, tempQImage);
 }
+
 
 
 

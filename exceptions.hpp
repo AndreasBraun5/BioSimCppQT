@@ -27,25 +27,25 @@ public:    virtual const char* what() const throw() {
 class invalidHeader : public std::exception{
     virtual const char* what() const throw(){
         return "InvalidHeader: Not supported TGA properties. "
-               "See imageTGA.cpp for more information./n";
+               "See imageTGA.cpp for more information.";
     }
 };
 
 class onlySqareImages : public std::exception{
     virtual const char* what() const throw(){
-        return "OnlySqareImages: Only square images are allowed./n";
+        return "OnlySqareImages: Only square images are allowed.";
     }
 };
 
 class falseBitsPerPixel : public std::exception{
     virtual const char* what() const throw(){
-        return "FalseBitsPerPixel: Allowed bitsPerPixel are 24(RGB) and 32(RGB(A))./n";
+        return "FalseBitsPerPixel: Allowed bitsPerPixel are 24(RGB) and 32(RGB(A)).";
     }
 };
 
 class imageTooBig : public std::exception{
     virtual const char* what() const throw(){
-        return "ImageTooBig: Maximum image size exceeded./n";
+        return "ImageTooBig: Maximum image size exceeded.";
     }
 };
 

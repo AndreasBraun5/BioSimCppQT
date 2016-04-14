@@ -11,6 +11,7 @@
 #include <fstream>
 
 #include <QApplication>
+#include <QMessageBox>
 
 #include "biosim.hpp"
 #include "creature.hpp"
@@ -23,6 +24,7 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 int main(int argn, char *argv[]) {
 
+    //TODO Note: error handling if not enough console parameters are given
     std::cout << argn << "\n";          // number of arguments
     //std::cout << argv[0];             // argument used by qt
     std::cout << argv[1] << "\n";       // relative filepath

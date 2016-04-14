@@ -9,10 +9,9 @@
 #include "list"
 #include "iostream"
 
-#include <qgraphicsscene.h>
-#include <qmessagebox.h>
-#include <qgraphicsscene.h>
-#include <qgraphicsitem.h>
+#include <QMessageBox>
+#include <QGraphicsScene>
+#include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 
 #include "gamemodel.hpp"
@@ -26,6 +25,10 @@ biosim::biosim(QWidget *parent) :
     ui->setupUi(this);
     try {
         this->gamemodel = new GameModel(qApp->arguments().at(1).toStdString());                 // !delete gamemodel auto managed
+        //TODO AB0: gamemodel use this here to initialise landscape = call gamemodel::loadLandscapeGridMap,
+        // it is done here because of compiletime determination of size, but up till ignore interaction
+        //TODO AB4: additional parameters at compiletime
+        this->gamemodel->loadLandscapeGrid(); // *gamemodel
     } catch(std::exception &e) {
         writeStartErrorToMsgboxAndExit(e.what());
         exit(EXIT_FAILURE);
@@ -53,10 +56,32 @@ biosim::biosim(QWidget *parent) :
     tempQRectItem.setRect(0,0,20,40);
     scene->addRect(250,250,50,100,outlinePen,greenBrush);
 
-    //TODO AB0: only the terrain images are dispayed correctly... header info?,
-    QPixmap qPixmap = QPixmap::fromImage(gamemodel->sand->qImage, Qt::AutoColor);
-    scene->addPixmap(qPixmap);
+    //TODO AB0: only the terrain images are dispayed correctly... header[11] is different, maybe there is the problem
+    //TODO AB0: DELETE!? check if items must be deleted
 
+   /* for (int i = 0; i <=gamemodel->landscapeGrid.data()->sizeHorizontal; i++) {
+        for (int j = 0; j <= gamemodel->landscapeGrid.data()->sizeVertical; j++) {
+            QGraphicsPixmapItem *k = new QGraphicsPixmapItem(QPixmap)
+        }
+    }*/
+
+    // übergabe der scene an eine Methode/slot updateScene die wiederum updateScene von gamemodel aufruft
+    QGraphicsPixmapItem *x = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->sandImageTga->qImage, Qt::AutoColor));
+    x->setOffset(100,100);
+    scene->addItem(x);
+    QGraphicsPixmapItem *y = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->shallow_waterImageTga->qImage, Qt::AutoColor));
+    y->setOffset(200,200);
+    scene->addItem(y);
+    QGraphicsPixmapItem *z = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->birne->qImage, Qt::AutoColor));
+    z->setOffset(-50,-50);
+    scene->addItem(z);
+
+    //ui->graphicsView
+    /* schwachsinn
+    QPixmap *pix = new QPixmap(QPixmap::fromImage(gamemodel->birne->qImage, Qt::AutoColor));
+    QPainter qPainter(pix);
+    qPainter.setRenderHint(QPainter::Antialiasing);
+    scene->render(&qPainter);*/
 
     //TODO Test: image debug output 4
     QImage tempQImage =  gamemodel->birne->qImage;
@@ -72,10 +97,14 @@ biosim::biosim(QWidget *parent) :
     std::cout << "ImageFormat: " << tempQImage.format() << ", if 5 it is 32-bit ARGB \n";
     std::cout << "Image data pointer adress: " << tempQImage.data_ptr() <<"\n";
     std::cout << "first pixel down left:\n";
-    std::cout << tempQImage.pixelColor(0,0).alpha() << " alpha\n" <<
-                 tempQImage.pixelColor(0,0).red() << " red\n" <<
-                 tempQImage.pixelColor(0,0).green() << " green\n" <<
-                 tempQImage.pixelColor(0,0).blue() << " blue\n";
+    for(int i = 0; i <= 1; i++){
+        for(int j = 0; j <= 10; j++){
+            std::cout << tempQImage.pixelColor(i,j).alpha() << " alpha " <<
+                         tempQImage.pixelColor(i,j).red() << " red " <<
+                         tempQImage.pixelColor(i,j).green() << " green " <<
+                         tempQImage.pixelColor(i,j).blue() << " blue \n";
+        }
+    }
 
 
     connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));
