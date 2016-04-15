@@ -11,6 +11,8 @@
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 #include "creature.hpp"
+#include "gamemodel.hpp"
+//class GameModel;
 
 enum ClimateType {DEEP_SEA, EARTH, ROCKS, SAND, SHALLOW_WATER, SNOW};
 
@@ -41,9 +43,9 @@ public: LandscapeGrid(unsigned int sizeHorizontal, unsigned int sizeVertical,
                        const std::vector<std::vector<LandscapeTile>> &landscapeGridMap);
 public: unsigned int sizeHorizontal; // const
     unsigned int sizeVertical; // const
-    //const std::vector<std::vector<LandscapeTile>> landscapeGridMap; // landscapeGridmap [down][left] = landscapeGridmap [0][0]
-    LandscapeTile landscapeTiles[2][2]; // tiles, working with arrays better here
-    static LandscapeGrid createLandscapeGrid(); //  //TODO AB4: additional parameters at compiletime
+    std::vector<std::vector<LandscapeTile>> landscapeGridMap; // landscapeGridmap [down][left] = landscapeGridmap [0][0]
+    //LandscapeTile *landscapeTiles; // tiles, working with arrays better here
+    static LandscapeGrid createLandscapeGrid(GameModel &gamemodel); //  //TODO AB4: additional parameters at compiletime
     // 2 dim grid vector containing all QGraphicsPixmapItems with specified offsets.
     // They are then added by the scene with a loop
     // size of landscape: Not hardcoded. Should be appropiatetly selected during compile time

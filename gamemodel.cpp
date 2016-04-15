@@ -9,7 +9,7 @@
 
 #include "imagetga.hpp"
 #include "textfilereader.hpp"
-
+#include "landscape.hpp" //TODO
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
@@ -67,6 +67,8 @@ void GameModel::loadImages(const std::string &relativePath) {
     this->shallow_waterPixmap.reset(new QPixmap(QPixmap::fromImage(shallow_waterImageTga.data()->qImage)));
     this->snowPixmap.reset(new QPixmap(QPixmap::fromImage(snowImageTga.data()->qImage)));
 
+    this->sandBlankPixmap = QPixmap::fromImage(sandImageTga.data()->qImage);
+
     // wasser
     this->algen.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathWasser + "algen.tga")));
     this->delpin.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathWasser + "delphin.tga")));
@@ -110,10 +112,10 @@ void GameModel::loadCreatures(const std::string &creatureDataFilepath) {
 }
 
 //TODO
-void GameModel::loadLandscapeGrid() { //TODO AB4: additional parameters at compiletime
+void GameModel::loadLandscapeGrid(GameModel &gamemodel) { //TODO AB4: additional parameters at compiletime
     // futher capsuling done here because advanced logic is needed (perl noise)
     //this->landscapeGrid.reset(new ...static Method of landscapegrid class); //TODO AB4: additional parameters at compiletime
-    landscapeGrid.reset(new LandscapeGrid(LandscapeGrid::createLandscapeGrid()));
+    landscapeGrid.reset(new LandscapeGrid(LandscapeGrid::createLandscapeGrid(gamemodel)));
 }
 
 

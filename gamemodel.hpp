@@ -14,7 +14,8 @@
 #include "exceptions.hpp"
 #include "imagetga.hpp"
 #include "creature.hpp"
-#include "landscape.hpp"
+//#include "landscape.hpp"
+class LandscapeGrid;
 //#include "biosim.h" // TODO Note: circular dependency
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class TextFileReader /*/
@@ -47,6 +48,9 @@ public: QList<CreatureData> creatureList;
     QSharedPointer<QPixmap> shallow_waterPixmap;
     QSharedPointer<QPixmap> snowPixmap;
 
+    QPixmap sandBlankPixmap; // TODO AB0:
+    LandscapeGrid *landscapeGridBlank;
+
     // wasser
     QScopedPointer<ImageTga> algen;
     QScopedPointer<ImageTga> delpin;
@@ -60,6 +64,6 @@ private:
     void setUpGamemodel(const std::string &relativePath);
     void loadImages(const std::string &relativePath);
     void loadCreatures(const std::string &relativeFilePath);
-public: void loadLandscapeGrid(); //TODO AB4: additional parameters at compiletime
+public: void loadLandscapeGrid(GameModel &gamemodel); //TODO AB4: additional parameters at compiletime
 };
 #endif // GAMEMODEL_HPP

@@ -15,6 +15,7 @@
 #include <QGraphicsPixmapItem>
 
 #include "gamemodel.hpp"
+#include "landscape.hpp"
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class CreatureData /*/
@@ -28,7 +29,7 @@ biosim::biosim(QWidget *parent) :
         //TODO AB0: gamemodel use this here to initialise landscape = call gamemodel::loadLandscapeGridMap,
         // it is done here because of compiletime determination of size, but up till ignore interaction
         //TODO AB4: additional parameters at compiletime
-        this->gamemodel->loadLandscapeGrid(); // *gamemodel
+        this->gamemodel->loadLandscapeGrid(*gamemodel); // *gamemodel
     } catch(std::exception &e) {
         writeStartErrorToMsgboxAndExit(e.what());
         exit(EXIT_FAILURE);
@@ -66,15 +67,35 @@ biosim::biosim(QWidget *parent) :
     }*/
 
     // übergabe der scene an eine Methode/slot updateScene die wiederum updateScene von gamemodel aufruft
-    QGraphicsPixmapItem *x = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->sandImageTga->qImage, Qt::AutoColor));
-    x->setOffset(100,100);
-    scene->addItem(x);
-    QGraphicsPixmapItem *y = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->shallow_waterImageTga->qImage, Qt::AutoColor));
-    y->setOffset(200,200);
+    QGraphicsPixmapItem x(QPixmap::fromImage(gamemodel->sandImageTga->qImage, Qt::AutoColor));
+    x.setOffset(100,100);
+    scene->addItem(&x);
+    QGraphicsPixmapItem *y = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->sandImageTga->qImage, Qt::AutoColor));
+    y->setOffset(100,100);
+    y->setOpacity(1.0);
     scene->addItem(y);
-    QGraphicsPixmapItem *z = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->birne->qImage, Qt::AutoColor));
-    z->setOffset(-50,-50);
-    scene->addItem(z);
+    /*QGraphicsPixmapItem *z = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->birne->qImage, Qt::AutoColor));
+    z->setOffset(100,100);
+    scene->addItem(z);*/
+
+    /*LandscapeGrid *landscape2 = gamemodel->landscapeGrid.data();
+    LandscapeTile landscapeTile1 = landscape2->landscapeGridMap[0][0];
+    QPixmap *pixmapTile1 = landscapeTile1.climatePixmap.data();
+    QGraphicsPixmapItem *k = new QGraphicsPixmapItem(*pixmapTile1);
+    k->setOffset(0,0);
+    scene->addItem(k);
+
+    QGraphicsPixmapItem *m = new QGraphicsPixmapItem(gamemodel->sandBlankPixmap);
+    m->setOffset(-50,50);
+    scene->addItem(m);*/
+
+    // Item generation here because
+    QGraphicsPixmapItem *u = new QGraphicsPixmapItem (*gamemodel->landscapeGrid.data()->landscapeGridMap[0][0].climatePixmap.data());
+    u->setOffset(110,110);
+    u->setOpacity(0.5);
+    scene->addItem(u);
+
+
 
     //ui->graphicsView
     /* schwachsinn

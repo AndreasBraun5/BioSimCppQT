@@ -29,26 +29,27 @@ LandscapeGrid::LandscapeGrid() {
 
 LandscapeGrid::LandscapeGrid(unsigned int sizeHorizontal, unsigned int sizeVertical,
                              const std::vector<std::vector<LandscapeTile> > &landscapeGridMap)
-    : sizeHorizontal(sizeHorizontal), sizeVertical(sizeVertical){}
+    : sizeHorizontal(sizeHorizontal), sizeVertical(sizeVertical), landscapeGridMap(landscapeGridMap){}
 
-LandscapeGrid LandscapeGrid::createLandscapeGrid() { // Gamemodel &gamemodel
-    LandscapeTile tile1(SHALLOW_WATER);
-    LandscapeTile tile2(DEEP_SEA);
-    LandscapeTile tile3(SAND);
-    LandscapeTile tile4(ROCKS);
+LandscapeGrid LandscapeGrid::createLandscapeGrid(GameModel &gamemodel) { // Gamemodel &gamemodel
+    LandscapeTile shallowWaterTile(SHALLOW_WATER);
+    LandscapeTile deepSeaTile(DEEP_SEA);
+    LandscapeTile sandTile(SAND);
+    LandscapeTile rocksTile(ROCKS);
 
+    shallowWaterTile.climatePixmap.reset(gamemodel.shallow_waterPixmap.data());
+    deepSeaTile.climatePixmap.reset(gamemodel.deep_seaPixmap.data());
+    sandTile.climatePixmap.reset(gamemodel.sandPixmap.data());
+    rocksTile.climatePixmap.reset(gamemodel.rocksPixmap.data());
 
+    std::vector<LandscapeTile> row1 = {shallowWaterTile, deepSeaTile};
+    std::vector<LandscapeTile> row2 = {sandTile, rocksTile};
 
-    //std::vector<std::vector<LandscapeTile>> landscapeGridMap[2][2];
     LandscapeGrid landscapeGrid = LandscapeGrid();
-    // right now I am working with arrays
-    landscapeGrid.landscapeTiles[0][0] = tile1;
-    landscapeGrid.landscapeTiles[0][1] = tile2;
-    landscapeGrid.landscapeTiles[1][0] = tile3;
-    landscapeGrid.landscapeTiles[1][1] = tile4;
     landscapeGrid.sizeHorizontal = 2;
     landscapeGrid.sizeVertical = 2;
+    landscapeGrid.landscapeGridMap.push_back(row1);
+    landscapeGrid.landscapeGridMap.push_back(row2);
 
-    //LandscapeGrid(2,2,&landscapeGridMap);
     return landscapeGrid;
 }
