@@ -9,7 +9,7 @@
 
 #include <exception>
 
-// TODO Discuss: make more specific exceptions possible?
+// TODO Note: make more specific exceptions possible?
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ exceptions used by TextFileReader.hpp /*/

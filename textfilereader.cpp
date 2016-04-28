@@ -95,7 +95,7 @@ bool textFileReader::correctRow(const std::vector<std::string> &creatureInfo,
                                 StatisticalFileReadingData &statisticalFileReadingData,
                                 ErrorFileReadingData &errorFileReadingData) {
     bool valid = true;
-    // TODO Discuss: bool flag valid is needed, because all mistakes in each line are to be found at the first try loading the file
+    // TODO AB1: Discuss: bool flag valid is needed, because all mistakes in each line are to be found at the first try loading the file
     if (creatureInfo.size() == 6) {
         // äüößÄÜÖ
         std::regex creatureNameRegex("[a-zA-Z\\s]+");
@@ -192,7 +192,7 @@ void helperTextFileReader::splitString(std::string str,
     size_t substrStart = 0;
     size_t substrEnd = 0;
     while (substrStart < str.length()) {
-        if (substrEnd > 10000) { break; }               // TODO Discuss: how to avoid this hack? [10000]
+        if (substrEnd > 10000) { break; }               // TODO Note: avoid this hack [10000]
         substrEnd = str.find(delimiter, substrStart);
         std::string vectorElement = str.substr(substrStart, substrEnd - substrStart);
         vector.push_back(vectorElement);

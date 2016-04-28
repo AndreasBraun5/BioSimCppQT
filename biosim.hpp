@@ -32,12 +32,13 @@ public:
 private:
     CreatureData const *tempCreatureEditing;
     Ui::biosim *ui;
-    // TODO Discuss: access violation scoped pointer, if main window is closed. Solved?: the pointer gamemodel was
+    // TODO Note: access violation scoped pointer, if main window is closed. Solved?: the pointer gamemodel was
     // deleted in the constructor, analog to the ui pointer. But I blieve some kind of garbage collection tried
     // again to delete the already deleted pointer gamemodel. How to check if the gamemodel pointer is really already deleted?
     // or better use smart pointer?
-    GameModel *gamemodel;                                   // TODO AB2: Improvement, name it gamecontroller
-    // TODO Discuss: Model(gamemodel)-View(Ui_biosim.h)-Presenter(biosim-.hpp/.cpp) intended. Gamemodel doesn´t know of
+    GameModel *gamemodel;
+    // TODO AB2: Improvement, name it gamecontroller
+    // Model(gamemodel)-View(Ui_biosim.h)-Presenter(biosim-.hpp/.cpp) intended. Gamemodel doesn´t know of
     // Ui_biosim.h (generated from biosim.ui) and biosim-.hpp/.cpp. Gamemodel will contain all data and logic. biosim will
     // handle the communication and Ui_biosim will only contain the view.
 

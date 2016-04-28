@@ -13,7 +13,7 @@
 #include <QPixmap>
 
 
-// TODO Discuss: smart pointer, auto_pointer = boost::scoped_ptr or std::unique_ptr, boost::shared_ptr, std::shared_ptr
+// TODO Note: smart pointer, auto_pointer = boost::scoped_ptr or std::unique_ptr, boost::shared_ptr, std::shared_ptr
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/

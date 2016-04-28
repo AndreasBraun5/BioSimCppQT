@@ -7,9 +7,10 @@
 #ifndef INCLUDED_BIOSIM_GAMEMODEL_HPP
 #define INCLUDED_BIOSIM_GAMEMODEL_HPP
 
+#include <list>
+
 #include <QMainWindow>
 #include <QImage>
-#include <list>
 
 #include "exceptions.hpp"
 #include "imagetga.hpp"
@@ -23,7 +24,7 @@ class LandscapeGrid;
 class GameModel {
 public: QList<CreatureData> creatureList;
 
-    //TODO Discuss: const Qscoped... -> pointer to a ?const? imagetga, because Image data
+    //TODO Note: const Qscoped... -> pointer to a ?const? imagetga, because Image data
     // doesn´t need to be manipulated.
 
     // land

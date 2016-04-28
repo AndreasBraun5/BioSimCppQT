@@ -137,7 +137,7 @@ biosim::biosim(QWidget *parent) :
 
 biosim::~biosim() {
     delete ui;                                                                                  // !delete ui
-    //delete gamemodel; //TODO Discuss: wanted to delete here,
+    //delete gamemodel; //TODO Note: wanted to delete here,
     //  but there is shown an error if i do that. Deleting an already deleted pointer. // !delete gamemodel
 }
 
@@ -150,7 +150,7 @@ void biosim::updateCreatureEditLines(const CreatureData *tempCreatureEditing) {
         tempProperties.append(QString::fromStdString(tempCreatureEditing->properties[i]));
         tempProperties.append(" ");
     }
-    // TODO Discuss: Too much text in the LineEdit.
+    // TODO Note: Too much text in the LineEdit.
     ui->creatureEditingPropertiesLineEdit->setText(tempProperties);
 }
 
@@ -173,10 +173,3 @@ void biosim::writeStartErrorToMsgboxAndExit(const std::string &error)
     msg.exec();
     QApplication::exit();
 }
-
-
-
-
-
-
-

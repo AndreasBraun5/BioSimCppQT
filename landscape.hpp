@@ -8,8 +8,10 @@
 #define INCLUDED_BIOSIM_LANDSCAPE_HPP
 
 #include <vector>
+
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
+
 #include "creature.hpp"
 #include "gamemodel.hpp"
 //class GameModel;
