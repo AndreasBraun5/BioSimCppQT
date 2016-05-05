@@ -33,13 +33,13 @@ void GameModel::setUpGamemodel(const std::string &relativePath) {
     }
     std::cout << "\n";
     loadCreatures(creatureDataFilepath);
-    loadImages(relativePath);
+    loadImages(relativePath); // relativePath is imageDataFilepath
 }
 
-void GameModel::loadImages(const std::string &relativePath) {
-    std::string relativePathLand = relativePath + "land/";
-    std::string relativePathTerrain = relativePath + "terrain/";
-    std::string relativePathWasser = relativePath + "wasser/";
+void GameModel::loadImages(const std::string &imageDataFilepath) {
+    std::string relativePathLand = imageDataFilepath + "land/";
+    std::string relativePathTerrain = imageDataFilepath + "terrain/";
+    std::string relativePathWasser = imageDataFilepath + "wasser/";
 
     //TODO Test: image debug output
     //this->sand.reset(new ImageTga(ImageTga::createCorrectQImage(relativePathTerrain + "sand.tga")));
@@ -47,34 +47,34 @@ void GameModel::loadImages(const std::string &relativePath) {
     // TODO AB2: all images need to be loaded. All terrain images are already.
     // TODO Test: showing error window if wrong image path is given at start.
     // land
-    this->birne.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathLand + "birne.tga")));
-    this->busch.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathLand + "busch.tga")));
+    this->birne.reset(new ImageTga(ImageTga::createImageTga(relativePathLand + "birne.tga")));
+    this->busch.reset(new ImageTga(ImageTga::createImageTga(relativePathLand + "busch.tga")));
 
     //terrain
-    this->deep_seaImageTga.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathTerrain + "deep_sea.tga")));
-    this->earthImageTga.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathTerrain + "earth.tga")));
-    this->rocksImageTga.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathTerrain + "rocks.tga")));
+    this->deep_seaImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "deep_sea.tga")));
+    this->earthImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "earth.tga")));
+    this->rocksImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "rocks.tga")));
     //TODO AB0: if sand_kopie.tga use, where in midst something is deletet, then same display error. Problem exists with
     // pixel values 0,0,0 and 255,255,255
-    this->sandImageTga.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathTerrain + "sand.tga")));
-    this->shallow_waterImageTga.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathTerrain + "shallow_water.tga")));
-    this->snowImageTga.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathTerrain + "snow.tga")));
+    this->sandImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "sand.tga")));
+    this->shallow_waterImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "shallow_water.tga")));
+    this->snowImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "snow.tga")));
 
-    this->deep_seaPixmap.reset(new QPixmap(QPixmap::fromImage(deep_seaImageTga.data()->qImage)));
+    /*this->deep_seaPixmap.reset(new QPixmap(QPixmap::fromImage(deep_seaImageTga.data()->qImage)));
     this->earthPixmap.reset(new QPixmap(QPixmap::fromImage(earthImageTga.data()->qImage)));
     this->rocksPixmap.reset(new QPixmap(QPixmap::fromImage(rocksImageTga.data()->qImage)));
     this->sandPixmap.reset(new QPixmap(QPixmap::fromImage(sandImageTga.data()->qImage)));
     this->shallow_waterPixmap.reset(new QPixmap(QPixmap::fromImage(shallow_waterImageTga.data()->qImage)));
     this->snowPixmap.reset(new QPixmap(QPixmap::fromImage(snowImageTga.data()->qImage)));
 
-    this->sandBlankPixmap = QPixmap::fromImage(sandImageTga.data()->qImage);
+    this->sandBlankPixmap = QPixmap::fromImage(sandImageTga.data()->qImage);*/
 
     // wasser
-    this->algen.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathWasser + "algen.tga")));
-    this->delpin.reset(new ImageTga(ImageTga::createCorrectImageTga(relativePathWasser + "delphin.tga")));
+    this->algen.reset(new ImageTga(ImageTga::createImageTga(relativePathWasser + "algen.tga")));
+    this->delpin.reset(new ImageTga(ImageTga::createImageTga(relativePathWasser + "delphin.tga")));
 
     // TODO Test: image debug output 3
-    QImage tempQImage =  birne->qImage;
+    /*QImage tempQImage =  birne->qImage;
     std::cout << "\nTest: image debug output 3\n";
     std::cout << "Image heigth: " << tempQImage.height() << "\n";
     std::cout << "Image width: " << tempQImage.width() << "\n";
@@ -93,22 +93,20 @@ void GameModel::loadImages(const std::string &relativePath) {
                          tempQImage.pixelColor(i,j).green() << " green " <<
                          tempQImage.pixelColor(i,j).blue() << " blue \n";
         }
-    }
+    }*/
 }
 
-// helper method: only needed by loadCreatures
+/*// helper method: only needed by loadCreatures
 bool creatureListComparator(const CreatureData &cd1, const CreatureData &cd2) {
     return cd1.creaturename[0] < cd2.creaturename[0];
-}
+}*/
 
 void GameModel::loadCreatures(const std::string &creatureDataFilepath) {
-    StatisticalFileReadingData sfrd;
-    ErrorFileReadingData efrd;
-    std::list<CreatureData> tempList = textFileReader::readCreatureFile(creatureDataFilepath, sfrd, efrd);
-    tempList.sort(creatureListComparator);
-    // TODO Note: qSort deprecated...
-    QList<CreatureData> qtempList = QList<CreatureData>::fromStdList(tempList);
-    creatureList = qtempList;
+    this->textFileReaderObj.reset(new textFileReader(textFileReader(creatureDataFilepath)));
+    //std::list<CreatureData> tempList = textFileReader::readCreatureFile(creatureDataFilepath, sfrd, efrd);
+    //tempList.sort(creatureListComparator);
+    //QList<CreatureData> qtempList = QList<CreatureData>::fromStdList(tempList);
+    //creatureList = qtempList;
 }
 
 //TODO

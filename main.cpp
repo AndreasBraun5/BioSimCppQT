@@ -38,3 +38,6 @@ int main(int argn, char *argv[]) {
     std::cout << "\nErfolgreicher Durchlauf\n";
     return a.exec(); // game loop executing
 }
+// TODO check for QPainter draw tiled pixmap
+
+// Ab Blatt 5 verwenden der neuen Aufgabenblätter

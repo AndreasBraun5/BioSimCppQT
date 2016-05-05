@@ -32,15 +32,35 @@ void addErrorLine(std::string errorMessage,
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ readCreatureFile /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-std::list<CreatureData> textFileReader::readCreatureFile(const std::string &filePath,
-                                                         StatisticalFileReadingData &statisticalFileReadingData,
-                                                         ErrorFileReadingData &errorFileReadingData) {
+textFileReader::textFileReader(const std::string &filepath) //{
+    : creatureDataQList(QList<CreatureData>::fromStdList(textFileReader::readCreatureFile(filepath))) {
+
+    //std::list<CreatureData> tempList = textFileReader::readCreatureFile(creatureDataFilepath, sfrd, efrd);
+    //tempList.sort(creatureListComparator);
+    //QList<CreatureData> qtempList = QList<CreatureData>::fromStdList(tempList);
+    //creatureList = qtempList;
+
+    //std::list<CreatureData> tempList = textFileReader::readCreatureFile(filepath);
+    //QList<CreatureData> tempQList = QList<CreatureData>::fromStdList(tempList);
+    //this->creatureDataQList.swap(4,5);
+    //this->creatureDataQList.swap(tempQList);
+}
+
+// helper method only needed by readCreatureFile to sort the returned list
+bool creatureListComparator(const CreatureData &cd1, const CreatureData &cd2) {
+    return cd1.creaturename[0] < cd2.creaturename[0];
+}
+
+std::list<CreatureData> textFileReader::readCreatureFile(const std::string &filePath) {
+
+    StatisticalFileReadingData statisticalFileReadingData;
+    ErrorFileReadingData errorFileReadingData;
     std::list<CreatureData> creatureList;
     std::fstream infile(filePath, std::fstream::in);
     // information from one row
     std::vector<std::string> creatureInfo;
     std::string rowDescription;
-    if(infile.good() == false) throw badTextFilePath();
+    if(!infile) throw badTextFilePath();
     while (infile.good()) {
         std::getline(infile, rowDescription);
         statisticalFileReadingData.rownumber++;
@@ -73,6 +93,7 @@ std::list<CreatureData> textFileReader::readCreatureFile(const std::string &file
     for (int i = 0; i < errorFileReadingData.errorInfo.size(); i++) {
         std::cout << errorFileReadingData.errorInfo[i] << std::endl;
     }
+    creatureList.sort(creatureListComparator);
     return creatureList;
 }
 

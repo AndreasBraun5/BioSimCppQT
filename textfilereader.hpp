@@ -10,6 +10,8 @@
 
 #include <list>
 
+#include <QList>
+
 #include "creature.hpp"
 
 class StatisticalFileReadingData;
@@ -17,26 +19,29 @@ class ErrorFileReadingData;
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class TextFileReader /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-namespace textFileReader {
+class textFileReader {
+
+public: const QList<CreatureData> creatureDataQList;
+
+public: textFileReader() = delete;
+public: textFileReader(const std::string &filepath);
 // writes information to statisticalFileReadingData & errorFileReadingData
-std::list<CreatureData> readCreatureFile(const std::string &filePath,
-                                         StatisticalFileReadingData &statisticalFileReadingData,
-                                         ErrorFileReadingData &errorFileReadingData);
+static std::list<CreatureData> readCreatureFile(const std::string &filePath);
 
 // splitCreaturerow: rowDescription = one row of textfile, writes to tempCreatureInfo
-void splitCreatureRow(const std::string &rowDescription,
+static void splitCreatureRow(const std::string &rowDescription,
                       std::vector<std::string> &tempCreatureInfo);
 
 
 // correctRow: writes to errorFileReadingData
-bool correctRow(const std::vector<std::string> &creatureInfo,
+static bool correctRow(const std::vector<std::string> &creatureInfo,
                 StatisticalFileReadingData &statisticalFileReadingData,
                 ErrorFileReadingData &errorFileReadingData);
 
 
 // splitCreaturerow: cleares the vector creatureInfo
-CreatureData createCreatureFromRow(std::vector<std::string> &creatureInfo);
-}
+static CreatureData createCreatureFromRow(std::vector<std::string> &creatureInfo);
+};
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/

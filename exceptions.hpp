@@ -61,4 +61,10 @@ class badImageFilePath : public std::exception{
     }
 };
 
+class wrongNumberOfBytesRead : public std::exception{
+    virtual const char* what() const throw() {
+        return "WrongNumberOfBytesRead: The read number of bytes is incorrect.";
+    }
+};
+
 #endif // EXCEPTIONS_HPP

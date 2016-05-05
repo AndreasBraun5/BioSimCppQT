@@ -15,6 +15,7 @@
 #include "exceptions.hpp"
 #include "imagetga.hpp"
 #include "creature.hpp"
+#include "textfilereader.hpp"
 //#include "landscape.hpp"
 class LandscapeGrid;
 //#include "biosim.h" // TODO Note: circular dependency
@@ -22,7 +23,8 @@ class LandscapeGrid;
 /*/ class TextFileReader /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class GameModel {
-public: QList<CreatureData> creatureList;
+public: //QList<CreatureData> creatureList;
+    QScopedPointer<textFileReader> textFileReaderObj;
 
     //TODO Note: const Qscoped... -> pointer to a ?const? imagetga, because Image data
     // doesn´t need to be manipulated.
@@ -63,8 +65,8 @@ public: QList<CreatureData> creatureList;
 
 private:
     void setUpGamemodel(const std::string &relativePath);
-    void loadImages(const std::string &relativePath);
-    void loadCreatures(const std::string &relativeFilePath);
+    void loadImages(const std::string &imageDataFilepath);
+    void loadCreatures(const std::string &creatureDataFilepath);
 public: void loadLandscapeGrid(GameModel &gamemodel); //TODO AB4: additional parameters at compiletime
 };
 #endif // GAMEMODEL_HPP

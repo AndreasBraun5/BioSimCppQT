@@ -30,16 +30,18 @@ biosim::biosim(QWidget *parent) :
         // it is done here because of compiletime determination of size, but up till ignore interaction
         //TODO AB4: additional parameters at compiletime
         this->gamemodel->loadLandscapeGrid(*gamemodel); // *gamemodel
-    } catch(std::exception &e) {
+    } catch(const std::exception &e) {
         writeStartErrorToMsgboxAndExit(e.what());
         exit(EXIT_FAILURE);
     }
 
 
     // pre selecting of the combobox and its related fields
-    tempCreatureEditing =  &gamemodel->creatureList.at(0);
-    for(int i = 0; i < gamemodel->creatureList.size(); i++) {
-        ui->creatureEditingComboBox->addItem(QString::fromStdString(gamemodel->creatureList.at(i).creaturename));
+    //tempCreatureEditing = &gamemodel->creatureList.at(0);
+    tempCreatureEditing = &gamemodel->textFileReaderObj.data()->creatureDataQList.at(0);
+    //for(int i = 0; i < gamemodel->creatureList.size(); i++) {
+    for(int i = 0; i < gamemodel->textFileReaderObj.data()->creatureDataQList.size(); i++) {
+        ui->creatureEditingComboBox->addItem(QString::fromStdString(gamemodel->textFileReaderObj.data()->creatureDataQList.at(i).creaturename));
     }
     updateCreatureEditLines(tempCreatureEditing);
 
@@ -67,15 +69,15 @@ biosim::biosim(QWidget *parent) :
     }*/
 
     // übergabe der scene an eine Methode/slot updateScene die wiederum updateScene von gamemodel aufruft
-    QGraphicsPixmapItem x(QPixmap::fromImage(gamemodel->sandImageTga->qImage, Qt::AutoColor));
+    /*QGraphicsPixmapItem x(QPixmap::fromImage(gamemodel->sandImageTga->qImage, Qt::AutoColor));
     x.setOffset(100,100);
     scene->addItem(&x);
     QGraphicsPixmapItem *y = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->sandImageTga->qImage, Qt::AutoColor));
     y->setOffset(100,100);
     y->setOpacity(1.0);
     scene->addItem(y);
-    /*QGraphicsPixmapItem *z = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->birne->qImage, Qt::AutoColor));
-    z->setOffset(100,100);
+    QGraphicsPixmapItem *z = new QGraphicsPixmapItem(QPixmap::fromImage(gamemodel->birne->qImage, Qt::AutoColor));
+    z->setOffset(200,200);
     scene->addItem(z);*/
 
     /*LandscapeGrid *landscape2 = gamemodel->landscapeGrid.data();
@@ -90,10 +92,10 @@ biosim::biosim(QWidget *parent) :
     scene->addItem(m);*/
 
     // Item generation here because
-    QGraphicsPixmapItem *u = new QGraphicsPixmapItem (*gamemodel->landscapeGrid.data()->landscapeGridMap[0][0].climatePixmap.data());
+    /*QGraphicsPixmapItem *u = new QGraphicsPixmapItem (*gamemodel->landscapeGrid.data()->landscapeGridMap[0][0].climatePixmap.data());
     u->setOffset(110,110);
     u->setOpacity(0.5);
-    scene->addItem(u);
+    scene->addItem(u);*/
 
 
 
@@ -104,30 +106,6 @@ biosim::biosim(QWidget *parent) :
     qPainter.setRenderHint(QPainter::Antialiasing);
     scene->render(&qPainter);*/
 
-    //TODO Test: image debug output 4
-    QImage tempQImage =  gamemodel->birne->qImage;
-    //QImage tempQImage =  gamemodel->sand->qImage;
-    std::cout << "\nTest: image debug output 4\n";
-    std::cout << "Image heigth: " << tempQImage.height() << "\n";
-    std::cout << "Image width: " << tempQImage.width() << "\n";
-    std::cout << "Image byteCount: " << tempQImage.byteCount() << "\n";
-    std::cout << "Image bytesPerLine: " << tempQImage.bytesPerLine() << "\n";
-    std::cout << "Image data size QimageSizeHeight*QimageSizeWidth: " <<
-                 tempQImage.size().height() * tempQImage.size().width() << "\n";
-    std::cout << "bits per pixel: " << tempQImage.depth() << "\n";
-    std::cout << "ImageFormat: " << tempQImage.format() << ", if 5 it is 32-bit ARGB \n";
-    std::cout << "Image data pointer adress: " << tempQImage.data_ptr() <<"\n";
-    std::cout << "first pixel down left:\n";
-    for(int i = 0; i <= 1; i++){
-        for(int j = 0; j <= 10; j++){
-            std::cout << tempQImage.pixelColor(i,j).alpha() << " alpha " <<
-                         tempQImage.pixelColor(i,j).red() << " red " <<
-                         tempQImage.pixelColor(i,j).green() << " green " <<
-                         tempQImage.pixelColor(i,j).blue() << " blue \n";
-        }
-    }
-
-
     connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));
     connect(ui->creatureEditingPushButton, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
     connect(ui->simulationControllButtonPause, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
@@ -137,8 +115,8 @@ biosim::biosim(QWidget *parent) :
 
 biosim::~biosim() {
     delete ui;                                                                                  // !delete ui
-    //delete gamemodel; //TODO Note: wanted to delete here,
-    //  but there is shown an error if i do that. Deleting an already deleted pointer. // !delete gamemodel
+    //delete gamemodel;                    // TODO                                              // !delete gamemodel automanaged
+    //  but there is shown an error if i do that. Deleting an already deleted pointer.
 }
 
 void biosim::updateCreatureEditLines(const CreatureData *tempCreatureEditing) {
@@ -155,7 +133,7 @@ void biosim::updateCreatureEditLines(const CreatureData *tempCreatureEditing) {
 }
 
 void biosim::updateCreatureComboBox(int index) {
-    tempCreatureEditing = &gamemodel->creatureList.at(index);
+    tempCreatureEditing = &gamemodel->textFileReaderObj.data()->creatureDataQList.at(index);
     updateCreatureEditLines(tempCreatureEditing);
 }
 

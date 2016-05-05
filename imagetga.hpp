@@ -18,14 +18,11 @@
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class ImageTga {
-public: const std::vector<unsigned int> tgaHeader;    // 18 Byte size
-    //QScopedPointer<std::vector<unsigned char>> imageDataVector;
-    QImage qImage;
+public: std::vector<unsigned char> imageDataVector;
 
 public: ImageTga() = delete; // RAII pattern. No zombie image possible
-private: ImageTga(const std::vector<unsigned int> &tgaHeader,
-                  const QImage &qImage);
-public: static ImageTga createCorrectImageTga(const std::string &imagePath);
+private: ImageTga(const std::vector<unsigned char> imageDataVector);
+public: static ImageTga createImageTga(const std::string &imagePath);
 };
 
 
