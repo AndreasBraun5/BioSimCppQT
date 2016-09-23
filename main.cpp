@@ -1,6 +1,8 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-    main
+    main: input of console parameters.
+    creation of an QApplication object that handles the game loop and other stuff.
+    creation of biosim object that is our mainwindow = PRESENTER
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include <vector>
@@ -38,6 +40,4 @@ int main(int argn, char *argv[]) {
     std::cout << "\nErfolgreicher Durchlauf\n";
     return a.exec(); // game loop executing
 }
-// TODO check for QPainter draw tiled pixmap
-
-// Ab Blatt 5 verwenden der neuen Aufgabenblätter
+// TODO Ab Blatt 5 verwenden der neuen Aufgabenblätter

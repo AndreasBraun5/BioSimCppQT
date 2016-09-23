@@ -1,6 +1,8 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-    class biosim is subclass of QMainWindow and Ui_biosim. Equals the presenter.
+    biosim = PRESENTER. class biosim is subclass of QMainWindow and Ui_biosim. Equals the PRESENTER,
+    which in this case holds an pointer to the VIEW which is generated out of the
+    biosim.ui file.
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #pragma once
@@ -37,7 +39,7 @@ private:
     // again to delete the already deleted pointer gamemodel. How to check if the gamemodel pointer is really already deleted?
     // or better use smart pointer?
     GameModel *gamemodel;
-    // TODO AB2: Improvement, name it gamecontroller
+    // TODO Discuss: Improvement, name it gamecontroller
     // Model(gamemodel)-View(Ui_biosim.h)-Presenter(biosim-.hpp/.cpp) intended. Gamemodel doesn´t know of
     // Ui_biosim.h (generated from biosim.ui) and biosim-.hpp/.cpp. Gamemodel will contain all data and logic. biosim will
     // handle the communication and Ui_biosim will only contain the view.

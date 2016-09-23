@@ -30,7 +30,7 @@ public: ClimateType climate;
     QSharedPointer<QPixmap> climatePixmap;
     //std::vector<CreatureData> creatures; Oder gespeichert in der Creature? eher nicht...
     //QScopedPointer<QGraphicsPixmapItem> climatePixmap;
-    // ?shared pointer" to one or more living creatures holded in gamemodel
+    // ?shared pointer" to one or more living creatures held in gamemodel
     // one or more creatures allowed on it
 };
 

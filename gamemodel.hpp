@@ -24,7 +24,7 @@ class LandscapeGrid;
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class GameModel {
 public: //QList<CreatureData> creatureList;
-    QScopedPointer<textFileReader> textFileReaderObj;
+    QScopedPointer<textFileReader> textFileReaderObj; // TODO Note: textFileReaderObj only needed because of creatureDataList, maybe move the creatureDataList to here
 
     //TODO Note: const Qscoped... -> pointer to a ?const? imagetga, because Image data
     // doesn´t need to be manipulated.

@@ -54,7 +54,7 @@ void GameModel::loadImages(const std::string &imageDataFilepath) {
     this->deep_seaImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "deep_sea.tga")));
     this->earthImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "earth.tga")));
     this->rocksImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "rocks.tga")));
-    //TODO AB0: if sand_kopie.tga use, where in midst something is deletet, then same display error. Problem exists with
+    //TODO AB0: if sand_kopie.tga use, where in midst something is deleted, then same display error. Problem exists with
     // pixel values 0,0,0 and 255,255,255
     this->sandImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "sand.tga")));
     this->shallow_waterImageTga.reset(new ImageTga(ImageTga::createImageTga(relativePathTerrain + "shallow_water.tga")));

@@ -1,6 +1,6 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-    biosim
+    biosim = PRESENTER
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include "biosim.hpp"
@@ -13,9 +13,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsView> //TODO  Do not use Qgraphicsview. It makes copies for each pixel. Check for QPainter draw tiled pixmap
 
 #include "gamemodel.hpp"
-#include "landscape.hpp"
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class CreatureData /*/
@@ -26,7 +26,7 @@ biosim::biosim(QWidget *parent) :
     ui->setupUi(this);
     try {
         this->gamemodel = new GameModel(qApp->arguments().at(1).toStdString());                 // !delete gamemodel auto managed
-        //TODO AB0: gamemodel use this here to initialise landscape = call gamemodel::loadLandscapeGridMap,
+        //TODO AB4: gamemodel use this here to initialise landscape = call gamemodel::loadLandscapeGridMap,
         // it is done here because of compiletime determination of size, but up till ignore interaction
         //TODO AB4: additional parameters at compiletime
         this->gamemodel->loadLandscapeGrid(*gamemodel); // *gamemodel
@@ -37,7 +37,6 @@ biosim::biosim(QWidget *parent) :
 
 
     // pre selecting of the combobox and its related fields
-    //tempCreatureEditing = &gamemodel->creatureList.at(0);
     tempCreatureEditing = &gamemodel->textFileReaderObj.data()->creatureDataQList.at(0);
     //for(int i = 0; i < gamemodel->creatureList.size(); i++) {
     for(int i = 0; i < gamemodel->textFileReaderObj.data()->creatureDataQList.size(); i++) {

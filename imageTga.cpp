@@ -9,12 +9,11 @@
 #include <vector>
 #include <iostream>
 
-#include <QImage>
-#include <QFile>
-#include <Qdebug>
+//#include <QImage>
+//#include <QFile>
+//#include <Qdebug>
 
 #include "exceptions.hpp"
-
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
@@ -22,13 +21,12 @@
 ImageTga::ImageTga(const std::vector<unsigned char> imageDataVector  )
     : imageDataVector(imageDataVector) {}
 
-// TODO Test: image debug output
 bool onetime = true;
 ImageTga ImageTga::createImageTga(const std::string &imagePath) {
 
     std::vector<unsigned int> tempTgaHeader(12);
     char bufferTgaHeaderUnformatted[18];
-    // TODO AB0: DELETE!? tempImageData needs to be deleted for every image from the heap or does scoped Pointer delete this?
+    // TODO Discuss: DELETE!? tempImageData needs to be deleted for every image from the heap or does scoped Pointer delete this?
     std::vector<unsigned char> tempImageData; //TODO Note: with temporary length of one (1)... ??
     unsigned char *tempImageDataPointer;
 

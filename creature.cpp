@@ -1,6 +1,6 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/
-    creature data
+    creature
 /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 #include "creature.hpp"
@@ -14,8 +14,6 @@
 /*/ class CreatureData /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 int CreatureData::creatureCount = 0;
-
-//void CreatureData::operator=(const CreatureData &cd){} // TODO Note: operator=
 
 CreatureData::CreatureData(const std::string &creaturename,
                            size_t strength,
