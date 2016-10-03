@@ -10,21 +10,20 @@
 
 #include <list>
 
-#include <QList>
-
 #include "creature.hpp"
 
 class StatisticalFileReadingData;
 class ErrorFileReadingData;
+
+
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class TextFileReader /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
+// namespace vs class: lookup regeln, koeniglookup
 class textFileReader {
 
-public: const QList<CreatureData> creatureDataQList;
-
 public: textFileReader() = delete;
-public: textFileReader(const std::string &filepath);
+
 // writes information to statisticalFileReadingData & errorFileReadingData
 static std::list<CreatureData> readCreatureFile(const std::string &filePath);
 
@@ -32,12 +31,10 @@ static std::list<CreatureData> readCreatureFile(const std::string &filePath);
 static void splitCreatureRow(const std::string &rowDescription,
                       std::vector<std::string> &tempCreatureInfo);
 
-
 // correctRow: writes to errorFileReadingData
 static bool correctRow(const std::vector<std::string> &creatureInfo,
                 StatisticalFileReadingData &statisticalFileReadingData,
                 ErrorFileReadingData &errorFileReadingData);
-
 
 // splitCreaturerow: cleares the vector creatureInfo
 static CreatureData createCreatureFromRow(std::vector<std::string> &creatureInfo);

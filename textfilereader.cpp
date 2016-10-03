@@ -28,24 +28,6 @@ void addErrorLine(std::string errorMessage,
                   ErrorFileReadingData &errorFileReadingData);
 }
 
-
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-/*/ readCreatureFile /*/
-/*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-textFileReader::textFileReader(const std::string &filepath) //{
-    : creatureDataQList(QList<CreatureData>::fromStdList(textFileReader::readCreatureFile(filepath))) {
-
-    //std::list<CreatureData> tempList = textFileReader::readCreatureFile(creatureDataFilepath, sfrd, efrd);
-    //tempList.sort(creatureListComparator);
-    //QList<CreatureData> qtempList = QList<CreatureData>::fromStdList(tempList);
-    //creatureList = qtempList;
-
-    //std::list<CreatureData> tempList = textFileReader::readCreatureFile(filepath);
-    //QList<CreatureData> tempQList = QList<CreatureData>::fromStdList(tempList);
-    //this->creatureDataQList.swap(4,5);
-    //this->creatureDataQList.swap(tempQList);
-}
-
 // helper method only needed by readCreatureFile to sort the returned list
 bool creatureListComparator(const CreatureData &cd1, const CreatureData &cd2) {
     return cd1.creaturename[0] < cd2.creaturename[0];

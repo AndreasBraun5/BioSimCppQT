@@ -41,3 +41,7 @@ int main(int argn, char *argv[]) {
     return a.exec(); // game loop executing
 }
 // TODO Ab Blatt 5 verwenden der neuen Aufgabenblätter
+
+// namespace statt class, allgemeiner Aufbau, T2 T3? naja momentan etwas unübersichtlich, Fehler aber behoben.
+
+//Notes: Viewport funktion rect bei Qgraphicsview, bei klick auf scrollbar updaten des sichtbaren bereichs des landscapegrid

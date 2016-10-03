@@ -9,27 +9,17 @@
 #include <vector>
 #include <iostream>
 
-//#include <QImage>
-//#include <QFile>
-//#include <Qdebug>
-
 #include "exceptions.hpp"
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class ImageTga /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-ImageTga::ImageTga(const std::vector<unsigned char> imageDataVector  )
-    : imageDataVector(imageDataVector) {}
 
-bool onetime = true;
-ImageTga ImageTga::createImageTga(const std::string &imagePath) {
+std::vector<unsigned char> ImageTga::createImageVector(const std::string &imagePath) {
 
     std::vector<unsigned int> tempTgaHeader(12);
     char bufferTgaHeaderUnformatted[18];
-    // TODO Discuss: DELETE!? tempImageData needs to be deleted for every image from the heap or does scoped Pointer delete this?
     std::vector<unsigned char> tempImageData; //TODO Note: with temporary length of one (1)... ??
-    unsigned char *tempImageDataPointer;
-
 
     unsigned int numberOfPixels;
     unsigned int byteToReadPerPixel;
@@ -82,10 +72,10 @@ ImageTga ImageTga::createImageTga(const std::string &imagePath) {
 
     // bitsPerPixel
     tempTgaHeader[10] = bufferTgaHeaderUnformatted[16];
-    if(tempTgaHeader[10] = 24) {
+    if(tempTgaHeader[10] == 24) {
         // 24 = RGB
         byteToReadPerPixel = 3;
-    } else if(tempTgaHeader[10] = 32) {
+    } else if(tempTgaHeader[10] == 32) {
         // 32 = RGB(A)
         byteToReadPerPixel = 4;
     } else {
@@ -132,32 +122,11 @@ ImageTga ImageTga::createImageTga(const std::string &imagePath) {
         }
     }
 
-    // TODO Test: image debug output 1
-    tempImageDataPointer = tempImageData.data();
-    if(onetime){
-        tempImageDataPointer = tempImageData.data();
-        std::cout << "\nTest: image debug output 1\n";
-        std::cout << "Image heigth: " << tempTgaHeader[8] << "\n";
-        std::cout << "Image width: " << tempTgaHeader[9] << "\n";
-        std::cout << "Image byteCountToRead: " << charsToReadFromStreamForImageData << "\n";
-        std::cout << "Image bytesPerLine: " << byteToReadPerPixel*tempTgaHeader[8] << "\n";
-        std::cout << "Image Data size of  std::vector<unsigned char> tempImageData: " << tempImageData.size() << "\n";
-        std::cout << "bits per pixel: " << tempTgaHeader[10] << "\n";
-        std::cout << "ImageFormat = 32bit alpha-RGB\n";
-        std::cout << "Image data pointer adress: " << &tempImageDataPointer <<"\n";
-        std::cout << "first pixel down left:\n";
-        for(int i = 0; i <= 500; i = i + 4){
-            std::cout << static_cast<int> (tempImageData.data()[i + 3]) << " alpha " <<
-                         static_cast<int> (tempImageData.data()[i + 2]) << " red " <<
-                         static_cast<int> (tempImageData.data()[i + 1])<< " green " <<
-                         static_cast<int> (tempImageData.data()[i + 0]) << " blue\n";
-        }
-        onetime = false;
-    }
     delete[] bufferImageDataUnformatted;                                                                    // !delete bufferImageDataUnformatted
     if(numberOfPixels * 4 != tempImageData.size()) throw corruptImageData();
     imageStream.close();
-    return ImageTga(tempImageData);
+    //return ImageTga(tempImageData);
+    return tempImageData;
 }
 
 
