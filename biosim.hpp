@@ -30,6 +30,8 @@ public:
     void updateCreatureEditLines(const CreatureData *tempCreatureEditing);
     CreatureData getTempCreatureEditing() const;
     void writeStartErrorToMsgboxAndExit(const std::string &error);
+    static void updateVisibleScene(int squareSize);
+
 
 private:
     CreatureData const *tempCreatureEditing;
@@ -47,6 +49,11 @@ private:
 private slots:
     void updateCreatureComboBox(int index);
     void dumbClick();
+
+public slots:
+    void updateVisibleSceneMouseDrag(int newSceneSize, int oldScenceSize); // QEvent::WindowStateChange = value 155 //TODO delete
+    void updateVisibleSceneScrollbar(int value);
+
 
 };
 

@@ -24,47 +24,82 @@
     <bool>true</bool>
    </property>
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="0" column="0" rowspan="3">
-     <widget class="QFrame" name="simulationAreaOuterFrame">
+    <item row="2" column="1">
+     <widget class="QFrame" name="simulationControlFrame">
+      <property name="minimumSize">
+       <size>
+        <width>275</width>
+        <height>80</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>275</width>
+        <height>80</height>
+       </size>
+      </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Plain</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>2</number>
+      <widget class="QLabel" name="simulationControlLabel">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>11</y>
+         <width>101</width>
+         <height>16</height>
+        </rect>
        </property>
-       <property name="topMargin">
-        <number>2</number>
+       <property name="text">
+        <string>Simulation Control:</string>
        </property>
-       <property name="rightMargin">
-        <number>2</number>
+      </widget>
+      <widget class="QWidget" name="layoutWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>239</width>
+         <height>25</height>
+        </rect>
        </property>
-       <property name="bottomMargin">
-        <number>2</number>
-       </property>
-       <property name="spacing">
-        <number>2</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="QFrame" name="simulationArea">
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <layout class="QGridLayout" name="simulationAreaGridLayout" rowstretch="0">
-          <item row="0" column="0">
-           <widget class="QGraphicsView" name="graphicsView"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
+       <layout class="QHBoxLayout" name="simulationControlButtonsHorizontalLayout">
+        <item>
+         <widget class="QPushButton" name="simulationControllButtonStart">
+          <property name="text">
+           <string>start</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="simulationControllButtonPause">
+          <property name="text">
+           <string>pause</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="simulationControllButtonStop">
+          <property name="text">
+           <string>step</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
     <item row="0" column="1">
      <widget class="QFrame" name="creatureEditingFrame">
+      <property name="minimumSize">
+       <size>
+        <width>275</width>
+        <height>200</height>
+       </size>
+      </property>
       <property name="maximumSize">
        <size>
         <width>275</width>
@@ -162,6 +197,45 @@
       </layout>
      </widget>
     </item>
+    <item row="0" column="0" rowspan="3">
+     <widget class="QFrame" name="simulationAreaOuterFrame">
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>2</number>
+       </property>
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>2</number>
+       </property>
+       <property name="bottomMargin">
+        <number>2</number>
+       </property>
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QFrame" name="simulationArea">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <layout class="QGridLayout" name="simulationAreaGridLayout" rowstretch="0">
+          <item row="0" column="0">
+           <widget class="QGraphicsView" name="graphicsView"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item row="1" column="1">
      <widget class="QFrame" name="dummyFrame">
       <property name="frameShape">
@@ -170,67 +244,18 @@
       <property name="frameShadow">
        <enum>QFrame::Plain</enum>
       </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QFrame" name="simulationControlFrame">
-      <property name="maximumSize">
-       <size>
-        <width>275</width>
-        <height>80</height>
-       </size>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-      <widget class="QLabel" name="simulationControlLabel">
-       <property name="geometry">
-        <rect>
-         <x>11</x>
-         <y>11</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Simulation Control:</string>
-       </property>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_2">
+      <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>40</y>
-         <width>239</width>
-         <height>25</height>
+         <y>0</y>
+         <width>141</width>
+         <height>41</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="simulationControlButtonsHorizontalLayout">
-        <item>
-         <widget class="QPushButton" name="simulationControllButtonStart">
-          <property name="text">
-           <string>start</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="simulationControllButtonPause">
-          <property name="text">
-           <string>pause</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="simulationControllButtonStop">
-          <property name="text">
-           <string>step</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <property name="text">
+        <string>adding zoom button here?</string>
+       </property>
       </widget>
      </widget>
     </item>

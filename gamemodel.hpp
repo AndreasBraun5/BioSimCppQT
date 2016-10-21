@@ -26,13 +26,18 @@ public:
     QList<CreatureData> creatureDataList;
 
     //images
-    std::vector<unsigned char> sand;
     std::vector<unsigned char> deep_sea;
+    std::vector<unsigned char> shallow_water;
+    std::vector<unsigned char> sand;
+    std::vector<unsigned char> earth;
+    std::vector<unsigned char> rocks;
+    std::vector<unsigned char> snow;
+
     std::vector<unsigned char> birne;
     std::vector<unsigned char> delphin;
 
     // landscape
-    std::vector<std::vector<LandscapeTile>> landscapegridmap;// landscapeGridmap [down][left] = landscapeGridmap [0][0];
+    std::vector<std::vector<LandscapeTile>> landscapeGridmap;// landscapeGridmap [down][left] = landscapeGridmap [0][0];
 
     // storing of all creatures here too
 
@@ -43,6 +48,6 @@ private:
     void setUpGamemodel(const std::string &relativePath);
     void loadImages(const std::string &imageDataFilepath);
     void loadCreatures(const std::string &creatureDataFilepath);
-public: void loadLandscapeGrid(GameModel &gamemodel);
+public: void loadLandscapeGrid(unsigned int sizehorizontal, unsigned int sizevertical);
 };
 #endif // GAMEMODEL_HPP

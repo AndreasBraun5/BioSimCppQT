@@ -22,7 +22,7 @@ class LandscapeTile{
 public: LandscapeTile() = delete;
 public: LandscapeTile(ClimateType climate);
 public: ClimateType climate;
-    bool tileClicked; // check if supported by qt framework? --> equals click or press events
+    //bool tileClicked; // check if supported by qt framework? --> equals click or press events
     //std::vector<CreatureData> creatures; // which creatures are on this tile
 };
 

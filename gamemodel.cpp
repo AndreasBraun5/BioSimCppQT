@@ -34,6 +34,7 @@ void GameModel::setUpGamemodel(const std::string &relativePath) {
     std::cout << "\n";
     loadCreatures(creatureDataFilepath);
     loadImages(relativePath); // relativePath is imageDataFilepath
+    loadLandscapeGrid(500, 500); // TODO Discuss, Parameter at compiletime are given here
 }
 
 void GameModel::loadImages(const std::string &imageDataFilepath) {
@@ -42,13 +43,15 @@ void GameModel::loadImages(const std::string &imageDataFilepath) {
     std::string relativePathWasser = imageDataFilepath + "wasser/";
 
     //this->sand.reset(new std::vector<unsigned char>(ImageTga::createImageVector(relativePathTerrain + "sand.tga")));
-    this->sand = ImageTga::createImageVector(relativePathTerrain + "sand.tga");
     this->deep_sea = ImageTga::createImageVector(relativePathTerrain + "deep_sea.tga");
+    this->shallow_water = ImageTga::createImageVector(relativePathTerrain + "shallow_water.tga");
+    this->sand = ImageTga::createImageVector(relativePathTerrain + "sand.tga");
+    this->earth = ImageTga::createImageVector(relativePathTerrain + "earth.tga");
+    this->rocks = ImageTga::createImageVector(relativePathTerrain + "rocks.tga");
+    this->snow = ImageTga::createImageVector(relativePathTerrain + "snow.tga");
+
     this->birne = ImageTga::createImageVector(relativePathLand + "birne.tga");
     this->delphin = ImageTga::createImageVector(relativePathWasser + "delphin.tga");
-
-    //landscape
-    //this->landscape = LandscapeGrid::createLandscapeGrid(); // creates default landscapegrid for testing purpose
 }
 
 /*// helper method: only needed by loadCreatures // not needed any more
@@ -66,7 +69,8 @@ void GameModel::loadCreatures(const std::string &creatureDataFilepath) {
 }
 
 
-void GameModel::loadLandscapeGrid(GameModel &gamemodel) {
+void GameModel::loadLandscapeGrid(unsigned int sizehorizontal, unsigned int sizevertical) {
+    this->landscapeGridmap = LandscapeGrid::createLandscapeGrid(sizehorizontal, sizevertical);
     // futher capsuling done here because advanced logic is needed (perl noise)
     //this->landscapeGrid.reset(new ...static Method of landscapegrid class);
     //landscapeGrid.reset(new LandscapeGrid(LandscapeGrid::createLandscapeGrid(gamemodel)));

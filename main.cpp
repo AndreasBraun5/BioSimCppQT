@@ -42,6 +42,6 @@ int main(int argn, char *argv[]) {
 }
 // TODO Ab Blatt 5 verwenden der neuen Aufgabenblätter
 
-// namespace statt class, allgemeiner Aufbau, T2 T3? naja momentan etwas unübersichtlich, Fehler aber behoben.
-
 //Notes: Viewport funktion rect bei Qgraphicsview, bei klick auf scrollbar updaten des sichtbaren bereichs des landscapegrid
+
+// TODO Next: Auslesen des Sichtbaren bereichs, alles außerhalb nicht laden. Signal-Slot um bei scrollbar usage die Bilder nachzuladen
