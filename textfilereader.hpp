@@ -19,7 +19,7 @@ class ErrorFileReadingData;
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class TextFileReader /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-// namespace vs class: lookup regeln, koeniglookup
+// TODO Note: namespace vs class: lookup regeln, koeniglookup
 class textFileReader {
 
 public: textFileReader() = delete;

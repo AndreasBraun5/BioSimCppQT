@@ -125,7 +125,6 @@ std::vector<unsigned char> ImageTga::createImageVector(const std::string &imageP
     delete[] bufferImageDataUnformatted;                                                                    // !delete bufferImageDataUnformatted
     if(numberOfPixels * 4 != tempImageData.size()) throw corruptImageData();
     imageStream.close();
-    //return ImageTga(tempImageData);
     return tempImageData;
 }
 

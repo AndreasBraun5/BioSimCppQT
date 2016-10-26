@@ -10,8 +10,9 @@
 #define INCLUDED_BIOSIM_BIOSIM_HPP
 
 #include <QMainWindow>
+#include <QImage>
 
-#include "gamemodel.hpp" // had circular dependency
+#include "gamemodel.hpp"
 #include "creature.hpp"
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
@@ -30,13 +31,15 @@ public:
     void updateCreatureEditLines(const CreatureData *tempCreatureEditing);
     CreatureData getTempCreatureEditing() const;
     void writeStartErrorToMsgboxAndExit(const std::string &error);
-    static void updateVisibleScene(int squareSize);
+    void updateVisibleScene();
+    void resizeEvent(QResizeEvent *event);
 
 
 private:
     CreatureData const *tempCreatureEditing;
     Ui::biosim *ui;
-    // TODO Note: access violation scoped pointer, if main window is closed. Solved?: the pointer gamemodel was
+    QGraphicsScene *scene;
+    // TODO Discuss: access violation scoped pointer, if main window is closed. Solved?: the pointer gamemodel was
     // deleted in the constructor, analog to the ui pointer. But I blieve some kind of garbage collection tried
     // again to delete the already deleted pointer gamemodel. How to check if the gamemodel pointer is really already deleted?
     // or better use smart pointer?
@@ -51,8 +54,7 @@ private slots:
     void dumbClick();
 
 public slots:
-    void updateVisibleSceneMouseDrag(int newSceneSize, int oldScenceSize); // QEvent::WindowStateChange = value 155 //TODO delete
-    void updateVisibleSceneScrollbar(int value);
+    void updateVisibleSceneScrollbar();
 
 
 };

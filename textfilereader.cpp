@@ -66,7 +66,6 @@ std::list<CreatureData> textFileReader::readCreatureFile(const std::string &file
             statisticalFileReadingData.rowsincorrect++;
         }
     }
-    // TODO Note: Programm should not exit
     std::cout << "\n";
     std::cout << "Read rows: " << statisticalFileReadingData.rownumber << std::endl;
     std::cout << "Correct rows: " << statisticalFileReadingData.rowscorrect << std::endl;
@@ -148,7 +147,6 @@ bool textFileReader::correctRow(const std::vector<std::string> &creatureInfo,
                                            statisticalFileReadingData, errorFileReadingData);
         valid = false;
     }
-
     return valid;
 }
 
@@ -195,7 +193,7 @@ void helperTextFileReader::splitString(std::string str,
     size_t substrStart = 0;
     size_t substrEnd = 0;
     while (substrStart < str.length()) {
-        if (substrEnd > 10000) { break; }               // TODO Note: avoid this hack [10000], actually is ok.
+        if (substrEnd > 10000) { break; }               // TODO Note: avoid this hack [10000] --> actually is ok
         substrEnd = str.find(delimiter, substrStart);
         std::string vectorElement = str.substr(substrStart, substrEnd - substrStart);
         vector.push_back(vectorElement);
@@ -212,4 +210,3 @@ void helperTextFileReader::addErrorLine(std::string errorMessage,
                     std::to_string(statisticalFileReadingData.rownumber)));
     errorFileReadingData.errorInfoCount++;
 }
-

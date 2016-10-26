@@ -40,8 +40,3 @@ int main(int argn, char *argv[]) {
     std::cout << "\nErfolgreicher Durchlauf\n";
     return a.exec(); // game loop executing
 }
-// TODO Ab Blatt 5 verwenden der neuen Aufgabenblätter
-
-//Notes: Viewport funktion rect bei Qgraphicsview, bei klick auf scrollbar updaten des sichtbaren bereichs des landscapegrid
-
-// TODO Next: Auslesen des Sichtbaren bereichs, alles außerhalb nicht laden. Signal-Slot um bei scrollbar usage die Bilder nachzuladen

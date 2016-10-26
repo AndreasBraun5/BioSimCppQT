@@ -37,7 +37,7 @@ std::vector<std::vector<LandscapeTile> > LandscapeGrid::createLandscapeGrid
     //double value = myModule.GetValue(1.25, 0.75, 0.5);
     //std::cout << "\n" << value << std::endl;
     utils::NoiseMap heightMap;
-    //TODO discuss, setting border Value?
+    //TODO Note: Setting border Value?
     //heightMap.m_borderValue;
     utils::NoiseMapBuilderPlane heightMapBuilder;
     heightMapBuilder.SetSourceModule(myModule);
@@ -56,8 +56,9 @@ std::vector<std::vector<LandscapeTile> > LandscapeGrid::createLandscapeGrid
      * This in combination with the variable size, are responsible witch type of terrain will be generated
     /*/
 
-    //TODO Discuss: Maybe using random number for a square to setbounds
-    // Powered by: http://stackoverflow.com/questions/5008804/generating-random-integer-from-a-range from user "Walter"
+    //TODO Discuss: Maybe using random number of a square to setbounds. Now it does sometimes generate deformed/distorted maps.
+
+    // Powered by Start: http://stackoverflow.com/questions/5008804/generating-random-integer-from-a-range from user "Walter"
     std::random_device rd;     // only used once to initialise (seed) engine
     std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
     int randomnumbers[4];
@@ -67,12 +68,13 @@ std::vector<std::vector<LandscapeTile> > LandscapeGrid::createLandscapeGrid
         randomnumbers[i] = random_integer;
     }
     std::qsort(randomnumbers, 4, sizeof(int), compare);
+    // Powered by END
 
     //heightMapBuilder.SetBounds (2.0, 6.0, 1.0, 5.0);
     heightMapBuilder.SetBounds (randomnumbers[0], randomnumbers[2], randomnumbers[1], randomnumbers[3]);
     heightMapBuilder.Build ();
 
-    // if a value outside of the heightMap is called, then the default m_borderValue value is given back.
+    // TODO Note: If a value outside of the heightMap is called, then the default m_borderValue value is given back.
     std::vector<std::vector<LandscapeTile>> landscapeGridmap(sizehorizontal, std::vector<LandscapeTile> (sizehorizontal, DEEP_SEA));
     for (unsigned int i = 0; i < sizehorizontal; i++) {
         for (unsigned int j = 0; j < sizevertical; j++) {

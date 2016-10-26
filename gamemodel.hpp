@@ -10,22 +10,22 @@
 #include <list>
 
 #include <QList> // // QT stuff allowed here in gamemodel
+#include <QGraphicsScene>
 
 #include "exceptions.hpp"
 #include "imagetga.hpp"
 #include "creature.hpp"
 #include "textfilereader.hpp"
 #include "landscape.hpp"
-//class LandscapeGrid;
-//#include "biosim.h" // TODO Note: circular dependency
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class TextFileReader /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 class GameModel {
 public:
+    // possible creature types
     QList<CreatureData> creatureDataList;
 
-    //images
+    // images
     std::vector<unsigned char> deep_sea;
     std::vector<unsigned char> shallow_water;
     std::vector<unsigned char> sand;
@@ -39,7 +39,7 @@ public:
     // landscape
     std::vector<std::vector<LandscapeTile>> landscapeGridmap;// landscapeGridmap [down][left] = landscapeGridmap [0][0];
 
-    // storing of all creatures here too
+    // storing of all creatures objects here too
 
     GameModel() = delete; // RAII pattern. No zombie gamemodel possible.
     GameModel(const std::string &relativePath);
