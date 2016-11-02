@@ -25,7 +25,7 @@ class textFileReader {
 public: textFileReader() = delete;
 
 // writes information to statisticalFileReadingData & errorFileReadingData
-static std::list<CreatureData> readCreatureFile(const std::string &filePath);
+static std::list<Creature> readCreatureFile(const std::string &filePath);
 
 // splitCreaturerow: rowDescription = one row of textfile, writes to tempCreatureInfo
 static void splitCreatureRow(const std::string &rowDescription,
@@ -37,7 +37,7 @@ static bool correctRow(const std::vector<std::string> &creatureInfo,
                 ErrorFileReadingData &errorFileReadingData);
 
 // splitCreaturerow: cleares the vector creatureInfo
-static CreatureData createCreatureFromRow(std::vector<std::string> &creatureInfo);
+static Creature createCreatureFromRow(std::vector<std::string> &creatureInfo);
 };
 
 

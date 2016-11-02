@@ -29,15 +29,15 @@ void addErrorLine(std::string errorMessage,
 }
 
 // helper method only needed by readCreatureFile to sort the returned list
-bool creatureListComparator(const CreatureData &cd1, const CreatureData &cd2) {
+bool creatureListComparator(const Creature &cd1, const Creature &cd2) {
     return cd1.creaturename[0] < cd2.creaturename[0];
 }
 
-std::list<CreatureData> textFileReader::readCreatureFile(const std::string &filePath) {
+std::list<Creature> textFileReader::readCreatureFile(const std::string &filePath) {
 
     StatisticalFileReadingData statisticalFileReadingData;
     ErrorFileReadingData errorFileReadingData;
-    std::list<CreatureData> creatureList;
+    std::list<Creature> creatureList;
     std::fstream infile(filePath, std::fstream::in);
     // information from one row
     std::vector<std::string> creatureInfo;
@@ -154,7 +154,7 @@ bool textFileReader::correctRow(const std::vector<std::string> &creatureInfo,
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ createCreatureFromRow /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
-CreatureData textFileReader::createCreatureFromRow(std::vector<std::string> &creatureInfo) {
+Creature textFileReader::createCreatureFromRow(std::vector<std::string> &creatureInfo) {
 
     std::vector<std::string> tempProperties;
     helperTextFileReader::splitString(creatureInfo[4], " ", tempProperties);
@@ -171,12 +171,40 @@ CreatureData textFileReader::createCreatureFromRow(std::vector<std::string> &cre
     size_t tempStrength = atoi(creatureInfo[1].c_str());
     size_t tempSpeed = atoi(creatureInfo[2].c_str());
     size_t tempLifetime = atoi(creatureInfo[3].c_str());
-    CreatureData creature(creatureInfo[0],
+
+    CreatureType type = BIRNE; // default...
+    // TODO: CreatureType
+    if(creatureInfo[0] == "Obstbaum"){type = BIRNE;}
+    if(creatureInfo[0] == "Gebuesch"){type = BUSCH;}
+    if(creatureInfo[0] == "Eiche"){type = EICHE;}
+    if(creatureInfo[0] == "Emu"){type = EMU;}
+    if(creatureInfo[0] == "Gras"){type = GRAS;}
+    if(creatureInfo[0] == "Hund"){type = HUND;}
+    if(creatureInfo[0] == "Kaktus"){type = KAKTUS;}
+    if(creatureInfo[0] == "Kuh"){type = KUH;}
+    if(creatureInfo[0] == "Pferd"){type = PFERD;}
+    if(creatureInfo[0] == "Schaf"){type = SCHAF;}
+    if(creatureInfo[0] == "Sonnenblume"){type = SONNENBLUME;}
+    if(creatureInfo[0] == "Tannenbaum"){type = TANNE;}
+    if(creatureInfo[0] == "Tiger"){type = TIGER;}
+    if(creatureInfo[0] == "Baer"){type = URSUS;}
+
+    if(creatureInfo[0] == "Algen"){type = ALGEN;}
+    if(creatureInfo[0] == "Delphin"){type = DELPHIN;}
+    if(creatureInfo[0] == "Forelle"){type = FORELLE;}
+    if(creatureInfo[0] == "Hai"){type = HAI;}
+    if(creatureInfo[0] == "Krabbe"){type = KRABBE;}
+    if(creatureInfo[0] == "Plankton"){type = PLANKTON;}
+    if(creatureInfo[0] == "Seetang"){type = SEETANG;}
+    if(creatureInfo[0] == "Wels"){type = WELS;}
+
+    Creature creature(creatureInfo[0],
             tempStrength,
             tempSpeed,
             tempLifetime,
             tempProperties,
-            creatureInfo[5]);
+            creatureInfo[5],
+            type);
 
     creatureInfo.clear();
     creature.printCreatureDataToConsole();              // control output

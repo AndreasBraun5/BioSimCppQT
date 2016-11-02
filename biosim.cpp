@@ -16,16 +16,84 @@
 #include <QGraphicsView>
 #include <QScrollBar>
 #include <QResizeEvent>
+#include <QGraphicsSceneMouseEvent>
+#include <QMouseEvent>
 
 #include "gamemodel.hpp"
+#include "landscape.hpp"
 
-// Overriding the resizeEvent function so that you are able to call the updateVisibleScene function.
-// TODO Note: Be careful with the inheritance hierarchy.
-void biosim::resizeEvent(QResizeEvent *event){
-    QMainWindow::resizeEvent(event);
-    std::cout << "Call from resizeEvent \n" << std::endl;
+class GridClickablePixmapItem : public QGraphicsPixmapItem {
+public :
+    GridClickablePixmapItem(const QPixmap &pixmap, int x, int y, GridCursorCallback *cursorCallback = NULL, QGraphicsItem *parent = Q_NULLPTR)
+    // calling parent constructor
+        : QGraphicsPixmapItem(pixmap, parent) {
+        this->cursorCallback = cursorCallback;
+        this->x = x;
+        this->y = y;
+    }
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) {
+        QGraphicsPixmapItem::mousePressEvent(event);
+        if(this->cursorCallback) {
+            this->cursorCallback->gridClicked(this->x, this->y);
+        }
+    }
+
+private:
+    GridCursorCallback *cursorCallback;
+    int x;
+    int y;
+};
+
+/*/
+void biosim::mousePressEvent(QMouseEvent *event){
+    std::cout << "mouse press event biosim" << std::endl;
+
+    //int viewPortWidth = ui->graphicsView->viewport()->width();
+    //int viewPortHeight = ui->graphicsView->viewport()->height();
+
+    int scrollBarValueHorizontal = ui->graphicsView->horizontalScrollBar()->value();
+    int scrollBarValueVertical = ui->graphicsView->verticalScrollBar()->value();
+
+    int scrollBarValueHorizontalLeft = scrollBarValueHorizontal;
+    //int scrollBarValueHorizontalRight = scrollBarValueHorizontal + viewPortWidth;
+    int scrollBarValueVerticalUpper = scrollBarValueVertical;
+    //int scrollBarValueVerticalDown = scrollBarValueVertical + viewPortHeight;
+
+    scrollBarValueHorizontalLeft = scrollBarValueHorizontalLeft/32;
+    //scrollBarValueHorizontalRight = scrollBarValueHorizontalRight/32;
+    scrollBarValueVerticalUpper = scrollBarValueVerticalUpper/32;
+    //scrollBarValueVerticalDown = scrollBarValueVerticalDown/32;
+
+    // Problem this are not scene coordinates, only coordinates relative to the biosim widget
+    QPoint point1  = event->pos();
+    std::cout << "Event->pos().x(): " << point1.x() << std::endl;
+    std::cout << "Event->pos().y(): " << point1.y() << std::endl;
+
+    // the difference is more to the upper left corner
+    // x difference: 26
+    // y difference: 38
+
+    int xPos = point1.x() - 26;
+    int yPos = point1.y() - 38;
+    std::cout << "xPos: " << xPos << std::endl;
+    std::cout << "yPos: " << yPos << std::endl;
+
+    QGraphicsPixmapItem *tempPixmapItem = new QGraphicsPixmapItem(QPixmap::fromImage(*this->cursor, Qt::AutoColor));
+
+    scrollBarValueHorizontalLeft = scrollBarValueHorizontalLeft/32;
+    //scrollBarValueHorizontalRight = scrollBarValueHorizontalRight/32;
+    scrollBarValueVerticalUpper = scrollBarValueVerticalUpper/32;
+    //scrollBarValueVerticalDown = scrollBarValueVerticalDown/32;
+
+    //tempPixmapItem->setOffset(i*32,j*32); // TODO still to calculate
+    //scene->addItem(tempPixmapItem);
+
     this->updateVisibleScene();
 }
+/*/
+
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 /*/ class CreatureData /*/
@@ -41,36 +109,32 @@ biosim::biosim(QWidget *parent) :
         exit(EXIT_FAILURE);
     }
 
-    tempCreatureEditing = &gamemodel->creatureDataList.at(0);
-    for(int i = 0; i < gamemodel->creatureDataList.size(); i++) {
-        ui->creatureEditingComboBox->addItem(QString::fromStdString(gamemodel->creatureDataList.at(i).creaturename));
+    tempCreatureEditing = &gamemodel->creaturesPossibleList.at(0);
+    for(int i = 0; i < gamemodel->creaturesPossibleList.size(); i++) {
+        ui->creatureEditingComboBox->addItem(QString::fromStdString(gamemodel->creaturesPossibleList.at(i).creaturename));
     }
     updateCreatureEditLines(tempCreatureEditing);
+    loadQImages();
 
     // creating scene and adding to graphicsView
     this->scene = new QGraphicsScene(this);                                                    // !delete scene auto managed, by parent
     ui->graphicsView->setScene(scene);
 
     // creating "empty" QGraphicsScene with specified size
-    int qrectfSize = 500*32; // TODO AB4: Needs to be sizehorizontal*sizeoftile
-    QRectF viewQrectf (0,0,qrectfSize,qrectfSize); // Constructs a rectangle with (x, y) as its top-left corner and the given width and height.
+    int qrectfSize = (int) this->gamemodel->landscapeGridmap.size()*32; // always square maps, so this length is ok
+    QRectF viewQrectf (0,0,qrectfSize,qrectfSize); // Constructs a rectangle with (x, y) as its top-left corner and the given width and height --> scrollbars have the right size
     ui->graphicsView->setSceneRect(viewQrectf);
 
-    // initial call to fill the scene
-    // TODO AB4: It is called before the QGraphicsView is properly initialised resulting in a only partly filled scene.
-    biosim::updateVisibleScene();
-
-    // TODO implement zooming?
+    // TODO Note: implement zooming? I guess not :D
     //ui->graphicsView->scale(2, 2);
 
     connect(ui->creatureEditingComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCreatureComboBox(int)));
-    connect(ui->creatureEditingPushButton, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
+    connect(ui->creatureEditingPushButton, SIGNAL(clicked(bool)), this, SLOT(placeCreature()));
     connect(ui->simulationControllButtonPause, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
     connect(ui->simulationControllButtonStart, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
     connect(ui->simulationControllButtonStop, SIGNAL(clicked(bool)), this, SLOT(dumbClick()));
     connect(ui->graphicsView->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateVisibleSceneScrollbar()));
     connect(ui->graphicsView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateVisibleSceneScrollbar()));
-    //connect(ui->graphicsView->resizeEvent(QResizeEvent *event), SIGNAL(), this, SLOT(updateVisibleScene(int)));
 }
 
 biosim::~biosim() {
@@ -79,7 +143,47 @@ biosim::~biosim() {
     //  but there is shown an error if i do that. Deleting an already deleted pointer. Something that qt already does
 }
 
-void biosim::updateCreatureEditLines(const CreatureData *tempCreatureEditing) {
+void biosim::loadQImages() {
+    int imageSizeInPixel = 32;
+
+    //TODO: rotate images...
+    imageMap["cursor"] = QImage(gamemodel->cursor.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["dead"] = QImage(gamemodel->dead.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["path"] = QImage(gamemodel->path.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+
+    imageMap["deep_sea"] = QImage(gamemodel->deep_sea.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["shallow_water"] = QImage(gamemodel->shallow_water.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["sand"] = QImage(gamemodel->sand.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["earth"] = QImage(gamemodel->earth.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["rocks"] = QImage(gamemodel->rocks.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["snow"] = QImage(gamemodel->snow.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+
+    imageMap["birne"] = QImage(gamemodel->birne.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["busch"] = QImage(gamemodel->busch.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["eiche"] = QImage(gamemodel->eiche.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["emu"] = QImage(gamemodel->emu.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["gras"] = QImage(gamemodel->gras.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["hund"] = QImage(gamemodel->hund.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["kaktus"] = QImage(gamemodel->kaktus.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["kuh"] = QImage(gamemodel->kuh.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["pferd"] = QImage(gamemodel->pferd.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["schaf"] = QImage(gamemodel->schaf.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["sonnenblume"] = QImage(gamemodel->sonnenblume.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["tanne"] = QImage(gamemodel->tanne.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["tiger"] = QImage(gamemodel->tiger.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["ursus"] = QImage(gamemodel->ursus.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+
+    imageMap["algen"] = QImage(gamemodel->algen.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["delphin"] = QImage(gamemodel->delphin.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["forelle"] = QImage(gamemodel->forelle.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["hai"] = QImage(gamemodel->hai.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["krabbe"] = QImage(gamemodel->krabbe.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["plankton"] = QImage(gamemodel->plankton.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["seetang"] = QImage(gamemodel->seetang.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+    imageMap["wels"] = QImage(gamemodel->wels.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
+}
+
+void biosim::updateCreatureEditLines(const Creature *tempCreatureEditing) {
     ui->creatureEditingStrengthLineEdit->setText(QString::number(tempCreatureEditing->strength));
     ui->creatureEditingSpeedLineEdit->setText(QString::number(tempCreatureEditing->speed));
     ui->creatureEditingHealthLineEdit->setText(QString::number(tempCreatureEditing->lifetime));
@@ -93,7 +197,7 @@ void biosim::updateCreatureEditLines(const CreatureData *tempCreatureEditing) {
 }
 
 void biosim::updateCreatureComboBox(int index) {
-    tempCreatureEditing = &gamemodel->creatureDataList.at(index);
+    tempCreatureEditing = &gamemodel->creaturesPossibleList.at(index);
     updateCreatureEditLines(tempCreatureEditing);
 }
 
@@ -102,117 +206,161 @@ void biosim::dumbClick() {
     msg.setText("dead end");
     msg.exec();
 }
-//
+
+void biosim::placeCreature() {
+    // getting the selected creature either due to letting Creature inherit from Qvariant and currentData Property
+    // or via the index like here
+    int index = ui->creatureEditingComboBox->currentIndex();
+    //copying the creature at the index in the list
+    Creature tempCreature = this->gamemodel->creaturesPossibleList.at(index);
+    tempCreature.positionX = this->cursorX;
+    tempCreature.positionY = this->cursorY;
+
+    LandscapeTile *tempTile = &gamemodel->landscapeGridmap[this->cursorX][this->cursorY];
+
+    if(tempCreature.creatureTileType != tempTile->creatureTileType) {
+        QMessageBox msg;
+        msg.setText("Creature can´t be placed on this Tile!");
+        msg.exec();
+    } else {
+        // adding the creature to the gamemodel and also to the grid.
+        gamemodel->creaturesAllOnGrid.append(tempCreature);
+        tempTile->creaturesOnTile.push_back(tempCreature);
+        // TODO: deleting creatures not implemented
+        this->updateVisibleScene();
+    }
+}
+
+// TODO Note: Be careful with the inheritance hierarchy
+void biosim::resizeEvent(QResizeEvent *event){
+    QMainWindow::resizeEvent(event);
+    // std::cout << "resize event triggered \n" << std::endl;
+    this->updateVisibleScene();
+}
+
 void biosim::updateVisibleSceneScrollbar() {
-    std::cout << "\n Call from UpdateVisibleScenceScrollbar: " << std::endl;
+    // std::cout << "\n Call from UpdateVisibleScenceScrollbar: " << std::endl;
     biosim::updateVisibleScene();
 }
 
-// static method
-// always updating everything
-// computing visible area: graphicsViewSize, maximum value, scrollbarValue (value) --> position,
-// filling a bit more tiles than needed
 void biosim::updateVisibleScene() {
 
-    // Quiet some debug output following
-    int viewPortWidth = ui->graphicsView->viewport()->width();
-    std::cout << "viewPortWidth: " << viewPortWidth << std::endl;
-    int viewPortHeight = ui->graphicsView->viewport()->height();
-    std::cout << "viewPortHeight: " << viewPortHeight << std::endl;
-
-    int viewQRectfSizeHeight = ui->graphicsView->sceneRect().size().rheight();
-    std::cout << "viewQRectfSizeHeight: " << viewQRectfSizeHeight << std::endl;
-    int viewQRectfSizeWidth = ui->graphicsView->sceneRect().size().rwidth();
-    std::cout << "viewQRectfSizeWidth: " << viewQRectfSizeWidth << std::endl;
-
-    int scrollBarValueHorizontal = ui->graphicsView->horizontalScrollBar()->value();
-    std::cout << "scrollBarValueHorizontal: " << scrollBarValueHorizontal << std::endl;
-    int scrollBarValueHorizontalMaximum = ui->graphicsView->horizontalScrollBar()->maximum();
-    std::cout << "scrollBarValueHorizontalMaximum: " << scrollBarValueHorizontalMaximum << std::endl;
-
-    int scrollBarValueVertical = ui->graphicsView->verticalScrollBar()->value();
-    std::cout << "scrollBarValueVertical: " << scrollBarValueVertical << std::endl;
-    int scrollBarValueVerticalMaximum = ui->graphicsView->verticalScrollBar()->maximum();
-    std::cout << "scrollBarValueVerticalMaximum: " << scrollBarValueVerticalMaximum << std::endl;
-
-    // scrollBarValue + scrollBarValueMaximum --> position within entire scence
-    // position + viewPortWidth + viewPortHeight --> area to update/show
-    // area shown will be somewhat bigger as needed to prevent mistakes due to inaccurate and not exact enough postion values
-
-    // Assuring its size is at least one
-    scrollBarValueHorizontalMaximum = std::max(scrollBarValueHorizontalMaximum,1);
-    std::cout << "\nscrollBarValueHorizontalMaximum: " << scrollBarValueHorizontalMaximum << std::endl;
-    scrollBarValueVerticalMaximum = std::max(scrollBarValueVerticalMaximum,1);
-    std::cout << "scrollBarValueVerticalMaximum: " << scrollBarValueVerticalMaximum << std::endl;
-
-    // Calculating the four needed values
-    int scrollBarValueHorizontalLeft = scrollBarValueHorizontal;
-    std::cout << "scrollBarValueHorizontalLeft: " << scrollBarValueHorizontalLeft << std::endl;
-    int scrollBarValueHorizontalRight = scrollBarValueHorizontal + viewPortWidth;
-    std::cout << "scrollBarValueHorizontalRight: " << scrollBarValueHorizontalRight << std::endl;
-    int scrollBarValueVerticalUpper = scrollBarValueVertical;
-    std::cout << "scrollBarValueVerticalUpper: " << scrollBarValueVerticalUpper << std::endl;
-    int scrollBarValueVerticalDown = scrollBarValueVertical + viewPortHeight;
-    std::cout << "scrollBarValueVerticalDown: " << scrollBarValueVerticalDown << std::endl;
-
-
-    int imageSizeInPixel = sqrt((int) gamemodel->sand.size())/2; // Image size in pixel
-
-    QImage deep_sea = QImage(gamemodel->deep_sea.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
-    QImage shallow_water = QImage(gamemodel->shallow_water.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
-    QImage sand = QImage(gamemodel->sand.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
-    QImage earth = QImage(gamemodel->earth.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
-    QImage rocks = QImage(gamemodel->rocks.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
-    QImage snow = QImage(gamemodel->snow.data(), imageSizeInPixel, imageSizeInPixel, QImage::Format_ARGB32);
-
+    // always the entire scene will be redrawn
     scene->clear();
+
+    // starting values for calculating
+    int viewPortWidth = ui->graphicsView->viewport()->width();
+    int viewPortHeight = ui->graphicsView->viewport()->height();
+    int scrollBarValueHorizontal = ui->graphicsView->horizontalScrollBar()->value();
+    int scrollBarValueVertical = ui->graphicsView->verticalScrollBar()->value();
+    /*/ debug output for testing
+    std::cout << "viewPortWidth: " << viewPortWidth << std::endl;
+    std::cout << "viewPortHeight: " << viewPortHeight << std::endl;
+    std::cout << "scrollBarValueHorizontal: " << scrollBarValueHorizontal << std::endl;
+    std::cout << "scrollBarValueVertical: " << scrollBarValueVertical << std::endl;
+    /*/
+
+    // Calculating the four needed values that are used in the for loops
+    int scrollBarValueHorizontalLeft = scrollBarValueHorizontal;
+    int scrollBarValueHorizontalRight = scrollBarValueHorizontal + viewPortWidth;
+    int scrollBarValueVerticalUpper = scrollBarValueVertical;
+    int scrollBarValueVerticalDown = scrollBarValueVertical + viewPortHeight;
+    /*/ debug output for testing
+    std::cout << "scrollBarValueHorizontalLeft: " << scrollBarValueHorizontalLeft << std::endl;
+    std::cout << "scrollBarValueHorizontalRight: " << scrollBarValueHorizontalRight << std::endl;
+    std::cout << "scrollBarValueVerticalUpper: " << scrollBarValueVerticalUpper << std::endl;
+    std::cout << "scrollBarValueVerticalDown: " << scrollBarValueVerticalDown << std::endl;
+    /*/
 
     // Problem now is to determine the coordinate transformation between scrollBarValues and the position of the picture in the grid
     // now the scrollBarValues are in multiple of tiles
     scrollBarValueHorizontalLeft = scrollBarValueHorizontalLeft/32;
-    std::cout << "scrollBarValueHorizontalLeft: " << scrollBarValueHorizontalLeft << std::endl;
     scrollBarValueHorizontalRight = scrollBarValueHorizontalRight/32;
-    std::cout << "scrollBarValueHorizontalRight: " << scrollBarValueHorizontalRight << std::endl;
     scrollBarValueVerticalUpper = scrollBarValueVerticalUpper/32;
-    std::cout << "scrollBarValueVerticalUpper: " << scrollBarValueVerticalUpper << std::endl;
     scrollBarValueVerticalDown = scrollBarValueVerticalDown/32;
+    /*/ debug output for testing
+    std::cout << "scrollBarValueHorizontalLeft: " << scrollBarValueHorizontalLeft << std::endl;
+    std::cout << "scrollBarValueHorizontalRight: " << scrollBarValueHorizontalRight << std::endl;
+    std::cout << "scrollBarValueVerticalUpper: " << scrollBarValueVerticalUpper << std::endl;
     std::cout << "scrollBarValueVerticalDown: " << scrollBarValueVerticalDown << std::endl;
+    /*/
 
-    // guaranteeing that the calculated subsripts exist. Needed because with applied method sometimes
-    // little bit more than the visible area is expected to be drawn. At the right and down boarder this
+    // guaranteeing that the calculated subsripts exists. Needed because with applied method sometimes
+    // little bit more than the visible area is being drawn. At the right and down boader this
     // would lead to a vector subscript access out of range.
     if(scrollBarValueHorizontalRight > 499) {
         scrollBarValueHorizontalRight = 499;
-        std::cout << "scrollBarValueHorizontalRightGuaranteed: " << scrollBarValueHorizontalRight << std::endl;
+        //std::cout << "scrollBarValueHorizontalRightGuaranteed: " << scrollBarValueHorizontalRight << std::endl;
     }
     if(scrollBarValueVerticalDown > 499) {
         scrollBarValueVerticalDown = 499;
-        std::cout << "scrollBarValueVerticalDownGuaranteed: " << scrollBarValueVerticalDown << std::endl;
+        //std::cout << "scrollBarValueVerticalDownGuaranteed: " << scrollBarValueVerticalDown << std::endl;
     }
-    int vectorSize1 = (int) this->gamemodel->landscapeGridmap.size();
-    std::cout << "vectorSize1: " << vectorSize1 << std::endl;
-    int vectorSize2 = (int) this->gamemodel->landscapeGridmap[1].size();
-    std::cout << "vectorSize2: " << vectorSize2 << std::endl;
 
     // TODO Note: Still need to verify. landscapegrid vector[0][0] (down, left) is being printed to the upper left corner of scene
     for (int i = scrollBarValueHorizontalLeft; i <= scrollBarValueHorizontalRight; i++) {
         for (int j = scrollBarValueVerticalUpper; j <= scrollBarValueVerticalDown; j++) {
             QImage tempImage;
             if(this->gamemodel->landscapeGridmap[i][j].climate == DEEP_SEA)
-                {tempImage = deep_sea;}
-            else if(this->gamemodel->landscapeGridmap[i][j].climate == SHALLOW_WATER){tempImage = shallow_water;}
-            else if(this->gamemodel->landscapeGridmap[i][j].climate == SAND){tempImage = sand;}
-            else if(this->gamemodel->landscapeGridmap[i][j].climate == EARTH){tempImage = earth;}
-            else if(this->gamemodel->landscapeGridmap[i][j].climate == ROCKS){tempImage = rocks;}
+            {tempImage = imageMap["deep_sea"];}
+            else if(this->gamemodel->landscapeGridmap[i][j].climate == SHALLOW_WATER){tempImage = imageMap["shallow_water"];}
+            else if(this->gamemodel->landscapeGridmap[i][j].climate == SAND){tempImage = imageMap["sand"];}
+            else if(this->gamemodel->landscapeGridmap[i][j].climate == EARTH){tempImage = imageMap["earth"];}
+            else if(this->gamemodel->landscapeGridmap[i][j].climate == ROCKS){tempImage = imageMap["rocks"];}
             else //this->gamemodel->landscapeGridmap[i][j].climate == SNOW)
-                {tempImage = snow;}
+            {tempImage = imageMap["snow"];}
             //scene->addPixmap(QPixmap::fromImage(tempImage, Qt::AutoColor)); // Coordinates are default (0,0)
-            QGraphicsPixmapItem *tempPixmapItem = new QGraphicsPixmapItem(QPixmap::fromImage(tempImage, Qt::AutoColor));
+            // only the landscape tiles need to be clickable
+            QGraphicsPixmapItem *tempPixmapItem = new GridClickablePixmapItem(QPixmap::fromImage(tempImage, Qt::AutoColor), i, j, this);
             tempPixmapItem->setOffset(i*32,j*32);
             scene->addItem(tempPixmapItem);
-            //std::cout << i << std::endl;
-            //std::cout << j << std::endl;
-         }
+        }
+    }
+
+    //DRAW CURSOR
+    QImage tempImage = imageMap["cursor"];
+    QGraphicsPixmapItem *tempPixmapItem = new QGraphicsPixmapItem(QPixmap::fromImage(tempImage, Qt::AutoColor));
+    tempPixmapItem->setOffset(this->cursorX*32,this->cursorY*32);
+    scene->addItem(tempPixmapItem);
+    std::cout << "x:" << (int) this->cursorX << ", y:" << (int) this->cursorY << "\n" <<std::endl;
+    // TODO Note: Output follows here to the console: QGraphicsItem::ungrabMouse: not a mouse grabber
+    //  doesn´t matter because the cursor position is set.
+
+    //TODO: using alpha channel
+    for (int i = scrollBarValueHorizontalLeft; i <= scrollBarValueHorizontalRight; i++) {
+        for (int j = scrollBarValueVerticalUpper; j <= scrollBarValueVerticalDown; j++) {
+            if(!this->gamemodel->landscapeGridmap[i][j].creaturesOnTile.empty()){
+                for(int k = 0; k < this->gamemodel->landscapeGridmap[i][j].creaturesOnTile.size(); k++){
+                    QImage tempImage;
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == BIRNE){tempImage = imageMap["birne"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == BUSCH){tempImage = imageMap["busch"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == EICHE){tempImage = imageMap["eiche"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == EMU){tempImage = imageMap["emu"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == GRAS){tempImage = imageMap["gras"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == HUND){tempImage = imageMap["hund"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == KAKTUS){tempImage = imageMap["kaktus"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == KUH){tempImage = imageMap["kuh"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == PFERD){tempImage = imageMap["pferd"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == SCHAF){tempImage = imageMap["schaf"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == SONNENBLUME){tempImage = imageMap["sonnenblume"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == TANNE){tempImage = imageMap["tanne"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == TIGER){tempImage = imageMap["tiger"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == URSUS){tempImage = imageMap["ursus"];}
+
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == ALGEN){tempImage = imageMap["algen"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == DELPHIN){tempImage = imageMap["delphin"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == FORELLE){tempImage = imageMap["forelle"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == HAI){tempImage = imageMap["hai"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == KRABBE){tempImage = imageMap["krabbe"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == PLANKTON){tempImage = imageMap["plankton"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == SEETANG){tempImage = imageMap["seetang"];}
+                    if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile[k].type == WELS){tempImage = imageMap["wels"];}
+                    QGraphicsPixmapItem *tempPixmapItem = new QGraphicsPixmapItem(QPixmap::fromImage(tempImage, Qt::AutoColor));
+                    tempPixmapItem->setOffset(i*32,j*32);
+                    scene->addItem(tempPixmapItem);
+                }
+            }
+        }
     }
 }
 

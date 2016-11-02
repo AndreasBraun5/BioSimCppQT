@@ -38,5 +38,7 @@ int main(int argn, char *argv[]) {
     biosim w;
     w.show();
     std::cout << "\nErfolgreicher Durchlauf\n";
+    w.updateVisibleScene(); // Needed to correctly initialise, or else you have only 4 tiles
+    // in the scene, it has got something to do with the init order of the different elements
     return a.exec(); // game loop executing
 }

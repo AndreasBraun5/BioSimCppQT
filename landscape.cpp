@@ -14,7 +14,14 @@
 /*/ class LandscapeTile /*/
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 LandscapeTile::LandscapeTile(ClimateType climate)
-    : climate(climate){
+    : climate(climate), creatureTileType(NONE){
+    if( climate == DEEP_SEA || climate == SHALLOW_WATER) {
+        creatureTileType = WATER;
+    } else if (climate == EARTH || climate == ROCKS || climate == SAND || climate == SNOW){
+        creatureTileType = TERESTIAL;
+    } else { // ROCKS
+        creatureTileType = NONE;
+    }
 }
 
 

@@ -12,6 +12,8 @@
 #include <QMainWindow>
 #include <QImage>
 
+#include <map>
+
 #include "gamemodel.hpp"
 #include "creature.hpp"
 
@@ -20,25 +22,40 @@
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
 namespace Ui {
 class biosim;
+class GridCursorCallback;
 }
 
-class biosim : public QMainWindow {
+// capsuling the callback into a abstract class
+class GridCursorCallback {
+public:
+    virtual void gridClicked(int xCoord, int yCoord) = 0;
+};
+
+class biosim : public QMainWindow, public virtual GridCursorCallback {
     Q_OBJECT
 
 public:
     explicit biosim(QWidget *parent = 0);
     ~biosim();
-    void updateCreatureEditLines(const CreatureData *tempCreatureEditing);
-    CreatureData getTempCreatureEditing() const;
+    void loadQImages();
+    void updateCreatureEditLines(const Creature *tempCreatureEditing);
+    Creature getTempCreatureEditing() const;
     void writeStartErrorToMsgboxAndExit(const std::string &error);
     void updateVisibleScene();
     void resizeEvent(QResizeEvent *event);
-
+    // TODO pressing
+    // void mousePressEvent(QMouseEvent *event);
+    virtual void gridClicked(int xCoord, int yCoord) {
+        this->cursorX = xCoord;
+        this->cursorY = yCoord;
+        this->updateVisibleScene();
+    }
 
 private:
-    CreatureData const *tempCreatureEditing;
+    Creature const *tempCreatureEditing;
     Ui::biosim *ui;
     QGraphicsScene *scene;
+    int imageSizeInPixel = 32;
     // TODO Discuss: access violation scoped pointer, if main window is closed. Solved?: the pointer gamemodel was
     // deleted in the constructor, analog to the ui pointer. But I blieve some kind of garbage collection tried
     // again to delete the already deleted pointer gamemodel. How to check if the gamemodel pointer is really already deleted?
@@ -49,9 +66,16 @@ private:
     // Ui_biosim.h (generated from biosim.ui) and biosim-.hpp/.cpp. Gamemodel will contain all data and logic. biosim will
     // handle the communication and Ui_biosim will only contain the view.
 
+    std::map<std::string, QImage> imageMap;
+
+    int cursorX = 0;
+    int cursorY = 0;
+
+
 private slots:
     void updateCreatureComboBox(int index);
     void dumbClick();
+    void placeCreature();
 
 public slots:
     void updateVisibleSceneScrollbar();
