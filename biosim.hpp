@@ -11,6 +11,8 @@
 
 #include <QMainWindow>
 #include <QImage>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
 
 #include <map>
 
@@ -31,6 +33,21 @@ public:
     virtual void gridClicked(int xCoord, int yCoord) = 0;
 };
 
+class GridClickablePixmapItem : public QGraphicsPixmapItem {
+public :
+    GridClickablePixmapItem() = delete;
+    GridClickablePixmapItem(const QPixmap &pixmap, int x, int y,
+                            GridCursorCallback *cursorCallback = NULL, QGraphicsItem *parent = Q_NULLPTR);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    double opacity;
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+private:
+    GridCursorCallback *cursorCallback;
+    int x;
+    int y;
+};
+
 class biosim : public QMainWindow, public virtual GridCursorCallback {
     Q_OBJECT
 
@@ -39,17 +56,11 @@ public:
     ~biosim();
     void loadQImages();
     void updateCreatureEditLines(const Creature *tempCreatureEditing);
-    Creature getTempCreatureEditing() const;
     void writeStartErrorToMsgboxAndExit(const std::string &error);
     void updateVisibleScene();
     void resizeEvent(QResizeEvent *event);
-    // TODO pressing
-    // void mousePressEvent(QMouseEvent *event);
-    virtual void gridClicked(int xCoord, int yCoord) {
-        this->cursorX = xCoord;
-        this->cursorY = yCoord;
-        this->updateVisibleScene();
-    }
+    virtual void gridClicked(int xCoord, int yCoord);
+    //void biosim::paintEvent(QPaintEvent *);
 
 private:
     Creature const *tempCreatureEditing;
@@ -66,8 +77,7 @@ private:
     // Ui_biosim.h (generated from biosim.ui) and biosim-.hpp/.cpp. Gamemodel will contain all data and logic. biosim will
     // handle the communication and Ui_biosim will only contain the view.
 
-    std::map<std::string, QImage> imageMap;
-
+    std::map<std::string, QImage> qImageMap;
     int cursorX = 0;
     int cursorY = 0;
 
@@ -79,8 +89,6 @@ private slots:
 
 public slots:
     void updateVisibleSceneScrollbar();
-
-
 };
 
 #endif // BIOSIM_HPP

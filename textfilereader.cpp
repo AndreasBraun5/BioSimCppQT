@@ -14,6 +14,7 @@
 #include <regex>
 
 #include "exceptions.hpp"
+#include "creature.hpp"
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
@@ -98,46 +99,49 @@ bool textFileReader::correctRow(const std::vector<std::string> &creatureInfo,
                                 ErrorFileReadingData &errorFileReadingData) {
     bool valid = true;
     // TODO Discuss: bool flag valid is needed, because all mistakes in each line are to be found at the first try loading the file
+    // valid number of collums per line for creating a creature
     if (creatureInfo.size() == 6) {
         // äüößÄÜÖ
         std::regex creatureNameRegex("[a-zA-Z\\s]+");
+        // valid creaturename
         if (!std::regex_match(creatureInfo[0], creatureNameRegex)) {
-            // valid creaturename
             helperTextFileReader::addErrorLine("Invalid creature name. Line:",
                                                statisticalFileReadingData, errorFileReadingData);
             valid = false;
         }
         std::regex creatureStrengthRegex("[0-9]+");
+        // valid strengh
         if (!std::regex_match(creatureInfo[1], creatureStrengthRegex)|| std::stoi(creatureInfo[1]) < 0 ) {
-            // valid strengh
             helperTextFileReader::addErrorLine("Only positive integer strength is allowed. Line: ",
                                                statisticalFileReadingData, errorFileReadingData);
             valid = false;
         }
         std::regex creatureSpeedRegex("[0-9]+");
+        // valid speed
         if (!std::regex_match(creatureInfo[2], creatureSpeedRegex) || std::stoi(creatureInfo[2]) < 0) {
-            // valid speed
             helperTextFileReader::addErrorLine("Only positive integer speed is allowed. Line: ",
                                                statisticalFileReadingData, errorFileReadingData);
             valid = false;
         }
         std::regex creatureLifetimeRegex("[0-9]+");
+        // valid lifetime
         if (!std::regex_match(creatureInfo[3], creatureLifetimeRegex) || std::stoi(creatureInfo[3]) < 0) {
-            // valid lifetime
             helperTextFileReader::addErrorLine("Only positive integer lifetime is allowed. Line: ",
                                                statisticalFileReadingData, errorFileReadingData);
             valid = false;
         }
         std::regex creaturePropertiesRegex("[a-zA-Z0-9_\\s]+");
+        // valid properties
         if (!std::regex_match(creatureInfo[4], creaturePropertiesRegex)) {
-            // valid properties
             helperTextFileReader::addErrorLine("Invalid creature properties. Line: ",
                                                statisticalFileReadingData, errorFileReadingData);
             valid = false;
         }
-        std::regex creatureFilePathRegex("[a-zA-Z0-9]+/[a-zA-Z0-9]+.[a-zA-Z0-9]+");
-        if (!std::regex_match(creatureInfo[5], creatureFilePathRegex)) {
-            // valid path
+        std::regex creatureFilePathRegexLand("land/[a-zA-Z0-9]+.tga");
+        std::regex creatureFilePathRegexWasser("wasser/[a-zA-Z0-9]+.tga");
+        // valid path
+        if (!std::regex_match(creatureInfo[5], creatureFilePathRegexLand) &&
+                !std::regex_match(creatureInfo[5], creatureFilePathRegexWasser)) {
             helperTextFileReader::addErrorLine("Invalid creature file path. Line: ",
                                                statisticalFileReadingData, errorFileReadingData);
             valid = false;
@@ -168,46 +172,33 @@ Creature textFileReader::createCreatureFromRow(std::vector<std::string> &creatur
         }
     }
 
+    std::string tempCreatureName = creatureInfo[0];
     size_t tempStrength = atoi(creatureInfo[1].c_str());
     size_t tempSpeed = atoi(creatureInfo[2].c_str());
     size_t tempLifetime = atoi(creatureInfo[3].c_str());
+    std::string tempImageFilePath = creatureInfo[5];
 
-    CreatureType type = BIRNE; // default...
-    // TODO: CreatureType
-    if(creatureInfo[0] == "Obstbaum"){type = BIRNE;}
-    if(creatureInfo[0] == "Gebuesch"){type = BUSCH;}
-    if(creatureInfo[0] == "Eiche"){type = EICHE;}
-    if(creatureInfo[0] == "Emu"){type = EMU;}
-    if(creatureInfo[0] == "Gras"){type = GRAS;}
-    if(creatureInfo[0] == "Hund"){type = HUND;}
-    if(creatureInfo[0] == "Kaktus"){type = KAKTUS;}
-    if(creatureInfo[0] == "Kuh"){type = KUH;}
-    if(creatureInfo[0] == "Pferd"){type = PFERD;}
-    if(creatureInfo[0] == "Schaf"){type = SCHAF;}
-    if(creatureInfo[0] == "Sonnenblume"){type = SONNENBLUME;}
-    if(creatureInfo[0] == "Tannenbaum"){type = TANNE;}
-    if(creatureInfo[0] == "Tiger"){type = TIGER;}
-    if(creatureInfo[0] == "Baer"){type = URSUS;}
+    CreatureTileType tempCreatureTileType;
+    std::regex creatureFilePathRegexLand("land/[a-zA-Z0-9]+.tga");
+    std::regex creatureFilePathRegexWasser("wasser/[a-zA-Z0-9]+.tga");
 
-    if(creatureInfo[0] == "Algen"){type = ALGEN;}
-    if(creatureInfo[0] == "Delphin"){type = DELPHIN;}
-    if(creatureInfo[0] == "Forelle"){type = FORELLE;}
-    if(creatureInfo[0] == "Hai"){type = HAI;}
-    if(creatureInfo[0] == "Krabbe"){type = KRABBE;}
-    if(creatureInfo[0] == "Plankton"){type = PLANKTON;}
-    if(creatureInfo[0] == "Seetang"){type = SEETANG;}
-    if(creatureInfo[0] == "Wels"){type = WELS;}
-
-    Creature creature(creatureInfo[0],
-            tempStrength,
-            tempSpeed,
-            tempLifetime,
-            tempProperties,
-            creatureInfo[5],
-            type);
+    if (std::regex_match(tempImageFilePath, creatureFilePathRegexLand)) {
+        tempCreatureTileType = TERESTIAL;
+    } else if (std::regex_match(tempImageFilePath, creatureFilePathRegexWasser)) {
+        tempCreatureTileType = WATER;
+    } else {
+        throw badCreatureType();
+    }
+    Creature creature(tempCreatureName,
+                      tempStrength,
+                      tempSpeed,
+                      tempLifetime,
+                      tempProperties,
+                      tempImageFilePath,
+                      tempCreatureTileType);
 
     creatureInfo.clear();
-    creature.printCreatureDataToConsole();              // control output
+    //creature.printCreatureDataToConsole();              // control output
     return creature;
 }
 

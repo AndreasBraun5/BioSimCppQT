@@ -61,9 +61,21 @@ class badImageFilePath : public std::exception{
     }
 };
 
+class badCreatureType : public std::exception{
+    virtual const char* what() const throw() {
+        return "BadCreatureType: The given creature type is invalid.";
+    }
+};
+
 class wrongNumberOfBytesRead : public std::exception{
     virtual const char* what() const throw() {
         return "WrongNumberOfBytesRead: The read number of bytes is incorrect.";
+    }
+};
+
+class noCorrectCreaturesFoundInTextfile : public std::exception{
+    virtual const char* what() const throw() {
+        return "NoCorrectCreaturesFoundInTextfile: No correct Creature lines.";
     }
 };
 

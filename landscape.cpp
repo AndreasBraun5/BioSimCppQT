@@ -63,7 +63,7 @@ std::vector<std::vector<LandscapeTile> > LandscapeGrid::createLandscapeGrid
      * This in combination with the variable size, are responsible witch type of terrain will be generated
     /*/
 
-    //TODO Discuss: Maybe using random number of a square to setbounds. Now it does sometimes generate deformed/distorted maps.
+    //TODO Note: Maybe using random number of a square to setbounds. Now it does sometimes generate deformed/distorted maps.
 
     // Powered by Start: http://stackoverflow.com/questions/5008804/generating-random-integer-from-a-range from user "Walter"
     std::random_device rd;     // only used once to initialise (seed) engine
@@ -83,8 +83,8 @@ std::vector<std::vector<LandscapeTile> > LandscapeGrid::createLandscapeGrid
 
     // TODO Note: If a value outside of the heightMap is called, then the default m_borderValue value is given back.
     std::vector<std::vector<LandscapeTile>> landscapeGridmap(sizehorizontal, std::vector<LandscapeTile> (sizehorizontal, DEEP_SEA));
-    for (unsigned int i = 0; i < sizehorizontal; i++) {
-        for (unsigned int j = 0; j < sizevertical; j++) {
+    for (unsigned int i = 0; i < sizehorizontal; i++)
+    for (unsigned int j = 0; j < sizevertical; j++) {
             double landscapeGridmapvalue = heightMap.GetValue(i,j);
             if(landscapeGridmapvalue < -0.2500){
                 landscapeGridmap[i][j] = LandscapeTile(DEEP_SEA);}
@@ -94,7 +94,7 @@ std::vector<std::vector<LandscapeTile> > LandscapeGrid::createLandscapeGrid
             else if(landscapeGridmapvalue >= 0.7500 && landscapeGridmapvalue < 0.9000){landscapeGridmap[i][j] = LandscapeTile(ROCKS);}
             else //(landscapeGridmapvalue >= 0.9000)
                 {landscapeGridmap[i][j] = LandscapeTile(SNOW);}
-         }
-     }
+    }
+
     return landscapeGridmap;
 }

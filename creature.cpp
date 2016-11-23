@@ -20,20 +20,13 @@ Creature::Creature(const std::string &creaturename,
                    size_t lifetime,
                    const std::vector<std::string> &properties,
                    const std::string &figurepath,
-                   // TODO: CreatureType
-                   CreatureType type
+                   CreatureTileType creatureTileType
                    )
     : creaturename(creaturename), strength(strength), speed(speed), lifetime(lifetime),
       properties(properties), figurepath(figurepath),
-      // TODO: CreatureType
-      type(type),
-      // default setting of positin and creatureTileType
-      positionX(0), positionY(0), creatureTileType(TERESTIAL) {
+      // default setting of position and creatureTileType
+      positionX(0), positionY(0), creatureTileType(creatureTileType) {
     // due to default type being Terestial it only needs to be changed to water type
-    if(type == ALGEN || type == DELPHIN || type == FORELLE || type == HAI || type == KRABBE
-            || type == PLANKTON || type == SEETANG || type == WELS) {
-        creatureTileType = WATER;
-    }
 }
 
 

@@ -26,7 +26,8 @@ std::vector<unsigned char> ImageTga::createImageVector(const std::string &imageP
     unsigned int charsToReadFromStreamForImageData;
 
     std::ifstream imageStream(imagePath, std::ifstream::binary);
-    if(!imageStream.good()) throw badImageFilePath();
+    if(!imageStream.good())
+        throw badImageFilePath();
 
     // reading and checking header //
     imageStream.read(bufferTgaHeaderUnformatted, 18);
@@ -96,7 +97,9 @@ std::vector<unsigned char> ImageTga::createImageVector(const std::string &imageP
     charsToReadFromStreamForImageData = numberOfPixels * byteToReadPerPixel;
     char *bufferImageDataUnformatted =  new char[numberOfPixels * 4]; // always 4 byte per pixel              // !delete bufferImageDataUnformatted
     imageStream.read(bufferImageDataUnformatted, charsToReadFromStreamForImageData);
-    if(imageStream.gcount() != charsToReadFromStreamForImageData){throw wrongNumberOfBytesRead();}
+    if(imageStream.gcount() != charsToReadFromStreamForImageData){
+        delete[] bufferImageDataUnformatted;                                                                  // !delete bufferImageDataUnformatted
+        throw wrongNumberOfBytesRead();}
 
 
     // Bytes are ordered as BGR(A) in bufferImageDataUnformatted
