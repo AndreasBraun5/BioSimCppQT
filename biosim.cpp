@@ -40,28 +40,6 @@ void GridClickablePixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         this->cursorCallback->gridClicked(this->x, this->y);
     }
 }
-// TODO: !!!! after this method is left the error occurs
-/*/
-void biosim::paintEvent(QPaintEvent *)
-{
-    QImage tempImage = qImageMap["Baer"];
-    QPixmap tempPixmapAlpha =  QPixmap::fromImage(tempImage, Qt::AutoColor);
-    QPainter painter(this);
-    painter.setOpacity(0.5);
-    painter.drawPixmap(0, 0, tempPixmapAlpha);
-
-    /*/
-/*/
-    // create a new object scaled to widget size
-    QPixmap result_avatar = m_avatar.scaled(size());
-
-    QPainter painter(this);
-    painter.setOpacity(0.5);
-    // use scaled image or if needed not scaled m_avatar
-    painter.drawPixmap(0, 0, result_avatar);
-    }
-/*/
-
 
 
 /*/+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++/*/
@@ -116,8 +94,7 @@ biosim::biosim(QWidget *parent) :
 
 biosim::~biosim() {
     delete ui;                                                                                  // !delete ui
-    delete gamemodel;                    // TODO Discuss:                                       // !delete gamemodel
-    //  but there is shown an error if i do that. Deleting an already deleted pointer. Something that qt already does
+    delete gamemodel;                                                                           // !delete gamemodel
 }
 
 void biosim::loadQImages() {
@@ -168,7 +145,7 @@ void biosim::dumbClick() {
     msg.setText("dead end");
     msg.exec();
 }
-
+// TODO: shared pointer auf die Creaturen
 void biosim::placeCreature() {
     // getting the selected creature either due to letting Creature inherit from Qvariant and currentData Property
     // or via the index like here
@@ -230,7 +207,7 @@ void biosim::updateVisibleScene() {
     scrollBarValueVerticalDown = scrollBarValueVerticalDown/32;
 
     // guaranteeing that the calculated subsripts exists. Needed because with applied method sometimes
-    // little bit more than the visible area is being drawn. At the right and down boader this
+    // little bit more than the visible area is being drawn. At the right and down border this
     // would lead to a vector subscript access out of range.
     if(scrollBarValueHorizontalRight > 499) {
         scrollBarValueHorizontalRight = 499;
@@ -251,7 +228,7 @@ void biosim::updateVisibleScene() {
             else if(this->gamemodel->landscapeGridmap[i][j].climate == ROCKS){tempImage = qImageMap["rocks"];}
             else //this->gamemodel->landscapeGridmap[i][j].climate == SNOW)
             {tempImage = qImageMap["snow"];}
-            //scene->addPixmap(QPixmap::fromImage(tempImage, Qt::AutoColor)); // Coordinates are default (0,0)
+            // scene->addPixmap(QPixmap::fromImage(tempImage, Qt::AutoColor)); // Coordinates are default (0,0)
             // only the landscape tiles need to be clickable
             GridClickablePixmapItem *tempPixmapItem = new GridClickablePixmapItem(QPixmap::fromImage(tempImage, Qt::AutoColor), i, j, this);
             tempPixmapItem->setOffset(i*32,j*32);
@@ -262,7 +239,7 @@ void biosim::updateVisibleScene() {
     for (int i = scrollBarValueHorizontalLeft; i <= scrollBarValueHorizontalRight; i++) {
     for (int j = scrollBarValueVerticalUpper; j <= scrollBarValueVerticalDown; j++) {
         if(this->gamemodel->landscapeGridmap[i][j].creaturesOnTile.empty()) continue;
-        int creaturesOnTile = this->gamemodel->landscapeGridmap[i][j].creaturesOnTile.size();
+        int creaturesOnTile = (int) this->gamemodel->landscapeGridmap[i][j].creaturesOnTile.size();
         // opacities allowed are 1.0, 0.8, 0.6 and 0.4, every creature more has opacity 0.4
         double tempOpacity = 1.2;
         for(int k = 0; k < creaturesOnTile ; k++){
@@ -289,44 +266,7 @@ void biosim::updateVisibleScene() {
     scene->addItem(tempPixmapItem);
     std::cout << "x:" << (int) this->cursorX << ", y:" << (int) this->cursorY << "\n" <<std::endl;
     // TODO Note: Output follows here to the console: QGraphicsItem::ungrabMouse: not a mouse grabber
-    //  doesn´t matter because the cursor position is set.
-
-    // /*/
-    // working on the created pixmap
-    tempImage = qImageMap["Baer"];
-    // GridClickablePixmapItem
-    GridClickablePixmapItem *tempPixmapItem2 = new GridClickablePixmapItem(QPixmap::fromImage(tempImage, Qt::AutoColor), 5, 5, this);
-    tempPixmapItem2->setAcceptedMouseButtons(0);
-    tempPixmapItem2->opacity = 1.0;
-    tempPixmapItem2->setOffset(5*32,5*32);
-    scene->addItem(tempPixmapItem2);
-
-    // /*/
-    /*/
-    // painter does modify the pixmap
-    QPainter tempPainter;
-    tempPainter.begin(&tempPixmapAlpha);
-    tempPainter.setOpacity(0.25);
-    tempPainter.setCompositionMode(QPainter::CompositionMode_Source);
-    tempPainter.end();
-    /*/
-    /*/
-
-    // As soon as there is a GridClickablePixmapItem the programm crashes. Nothing to do with painter.
-    // Qgraphicspixmapitem is constructed from the modified pixmap
-    QPixmap tempPixmap2 =  QPixmap::fromImage(tempImage, Qt::AutoColor);
-    QGraphicsPixmapItem *tempPixmapitem2 = new GridClickablePixmapItem(tempPixmap2, 3, 3, this);
-    tempPixmapitem2->setAcceptedMouseButtons(0);
-    tempPixmapitem2->setOffset(3*32,3*32);
-    scene->addItem(tempPixmapitem2);
-
-    // Qgraphicspixmapitem is constructed from the modified pixmap
-    QPixmap tempPixmap3 =  QPixmap::fromImage(tempImage, Qt::AutoColor);
-    GridClickablePixmapItem *tempPixmapitem3 = new GridClickablePixmapItem(tempPixmap3, 4, 4, this);
-    tempPixmapitem3->setAcceptedMouseButtons(0);
-    tempPixmapitem3->setOffset(4*32,4*32);
-    scene->addItem(tempPixmapitem3);
-    /*/
+    //  doesn´t matter because the cursor position is saved in the gamemodel.
 }
 
 void biosim::gridClicked(int xCoord, int yCoord) {

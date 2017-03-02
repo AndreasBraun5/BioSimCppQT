@@ -39,6 +39,7 @@ void GameModel::setUpGamemodel(const std::string &relativePath) {
     loadCreatures(creatureDataFilepath);
     loadImages(relativePath); // relativePath is imageDataFilepath
     loadLandscapeGrid(500, 500); // parameter at compiletime are given here
+    // TODO map size
 }
 
 void GameModel::loadImages(const std::string &imageDataFilepath) {
